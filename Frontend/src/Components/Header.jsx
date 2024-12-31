@@ -31,7 +31,7 @@ const Header = () => {
   },[showBar]) ;
 
   return (
-    <nav className='w-full h-14 px-6 bg-white flex flex-row justify-between items-center border-b-[1px] '>
+    <nav className='w-full h-16 px-6 bg-white bg-opacity-55 backdrop-blur-sm flex flex-row justify-between items-center border-b-[1px]  fixed top-0 left-0 z-20'>
       <div className='bg-red-300'>logo image</div>
       <div>
         <div onClick={handlePfpClick} className=' h-9 w-9 relative rounded-full border-[1px] '>
