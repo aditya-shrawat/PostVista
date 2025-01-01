@@ -8,6 +8,7 @@ import LoginPage from './Pages/LoginPage'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import SavedPosts from './Pages/SavedPosts'
+import CreateBlogPage from './Pages/CreateBlogPage'
 
 
 const router = createBrowserRouter([
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       {path:'mylist', element: <SavedPosts /> },
     ]
   },
+  {path:'new-blog', element:<CreateBlogPage /> },
   {path:'login',element:<LoginPage /> },
   {path:'signup',element:<LoginPage /> },
   {
