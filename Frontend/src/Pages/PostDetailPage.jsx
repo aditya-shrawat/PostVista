@@ -12,7 +12,7 @@ const PostDetailPage = () => {
         <LikeCommentBar likes={23425} comments={25425}  />
         
         <div className='w-auto h-auto my-16  bg-red-300'>
-          <img className=' object-contain' src="https://miro.medium.com/v2/resize:fit:828/format:webp/1*roDhx4LGySbB7Trg4IA4OQ.jpeg" alt="" />
+          <img className=' object-contain' src="" alt="" />
         </div>
         
         <p className='text-xl'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum, enim minima optio illo impedit quidem voluptates ab blanditiis vero in quis sequi mollitia velit voluptatum repudiandae cum, at, deserunt necessitatibus.
