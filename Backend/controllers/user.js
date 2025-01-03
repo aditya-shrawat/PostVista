@@ -8,12 +8,12 @@ export const handleSignup =async (req,res)=>{
 
     try {
         if(!username || !email || !password){
-            return res.json({message:"All feilds are required"})
+            return res.status(400).json({message:"All feilds are required"})
         }
     
         const existingEmail = await User.findOne({email})  // one email - one account
         if(existingEmail){
-            return res.json({message:"email already in use"}) 
+            return res.status(400).json({message:"Email already in use."}) 
         }
 
         const hashedPassword = await bcrypt.hash(password,12) ; // password get hashed
@@ -24,9 +24,37 @@ export const handleSignup =async (req,res)=>{
             password:hashedPassword,
         })
     
-        return res.status(200).json({message:`new user is created ${newUser}`}) 
+        return res.status(201).json({message:`new user is created ${newUser}`}) 
     } catch (error) {
         return res.status(500).json({error:`something went wrong - ${error}`})
+    }
+}
+
+
+export const handleSignin = async (req,res)=>{
+    const {email,password} = req.body ;
+
+    try {
+        if(!email || !password){
+            return res.status(400).json({message:"Enter email or password"})
+        }
+
+        const user = await User.findOne({email}) ;
+
+        if(!user){
+            return res.status(400).json({message:"User doesn't exist"})
+        }
+
+        const passwordMatched = await bcrypt.compare(password,user.password) ;
+
+        if(passwordMatched){
+            return res.status(200).json({message:"Login successfully"}) ;
+        }
+        else{
+            return res.status(400).json({message:"Incorrect password"})
+        }
+    } catch (error) {
+        return res.status(500).json({error:`something went worng - ${error}`})
     }
 }
 

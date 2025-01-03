@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     ]
   },
   {path:'new-blog', element:<CreateBlogPage /> },
-  {path:'user/login',element:<LoginPage /> },
+  {path:'user/signin',element:<LoginPage /> },
   {path:'user/signup',element:<LoginPage /> },
   {
     path:'*',
