@@ -1,6 +1,7 @@
 
 import User from '../model/user.js'
 import bcrypt from 'bcrypt' 
+import { createToken } from '../services/authentication.js';
 
 export const handleSignup =async (req,res)=>{
     console.log(req.body);
@@ -23,8 +24,10 @@ export const handleSignup =async (req,res)=>{
             email:email,
             password:hashedPassword,
         })
+
+        const token = createToken(newUser) ;
     
-        return res.status(201).json({message:`new user is created ${newUser}`}) 
+        return res.status(201).cookie('token',token,{path:"/",}).json({message:"signup successfully"}) ;
     } catch (error) {
         return res.status(500).json({error:`something went wrong - ${error}`})
     }
@@ -48,7 +51,9 @@ export const handleSignin = async (req,res)=>{
         const passwordMatched = await bcrypt.compare(password,user.password) ;
 
         if(passwordMatched){
-            return res.status(200).json({message:"Login successfully"}) ;
+            const token = createToken(user) ;
+
+            return res.status(200).cookie('token',token,{path:"/",}).json({message:"signin successfully"}) ;
         }
         else{
             return res.status(400).json({message:"Incorrect password"})
