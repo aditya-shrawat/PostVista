@@ -23,8 +23,8 @@ const router = createBrowserRouter([
     ]
   },
   {path:'new-blog', element:<CreateBlogPage /> },
-  {path:'login',element:<LoginPage /> },
-  {path:'signup',element:<LoginPage /> },
+  {path:'user/login',element:<LoginPage /> },
+  {path:'user/signup',element:<LoginPage /> },
   {
     path:'*',
     element:<Errorpage />
