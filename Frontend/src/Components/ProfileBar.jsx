@@ -11,7 +11,7 @@ const ProfileBar = ({barRef}) => {
         <div className='w-64 px-6 py-8 text-lg '>
             <ul className=''>
                 <li className='mb-5 text-gray-500 hover:text-black cursor-pointer'>
-                    <Link to={'profile/:id'} className=' w-full flex items-center' ><FaRegUser className='mr-3 text-xl' />Profile</Link>
+                    <div className=' w-full flex items-center' ><FaRegUser className='mr-3 text-xl' />Profile</div>
                 </li>
                 <li className='mb-5 text-gray-500 hover:text-black cursor-pointer'>
                     <Link to={'mylist'} className=' w-full flex items-center ' > <FaRegBookmark className='mr-3 text-xl' /> Bookmarks</Link>

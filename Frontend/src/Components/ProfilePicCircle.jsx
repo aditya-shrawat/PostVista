@@ -1,9 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import ProfileBar from './ProfileBar'
+import { UserContext } from '../Context/UserProvider';
 
 const ProfilePicCircle = () => {
     const [showBar,setShowbar] = useState(false)
     const barRef = useRef(null) ;
+    const user = useContext(UserContext) ;
+    console.log("user = ",user)
 
     const handlePfpClick = ()=>{
         setShowbar((prevState)=>!prevState)
@@ -30,7 +33,7 @@ const ProfilePicCircle = () => {
 
   return (
     <div onClick={handlePfpClick} className=' h-9 w-9 relative rounded-full border-[1px] '>
-        <div className='h-full w-full rounded-full cursor-pointer'>A</div>
+        <div className='h-full w-full rounded-full cursor-pointer'>{user}</div>
         {showBar && <ProfileBar barRef={barRef} />}
     </div>
   )

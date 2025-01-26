@@ -44,7 +44,7 @@ const LoginPage = () => {
         e.preventDefault();
 
         const BackendURL = import.meta.env.VITE_backendURL // backend url 
-        axios.post(`${BackendURL}/user/signup`,signupData)
+        axios.post(`${BackendURL}/user/signup`,signupData, { withCredentials: true })
         .then(response =>{
             if(response.status===201){
                 navigate('/'); // redirected to home page 
@@ -64,7 +64,7 @@ const LoginPage = () => {
         e.preventDefault();
 
         const BackendURL = import.meta.env.VITE_backendURL // backend url 
-        axios.post(`${BackendURL}/user/signin`,signInData)
+        axios.post(`${BackendURL}/user/signin`,signInData, { withCredentials: true })
         .then(response =>{
             if(response.status===200){
                 navigate('/'); // redirected to home page 
