@@ -7,8 +7,6 @@ export const createToken = (user)=>{
     const payLoad = {
         id:user._id,
         username:user.username,
-        email:user.email,
-        profileImageUrl: user.profileImageURL,
     }
 
     const token = jwt.sign(payLoad,secretKey);

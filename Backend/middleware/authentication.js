@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+
 import {verifyToken}  from '../services/authentication.js';
 
 

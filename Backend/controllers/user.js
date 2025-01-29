@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt'
 import  {createToken}  from '../services/authentication.js';
 
 export const handleSignup =async (req,res)=>{
-    console.log(req.body);
     const {username,email,password} = req.body ;
 
     try {
@@ -14,7 +13,12 @@ export const handleSignup =async (req,res)=>{
     
         const existingEmail = await User.findOne({email})  // one email - one account
         if(existingEmail){
-            return res.status(400).json({message:"Email already in use."}) 
+            return res.status(400).json({message:"Email is already in use."}) 
+        }
+
+        const existingUsername = await User.findOne({username})  // one username - one account
+        if(existingUsername){
+            return res.status(400).json({message:"Username is already in use."}) 
         }
 
         const hashedPassword = await bcrypt.hash(password,12) ; // password get hashed
@@ -27,12 +31,7 @@ export const handleSignup =async (req,res)=>{
 
         const token = createToken(newUser) ;
     
-        return res.status(201).cookie('token',token,{
-            path:"/",
-            httpOnly: true,
-            sameSite: 'None',
-            secure: process.env.NODE_ENV === 'production',
-        }).json({message:"signup successfully"}) ;
+        return res.status(201).cookie('token',token).json({message:"signup successfully"}) ;
     } catch (error) {
         return res.status(500).json({error:`something went wrong - ${error}`})
     }
@@ -58,12 +57,7 @@ export const handleSignin = async (req,res)=>{
         if(passwordMatched){
             const token = createToken(user) ;
 
-            return res.status(200).cookie('token',token,{
-                path:"/",
-                httpOnly: true,
-                sameSite: 'None',
-                secure: process.env.NODE_ENV === 'production',
-            }).json({message:"signin successfully"}) ;
+            return res.status(200).cookie('token',token).json({message:"signin successfully"}) ;
         }
         else{
             return res.status(400).json({message:"Incorrect password"})

@@ -12,9 +12,6 @@ const userSchema = mongoose.Schema({
     password:{
         type:String,required:true,
     },
-    profileImageURL:{
-        type:String,default:"/images/default.png"
-    },
 })
 
  const User = mongoose.model('User',userSchema) ;
