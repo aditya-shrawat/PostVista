@@ -35,6 +35,23 @@ app.get("/profile",checkTokenAuthentication,async (req,res)=>{
     }
 })
 
+app.get("/:username",async (req,res)=>{
+    const username = req.params.username ;
+    console.log("username {in backend} = ",username) ;
+
+    try {
+        const user = await User.findOne({username}) ;
+        if(user){
+            return res.status(200).json({
+                username:user.username,
+            }) ;
+        }
+        return res.status(400).json({message:"User does not exist"}) ;
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error",error:error });
+    }
+})
+
 app.use('/user',userRouter) ;
 
 

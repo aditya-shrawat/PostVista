@@ -35,7 +35,7 @@ const ProfilePicCircle = ({userInfo,}) => {
             {userInfo && userInfo.username ? userInfo.username[0].toUpperCase() : "x"}
         </span>
         </div>
-        {showBar && <ProfileBar barRef={barRef} />}
+        {showBar && <ProfileBar barRef={barRef} username={userInfo.username} />}
     </div>
   )
 }

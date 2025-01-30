@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     children:[
       {path:'/', element: <HomePage /> },
       {path:'post/:id',element:<PostDetailPage /> },
-      {path:'profile/:id',element:<ProfilePage /> },
+      {path:'/:username',element:<ProfilePage /> },
       {path:'mylist', element: <SavedPosts /> },
     ]
   },
