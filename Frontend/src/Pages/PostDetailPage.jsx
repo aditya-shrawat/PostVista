@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import LikeCommentBar from '../Components/LikeCommentBar';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const PostDetailPage = () => {
@@ -11,6 +11,7 @@ const PostDetailPage = () => {
   const [writerData,setWriterData] = useState({})
   const [likesCount,setLikesCount] = useState(0) ;
   const [commentCount,setCommentCount] = useState(0) ;
+  const [likeStatus,setLikeStatus] = useState(false) ;
 
   const [postTime,setPostTime] = useState('') ;
   const [formatedTime,setFormatedTime] = useState('') ;
@@ -52,11 +53,36 @@ const PostDetailPage = () => {
       console.log("Error in fetching PostData - ",error) ;
     }
   }
+  
+  const isPostIsLiked = async ()=>{
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      const response = await axios.get(`${BackendURL}/post/${postId}/like`,{withCredentials:true}) ;
+      setLikeStatus(response.data.isLiked) ;
+    } catch (error) {
+      console.log("Error in fetching like -",error) ;
+    }
+  }
+  
+  const toggleLike = async ()=>{
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      const response = await axios.post(`${BackendURL}/post/${postId}/like`,{},{withCredentials:true}) ;
+      setLikeStatus(response.data.isLiked) ;
+    } catch (error) {
+      console.log("Error in toggling like -",error) ;
+    }
+  }
 
   useEffect(()=>{
     fetchPostData() ;
     fetchCounts();
+    isPostIsLiked();
   },[])
+
+  useEffect(()=>{
+    fetchCounts();
+  },[likeStatus])
 
   return (
     <div className='min-h-screen min-w-screen p-2 pt-6  '>
@@ -65,17 +91,19 @@ const PostDetailPage = () => {
         <h1 className='text-4xl font-bold mb-8 break-words '>{postData.title}</h1> 
 
         <div className='flex items-center '>
-          <div className='bg-green-500 h-11 w-11 rounded-full cursor-pointer mr-4 ' ></div>
+          <Link to={`/${writerData.username}`}  className='bg-green-500 block h-11 w-11 rounded-full cursor-pointer mr-4 ' ></Link>
           <div className=' flex flex-col justify-center ' >
             <div className=' flex items-center'>
-              <span className='text-base cursor-pointer hover:underline flex items-center'>{writerData.username}</span> 
+              <span className='text-base cursor-pointer hover:underline flex items-center'>
+                <Link to={`/${writerData.username}`} >{writerData.username}</Link>
+              </span> 
               <span className='text-green-600 hover:text-green-800 font-semibold ml-4 cursor-pointer'>Follow</span> 
             </div>
             <div className='text-[14px] flex items-center text-gray-500'>{formatedTime}</div>
           </div>
         </div>
         
-        <LikeCommentBar likes={likesCount} comments={commentCount}  />
+        <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}  />
         
         <div className='w-auto h-auto my-12  bg-red-300'>
           <img className=' object-contain' src="" alt="" />
@@ -83,17 +111,21 @@ const PostDetailPage = () => {
         
         <p className='text-xl break-words'>{postData.body}</p>
 
-        <LikeCommentBar likes={likesCount} comments={commentCount}  />
+        <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}  />
 
         <div className='flex justify-between my-8 '>
-          <div className='w-full flex mr-6'>
-            <div><div className='bg-green-500 h-11 w-11 rounded-full cursor-pointer mr-4 ' ></div></div>
-            <div className='w-full flex flex-col ' >
-                <span className='text-base cursor-pointer hover:underline flex items-center'>{writerData.username}</span> 
-                <span className='text-[14px] my-1 flex items-center text-gray-500'>2.3K Followers | 22 following</span>
-                <span className='text-[14px] my-1 flex items-center break-words '>This is my Bio.</span>
+          <Link to={`/${writerData.username}`} className='w-full flex mr-6'>
+            <div className=' mr-4'>
+              <div className='bg-green-500 block h-11 w-11 rounded-full cursor-pointer  ' ></div>
             </div>
-          </div>
+            <div className=' w-full flex flex-col ' >
+              <span className='text-base cursor-pointer hover:underline flex items-center'>
+                {writerData.username}
+              </span> 
+              <span className='text-[14px] my-1 flex items-center text-gray-500'>2.3K Followers | 22 following</span>
+              <span className='text-[14px] my-1 flex items-center break-words '>This is my Bio.</span>
+            </div>
+          </Link>
           <button className='bg-black text-white h-9 px-3 rounded-2xl font-semibold cursor-pointer '>Follow</button>
         </div>
       </div>

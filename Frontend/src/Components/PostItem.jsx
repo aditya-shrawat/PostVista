@@ -6,6 +6,7 @@ import axios from 'axios';
 const PostItem = ({post}) => {
   const [likes,setLikes] = useState(0) ;
   const [comments,setComments] = useState(0) ;
+  const [likeStatus,setLikeStatus] = useState(false) ;
 
   const fetchCounts = async ()=>{
     try {
@@ -18,15 +19,26 @@ const PostItem = ({post}) => {
     }
   }
 
+  const isPostIsLiked = async ()=>{
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      const response = await axios.get(`${BackendURL}/post/${post._id}/like`,{withCredentials:true}) ;
+      setLikeStatus(response.data.isLiked) ;
+    } catch (error) {
+      console.log("Error in fetching like -",error) ;
+    }
+  }
+
   useEffect(()=>{
-    fetchCounts() ;
-  },[]) ;
+    fetchCounts();
+    isPostIsLiked();
+  },[])
 
   return (
     <div className='my-5 h-auto w-full px-3 py-4 sm:py-6 flex flex-col border-b-2 '>
       <div className='mb-3 flex '>
-        <div className='bg-green-500 h-6 w-6 rounded-full mr-3 cursor-pointer '></div>
-        <div className='w-auto cursor-pointer hover:underline '>{post.createdBy.username}</div>
+        <Link to={`/${post.createdBy.username}`}  className='bg-green-500 h-6 w-6 rounded-full mr-3 cursor-pointer '></Link>
+        <div className='w-auto cursor-pointer hover:underline '><Link to={`/${post.createdBy.username}`} >{post.createdBy.username}</Link></div>
       </div>
       <Link to={`/post/${post._id}`} className='w-full cursor-pointer '>
         <div className='w-full h-40 flex justify-between items-center cursor-pointer ' >
@@ -36,7 +48,7 @@ const PostItem = ({post}) => {
               <p className=' line-clamp-1 sm:line-clamp-2 break-words'>{post.body}</p>
             </div>
             <div className=' mt-3 w-full flex justify-between ' >
-              <div className=' flex items-center mr-8 cursor-pointer'><FaRegHeart className='mr-2 text-xl' />{likes}</div>
+              <div className=' flex items-center mr-8 cursor-pointer'><FaRegHeart className={`${(likeStatus)?`bg-red-600`:`bg-transparent`} mr-2 text-xl`} />{likes}</div>
               <div className=' flex items-center cursor-pointer'><FaRegComment className='mr-2 text-xl' />{comments}</div>
               <div className='text-xl sm:block hidden cursor-pointer'><FaRegBookmark  /></div>
             </div>

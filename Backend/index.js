@@ -11,8 +11,9 @@ import cookieParser from 'cookie-parser';
 import userRouter from './routes/user.js';
 import { checkTokenAuthentication } from './middleware/authentication.js';
 import User from './model/user.js';
-import { calculatingCounts, creatingNewPost, fetchingPostData } from './controllers/post.js';
+import { creatingNewPost, } from './controllers/post.js';
 import Post from './model/post.js';
+import postRouter from './routes/post.js'
 
 mongoose.connect(process.env.mongodbURL)
 .then(console.log("MongoDb is connected successfully"))
@@ -55,15 +56,14 @@ app.get("/:username",async (req,res)=>{
 
 app.get('/',checkTokenAuthentication,async (req,res)=>{
     try {
-        const allPosts = await Post.find({}).populate('createdBy');
+        const allPosts = await Post.find({}).populate('createdBy','username ');
         return res.status(200).json({allPosts});
     } catch (error) {
         return res.status(500).json({message:"Internal server error."})
     }
 })
 
-app.get('/post/:id',fetchingPostData)
-app.get('/post/:id/counts',calculatingCounts)
+app.use('/post',postRouter) ;
 app.post('/new-blog',checkTokenAuthentication,creatingNewPost)
 app.use('/user',userRouter) ;
 

@@ -41,4 +41,41 @@ export const fetchingPostData = async (req,res)=>{
     }
 }
 
+export const getLike = async (req,res)=>{
+    try {
+        const PostId = req.params.id ;
+        const UserId = req.user.id
+
+        const liked = await Like.findOne({postId:PostId,userId:UserId}) ;
+        if(liked){
+            return res.status(200).json({isLiked:true,message:"Post liked."}) ;
+        }
+        else{
+            return res.status(200).json({isLiked:false,message:"Post unliked."}) ;
+        }
+        
+    } catch (error) {
+        return res.status(500).json({message:"Internal server error."}) ;
+    }
+}
+
+export const postLike = async (req,res)=>{
+    try {
+        const PostId = req.params.id ;
+        const UserId = req.user.id
+
+        const liked = await Like.findOneAndDelete({postId:PostId,userId:UserId}) ;
+        if(!liked){
+            await Like.create({postId:PostId,userId:UserId})
+            return res.status(200).json({isLiked:true,message:"Post liked."}) ;
+        }
+        else{
+            // await Like.deleteOne({postId:PostId,userId:UserId})
+            return res.status(200).json({isLiked:false,message:"Post unliked."}) ;
+        }
+    } catch (error) {
+        return res.status(500).json({message:"Internal server error."}) ;
+    }
+}
+
 
