@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react'
 
 import PostItem from './PostItem'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const PostList = () => {
-
-  const [dummyData,setDummyData] = useState([]) ;
+  const navigate = useNavigate();
+  const [Posts,setPosts] = useState([]) ;
 
    const initialFxn = async ()=>{
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts') ;
-    const data = await response.json() ;
-    // console.log(data) ;
-    setDummyData(data)
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      const response = await axios.get(`${BackendURL}`,{withCredentials:true}) ;
+      setPosts(response.data.allPosts) ;
+    } catch (error) {
+      navigate('/user/signin')   //** */
+    }
    }
 
    useEffect(()=>{
@@ -21,9 +26,14 @@ const PostList = () => {
   return (
     <div className='m-auto max-w-[600px]'>
       {
-        dummyData.map((post)=>{
-          return <PostItem key={post.id} post={post} />
-        })
+        (!Posts)?
+        <>
+        </>:
+        <>
+        { Posts.map((post)=>{
+          return <PostItem key={post._id} post={post} />
+        }) }
+        </>
       }
     </div>
   )
