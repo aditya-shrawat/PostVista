@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import LikeCommentBar from '../Components/LikeCommentBar';
+import CommentList from '../Components/commentList';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -127,6 +128,14 @@ const PostDetailPage = () => {
             </div>
           </Link>
           <button className='bg-black text-white h-9 px-3 rounded-2xl font-semibold cursor-pointer '>Follow</button>
+        </div>
+
+        
+      </div>
+      <hr />
+      <div className='w-full max-w-screen-md h-auto p-2 m-auto'>
+        <div className='w-full '>
+          <CommentList postId={postId} />
         </div>
       </div>
     </div>

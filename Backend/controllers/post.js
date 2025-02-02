@@ -10,7 +10,6 @@ export const creatingNewPost = async (req,res)=>{
             body:body,
             createdBy:req.user.id,
         });
-        console.log("post - ",post)
         return res.status(201).json({message:"Post created successfully."}) ;
     } catch (error) {
         res.status(500).json({message:"Intenal server error.",error})
@@ -69,10 +68,7 @@ export const postLike = async (req,res)=>{
             await Like.create({postId:PostId,userId:UserId})
             return res.status(200).json({isLiked:true,message:"Post liked."}) ;
         }
-        else{
-            // await Like.deleteOne({postId:PostId,userId:UserId})
-            return res.status(200).json({isLiked:false,message:"Post unliked."}) ;
-        }
+        return res.status(200).json({isLiked:false,message:"Post unliked."}) ;
     } catch (error) {
         return res.status(500).json({message:"Internal server error."}) ;
     }
