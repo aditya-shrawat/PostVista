@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import CommentItem from './CommentItem';
-import { IoIosSend } from "react-icons/io";
 import { FaLocationArrow } from "react-icons/fa";
 
 const commentList = ({postId}) => {

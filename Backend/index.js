@@ -19,11 +19,11 @@ mongoose.connect(process.env.mongodbURL)
 .then(console.log("MongoDb is connected successfully"))
 
 const app = express() ;
-const PORT = 8000 ;
+const PORT = 3000 ;
 
 app.use(cookieParser()) ;
 app.use(cors({
-    origin: 'http://localhost:5173', // frontend URL
+    origin: 'http://localhost:5174', // frontend URL
     credentials: true
 }));
 
@@ -45,6 +45,7 @@ app.get("/:username",async (req,res)=>{
         const user = await User.findOne({username}) ;
         if(user){
             return res.status(200).json({
+                id:user._id,
                 username:user.username,
             }) ;
         }
