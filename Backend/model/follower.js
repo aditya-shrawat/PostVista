@@ -1,22 +1,19 @@
 import mongoose from "mongoose";
 
 
-const likeSchema = mongoose.Schema({
-    postId:{
+const followerSchema = mongoose.Schema({
+    account:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Post',
+        ref:'User',
         required:true,
     },
-    userId:{
+    followedBy:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
     },
 },{timestamps:true,});
 
-const Like = mongoose.model("Like",likeSchema) ;
+const Follower = mongoose.model('Follower',followerSchema) ;
 
-export default Like ;
-
-
-
+export default Follower ;
 
