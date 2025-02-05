@@ -21,6 +21,7 @@ const router = createBrowserRouter([
       {path:'post/:id',element:<PostDetailPage /> },
       {path:'/:username',element:<ProfilePage /> },
       {path:'user/:id/follower',element:<FollowerPage /> },
+      {path:'user/:id/following',element:<FollowerPage /> },
       {path:'mylist', element: <SavedPosts /> },
     ]
   },

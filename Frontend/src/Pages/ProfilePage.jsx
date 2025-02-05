@@ -92,8 +92,12 @@ const ProfilePage = () => {
                 </button>
               </div>
               <div className='flex text-gray-500 text-[17px] mb-2 '>
-                <span className='hover:bg-gray-100 px-2 rounded-lg hover:text-gray-600'><Link to={`/user/${userDetails.id}/follower`}>{followerCount} followers</Link></span>
-                <span className='ml-6 hover:bg-gray-100 px-2 rounded-lg hover:text-gray-600'>{followingCount} following</span>
+                <span className='hover:bg-gray-100 px-2 rounded-lg hover:text-gray-600'>
+                  <Link to={`/user/${userDetails.id}/follower`}>{followerCount} followers</Link>
+                </span>
+                <span className='ml-6 hover:bg-gray-100 px-2 rounded-lg hover:text-gray-600'>
+                  <Link to={`/user/${userDetails.id}/following`}>{followingCount} following</Link>
+                </span>
               </div>
               <h3 className='break-words text-[17px]'>This is my bio.</h3>
             </div>
