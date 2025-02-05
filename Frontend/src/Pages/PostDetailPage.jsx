@@ -13,6 +13,8 @@ const PostDetailPage = () => {
   const [likesCount,setLikesCount] = useState(0) ;
   const [commentCount,setCommentCount] = useState(0) ;
   const [likeStatus,setLikeStatus] = useState(false) ;
+  const [followStatus,setFollowStatus] = useState(false) ;
+  const [isYourAccount,setIsYourAccount] = useState(false) ;
 
   const [postTime,setPostTime] = useState('') ;
   const [formatedTime,setFormatedTime] = useState('') ;
@@ -85,6 +87,34 @@ const PostDetailPage = () => {
     fetchCounts();
   },[likeStatus])
 
+
+  const checkFollowStatus = async ()=>{
+      try {
+          const BackendURL = import.meta.env.VITE_backendURL;
+          const response = await axios.get(`${BackendURL}/user/${writerData._id}/follow/status`,{withCredentials:true,});
+          setFollowStatus(response.data.isFollowed) ;
+          setIsYourAccount(response.data.isYou) ;
+      } catch (error) {
+          console.log("Error in checking Followe status -",error) ;
+      }
+  }
+
+  useEffect(()=>{
+      if(writerData && writerData._id){
+        checkFollowStatus();
+      }
+  },[writerData]) ;
+
+  const toggleFollowStatus = async ()=>{
+      try {
+          const BackendURL = import.meta.env.VITE_backendURL;
+          const response = await axios.post(`${BackendURL}/user/${writerData._id}/follower`,{},{withCredentials:true,});
+          checkFollowStatus();
+      } catch (error) {
+          console.log("Error in toggling FollowStatus -",error) ;
+      }
+  };
+
   return (
     <div className='min-h-screen min-w-screen p-2 pt-6  '>
       <div className='w-full max-w-screen-md h-auto p-2 m-auto '>
@@ -98,7 +128,9 @@ const PostDetailPage = () => {
               <span className='text-base cursor-pointer hover:underline flex items-center'>
                 <Link to={`/${writerData.username}`} >{writerData.username}</Link>
               </span> 
-              <span className='text-green-600 hover:text-green-800 font-semibold ml-4 cursor-pointer'>Follow</span> 
+              <span onClick={toggleFollowStatus} className={`block ${followStatus?'text-gray-500 hover:text-gray-600':'text-green-600 hover:text-green-800'} font-semibold ml-4 cursor-pointer`}>
+                {followStatus?'Following':'Follow'}
+              </span> 
             </div>
             <div className='text-[14px] flex items-center text-gray-500'>{formatedTime}</div>
           </div>
@@ -127,10 +159,11 @@ const PostDetailPage = () => {
               <span className='text-[14px] my-1 flex items-center break-words '>This is my Bio.</span>
             </div>
           </Link>
-          <button className='bg-black text-white h-9 px-3 rounded-2xl font-semibold cursor-pointer '>Follow</button>
+          <button onClick={toggleFollowStatus} className={`${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
+            'bg-green-500 hover:bg-green-600 text-white border-none'} h-9 px-3 rounded-2xl font-semibold cursor-pointer `}>
+            {followStatus?"Following":"Follow"}
+          </button>
         </div>
-
-        
       </div>
       <hr />
       <div className='w-full max-w-screen-md h-auto p-2 m-auto'>

@@ -48,8 +48,24 @@ export const countFollowerFollowingCount = async (req,res)=>{
 
         const followerCount = await Follower.countDocuments({account:accountId,}) ;
         const followingCount = await Follower.countDocuments({followedBy:accountId,}) ;
-        const isFollowed = await Follower.findOne({account:accountId,followedBy:req.user.id}) ;
-        return res.status(200).json({followerCount,followingCount,isFollowed,message:"Followers counted successfully."}) ;
+        return res.status(200).json({followerCount,followingCount,message:"Followers counted successfully."}) ;
+    } catch (error) {
+        return res.status(500).json({message:"Internal server error."}) ;
+    }
+}
+
+
+export const checkFollowStatus = async (req,res)=>{
+    try {
+        const accountId = req.params.id ;
+        const userId = req.user.id ;
+
+        const isYou = accountId.toString() === userId.toString() ;
+        const uFollow = await Follower.findOne({account:accountId,followedBy:userId}) ;
+        if(uFollow){
+            return res.status(200).json({isFollowed:true,isYou,message:"Followed by you."});
+        }
+        return res.status(200).json({isFollowed:false,isYou,message:"Not followed by you."});
     } catch (error) {
         return res.status(500).json({message:"Internal server error."}) ;
     }

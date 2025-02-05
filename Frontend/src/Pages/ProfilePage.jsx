@@ -11,6 +11,7 @@ const ProfilePage = () => {
   const [followerCount,setFollowerCount] = useState(0) ;
   const [followingCount,setFollowingCount] = useState(0) ;
   const [followStatus,setFollowStatus] = useState(false) ;
+  const [isYourAccount,setIsYourAccount] = useState(false) ;
 
   const fetchPosts =async ()=>{
     try {
@@ -28,6 +29,7 @@ const ProfilePage = () => {
     if (userDetails ){
       fetchPosts() ;
       countFollowers();
+      checkFollowStatus();
     }
   },[userDetails]) ;
 
@@ -50,13 +52,24 @@ const ProfilePage = () => {
     fetchingUser();
   },[username]);
 
+  const checkFollowStatus = async ()=>{
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      const response = await axios.get(`${BackendURL}/user/${userDetails.id}/follow/status`,{withCredentials:true,});
+      setFollowStatus(response.data.isFollowed) ;
+      setIsYourAccount(response.data.isYou) ;
+    } catch (error) {
+      console.log("Error in checking Followe status -",error) ;
+    }
+  }
+
   const countFollowers = async ()=>{
     try {
       const BackendURL = import.meta.env.VITE_backendURL;
       const response = await axios.get(`${BackendURL}/user/${userDetails.id}/follower/count`,{withCredentials:true,});
       setFollowerCount(response.data.followerCount) ;
       setFollowingCount(response.data.followingCount)
-      setFollowStatus(response.data.isFollowed) ;
+      checkFollowStatus();
     } catch (error) {
       console.log("Error in counting Followers -",error) ;
     }
@@ -86,10 +99,23 @@ const ProfilePage = () => {
             <div className='mt-1'>
               <div className=' items-center my-2 flex '>
                 <h1 className='sm:text-2xl text-2xl font-semibold'>{userDetails.username}</h1>
-                <button onClick={toggleFollowStatus} className={`ml-14 ${followStatus?'bg-gray-100':'bg-green-500'} ${followStatus?'hover:bg-gray-200':'hover:bg-green-600'} 
-                 rounded-xl px-6 py-1 font-semibold cursor-pointer ${followStatus?'text-black':'text-white'}  text-[16px] ${followStatus?'border-2':'border-none'} `}>
-                  {followStatus?'Following':'Follow'}
-                </button>
+                {
+                  (isYourAccount)?
+                  <>
+                  <button onClick={toggleFollowStatus} className={`ml-14 bg-gray-100 hover:bg-gray-200 text-black border-2
+                     rounded-xl px-6 py-1 font-semibold cursor-pointer text-[16px]  `}>
+                    Edit Profile
+                  </button>
+                  </> :
+                  <>
+                  <button onClick={toggleFollowStatus} className={`ml-14 
+                    ${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
+                    'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl px-6 py-1 font-semibold cursor-pointer 
+                    text-[16px]  `}>
+                    {followStatus?'Following':'Follow'}
+                  </button>
+                  </>
+                }
               </div>
               <div className='flex text-gray-500 text-[17px] mb-2 '>
                 <span className='hover:bg-gray-100 px-2 rounded-lg hover:text-gray-600'>

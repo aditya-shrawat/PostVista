@@ -2,7 +2,7 @@ import express from 'express'
 import { handleSignin, handleSignup } from '../controllers/user.js';
 import { checkTokenAuthentication } from '../middleware/authentication.js';
 import Post from '../model/post.js';
-import { countFollowerFollowingCount, getFollowers, getFollowing, postFollower } from '../controllers/follow.js';
+import { checkFollowStatus, countFollowerFollowingCount, getFollowers, getFollowing, postFollower } from '../controllers/follow.js';
 
 const route = express.Router() ;
 
@@ -33,6 +33,7 @@ route.get('/:id/follower',checkTokenAuthentication,getFollowers) ;
 route.get('/:id/following',checkTokenAuthentication,getFollowing)
 route.post('/:id/follower',checkTokenAuthentication,postFollower)
 route.get('/:id/follower/count',checkTokenAuthentication,countFollowerFollowingCount)
+route.get('/:id/follow/status',checkTokenAuthentication,checkFollowStatus)
 
 export default route ;
 
