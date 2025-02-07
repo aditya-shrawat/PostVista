@@ -43,9 +43,9 @@ const FollowerItem = ({showFollowers,follower,following}) => {
                 <p className='break-words text-base'>this is my bio.</p>
             </Link>
             <div>
-                <button onClick={toggleFollowStatus} className={`ml-4 ${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
-              'bg-green-500 hover:bg-green-600 text-white border-none'} z-10 rounded-xl px-3 py-1 font-semibold cursor-pointer
-                 text-white text-[14px] ${isYourAccount?'hidden':'block'} `}>{(followStatus)?'Following':'Follow'}
+                <button onClick={toggleFollowStatus} className={`ml-4 ${followStatus?'bg-gray-100 text-black hover:bg-gray-200 border-2':
+              'bg-green-500 hover:bg-green-600 text-white border-none'} z-10 rounded-xl px-3 py-1 font-semibold cursor-pointer 
+               text-[14px] ${isYourAccount?'hidden':'block'} `}>{(followStatus)?'Following':'Follow'}
                 </button>
             </div>
         </div>
