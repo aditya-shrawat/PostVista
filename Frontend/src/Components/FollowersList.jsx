@@ -3,7 +3,7 @@ import FollowerItem from './FollowerItem'
 
 const FollowersList = ({showFollowers,followersData,followingData}) => {
   return (
-    <div className='w-full px-3'>
+    <div className='w-full px-2'>
         {
             (showFollowers)?
             followersData.map((follower)=>(

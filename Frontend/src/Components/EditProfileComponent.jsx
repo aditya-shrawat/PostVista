@@ -4,13 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 
 const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
     const [newProfileInfo,setNewProfileInfo] = useState({}) ;
+    const [initialInfo,setInitialInfo] = useState({});
+    const [saveBtnStatus,setSaveBtnStatus] = useState(false) ;
     const divRef = useRef(null)
 
     useEffect(()=>{
         if(userDetails){
             setNewProfileInfo(userDetails);
+            setInitialInfo(userDetails) ;
         }
     },[userDetails]);
+
     const handleNameInput = (e) => {
         setNewProfileInfo({...newProfileInfo,[e.target.name]:e.target.value});
     }
@@ -21,6 +25,15 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
         textarea.style.height = `${textarea.scrollHeight}px`; 
         setNewProfileInfo({...newProfileInfo,[e.target.name]:e.target.value});
     }
+
+    useEffect(() => {
+        if(newProfileInfo.name ==='' || newProfileInfo.bio ===''){
+            setSaveBtnStatus(false);
+        }
+        else{
+            setSaveBtnStatus(JSON.stringify(initialInfo) !== JSON.stringify(newProfileInfo));
+        }
+    }, [newProfileInfo, initialInfo]);
 
     useEffect(()=>{
         const handleOutsideClick = (e)=>{
@@ -42,6 +55,7 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
             const BackendURL = import.meta.env.VITE_backendURL;
             await axios.put(`${BackendURL}/${userDetails.username}`,newProfileInfo,{withCredentials:true,});
             setIsProfileUpdated(true) ;
+            setEdit(false);
         } catch (error) {
             console.log("Error in updating user info -",error) ;
         }
@@ -96,8 +110,9 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                     hover:text-blue-400 px-6 py-1 text-lg text-blue-500 font-semibold cursor-pointer rounded-3xl">
                     Cancel
                     </button>
-                    <button onClick={updateUserInfo} className="outline-none bg-blue-500 hover:bg-blue-400 px-6 py-1 text-lg text-white font-semibold 
-                        cursor-pointer rounded-3xl">Save
+                    <button onClick={updateUserInfo} className={`outline-none px-6 py-1 text-lg text-white font-semibold 
+                         rounded-3xl ${saveBtnStatus?`bg-blue-500 hover:bg-blue-400 cursor-pointer`:`bg-blue-400 cursor-not-allowed`} `} 
+                        disabled={!saveBtnStatus}>Save
                     </button>
                 </div>
             </div>

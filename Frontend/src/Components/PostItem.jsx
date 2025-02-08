@@ -35,12 +35,19 @@ const PostItem = ({post}) => {
   },[])
 
   return (
-    <div className='my-3 h-auto w-full px-3 py-6 sm:py-8 flex flex-col border-b-[1px] '>
+    <div className='my-3 h-auto w-full px-2 py-6 sm:py-8 flex flex-col border-b-[1px] '>
       {
         (post.createdBy.username)&&
-        <div className='mb-3 flex '>
-          <Link to={`/${post.createdBy.username}`}  className='bg-green-500 h-7 w-7 rounded-full mr-3 cursor-pointer '></Link>
-          <div className='w-auto cursor-pointer hover:underline '><Link to={`/${post.createdBy.username}`} >{post.createdBy.username}</Link></div>
+        <div className='mb-3 flex items-center'>
+          <div>
+            <Link to={`/${post.createdBy.username}`}  className='block bg-green-500 h-7 w-7 rounded-full mr-3 cursor-pointer '></Link>
+          </div>
+          <div className='w-auto cursor-pointer '>
+            <Link to={`/${post.createdBy.username}`} className='flex items-baseline'>
+              <h1 className='text-lg font-semibold text-black hover:underline '>{post.createdBy.name}</h1>
+              <h2 className='text-gray-500 text-base ml-2 ' >{`@${post.createdBy.username}`}</h2>
+            </Link>
+          </div>
         </div>
       }
       <Link to={`/post/${post._id}`} className='w-full cursor-pointer '>

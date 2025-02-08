@@ -25,13 +25,17 @@ const CommentItem = ({comment,}) => {
       },[])
 
   return (
-    <div className=' px-2 py-5 border-b-[1px]  '>
+    <div className=' py-5 border-b-[1px]  '>
         <div className='flex items-center mb-2 '>
             <Link to={`/${comment.user.username}`} className='bg-green-500 block w-8 h-8 rounded-full mr-3 cursor-pointer '></Link>
-            <div className='flex flex-col'>
-                <Link to={`/${comment.user.username}`} className='text-base text-[17px] hover:underline cursor-pointer break-words '>{comment.user.username}</Link>
+            <Link to={`/${comment.user.username}`} className='flex flex-col'>
+                <div className='flex items-baseline cursor-pointer'>
+                  <h2 className='text-black text-lg font-semibold hover:underline'>{comment.user.name}</h2>
+                  <h2 
+                  className='text-base break-words ml-2 text-gray-500'>{`@${comment.user.username}`}</h2>
+                </div>
                 <p className='text-[14px] text-gray-500 '>{formatedTime}</p>
-            </div>
+            </Link>
         </div>
         <div>
             <p className='break-words '>

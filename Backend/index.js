@@ -82,7 +82,7 @@ app.put('/:username',checkTokenAuthentication,async (req,res)=>{
 
 app.get('/',checkTokenAuthentication,async (req,res)=>{
     try {
-        const allPosts = await Post.find({}).populate('createdBy','username ').sort({ createdAt: -1 });
+        const allPosts = await Post.find({}).populate('createdBy','username name bio').sort({ createdAt: -1 });
         return res.status(200).json({allPosts});
     } catch (error) {
         return res.status(500).json({message:"Internal server error."})

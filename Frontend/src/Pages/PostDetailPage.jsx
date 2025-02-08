@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import LikeCommentBar from '../Components/LikeCommentBar';
-import CommentList from '../Components/commentList';
+import CommentList from '../Components/CommentList';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -15,6 +15,8 @@ const PostDetailPage = () => {
   const [likeStatus,setLikeStatus] = useState(false) ;
   const [followStatus,setFollowStatus] = useState(false) ;
   const [isYourAccount,setIsYourAccount] = useState(false) ;
+  const [followerCount,setFollowerCount] = useState(0) ;
+  const [followingCount,setFollowingCount] = useState(0) ;
 
   const [postTime,setPostTime] = useState('') ;
   const [formatedTime,setFormatedTime] = useState('') ;
@@ -102,6 +104,7 @@ const PostDetailPage = () => {
   useEffect(()=>{
       if(writerData && writerData._id){
         checkFollowStatus();
+        countFollowers()
       }
   },[writerData]) ;
 
@@ -115,22 +118,41 @@ const PostDetailPage = () => {
       }
   };
 
+  const countFollowers = async ()=>{
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      const response = await axios.get(`${BackendURL}/user/${writerData._id}/follower/count`,{withCredentials:true,});
+      setFollowerCount(response.data.followerCount) ;
+      setFollowingCount(response.data.followingCount)
+      checkFollowStatus();
+    } catch (error) {
+      console.log("Error in counting Followers -",error) ;
+    }
+  };
+
   return (
-    <div className='min-h-screen min-w-screen p-2 pt-6  '>
-      <div className='w-full max-w-screen-md h-auto p-2 m-auto '>
+    <div className='min-h-screen min-w-screen pt-6  '>
+      <div className='w-full max-w-screen-md h-auto p-4 m-auto '>
         
         <h1 className='text-4xl font-bold mb-8 break-words '>{postData.title}</h1> 
 
-        <div className='flex items-center '>
+        <div className='flex items-center border-t-[1px] pt-3 '>
           <Link to={`/${writerData.username}`}  className='bg-green-500 block h-11 w-11 rounded-full cursor-pointer mr-4 ' ></Link>
           <div className=' flex flex-col justify-center ' >
             <div className=' flex items-center'>
-              <span className='text-base cursor-pointer hover:underline flex items-center'>
-                <Link to={`/${writerData.username}`} >{writerData.username}</Link>
-              </span> 
-              <span onClick={toggleFollowStatus} className={`block ${followStatus?'text-gray-500 hover:text-gray-600':'text-green-600 hover:text-green-800'} font-semibold ml-4 cursor-pointer`}>
-                {followStatus?'Following':'Follow'}
-              </span> 
+              <Link to={`/${writerData.username}`} className=' cursor-pointer flex items-baseline '>
+                {
+                  writerData.name!=='' &&
+                  <h1 className='text-lg text-black font-semibold'>{writerData.name}</h1>
+                }
+                <h2 className='text-base text-gray-500 ml-3' >{`@${writerData.username}`}</h2>
+              </Link> 
+              {
+                (!isYourAccount)&&
+                <span onClick={toggleFollowStatus} className={`block ${followStatus?'text-gray-500 hover:text-gray-600':'text-green-600 hover:text-green-800'} font-semibold ml-8 cursor-pointer`}>
+                  {followStatus?'Following':'Follow'}
+                </span> 
+              }
             </div>
             <div className='text-[14px] flex items-center text-gray-500'>{formatedTime}</div>
           </div>
@@ -152,21 +174,25 @@ const PostDetailPage = () => {
               <div className='bg-green-500 block h-11 w-11 rounded-full cursor-pointer  ' ></div>
             </div>
             <div className=' w-full flex flex-col ' >
-              <span className='text-base cursor-pointer hover:underline flex items-center'>
-                {writerData.username}
-              </span> 
-              <span className='text-[14px] my-1 flex items-center text-gray-500'>2.3K Followers | 22 following</span>
-              <span className='text-[14px] my-1 flex items-center break-words '>This is my Bio.</span>
+              <div className=' cursor-pointer flex items-baseline '>
+                <h1 className='text-lg text-black font-semibold'>{writerData.name}</h1>
+                <h2 className='text-base text-gray-500 ml-3' >{`@${writerData.username}`}</h2>
+              </div> 
+              <span className='text-[14px] my-1 flex items-center break-words '>{writerData.bio}</span>
+              <span className='text-[14px] my-1 flex items-center text-gray-500'>{`${followerCount} Followers | ${followingCount} following`}</span>
             </div>
           </Link>
-          <button onClick={toggleFollowStatus} className={`${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
-            'bg-green-500 hover:bg-green-600 text-white border-none'} h-9 px-3 rounded-2xl font-semibold cursor-pointer `}>
-            {followStatus?"Following":"Follow"}
-          </button>
+          {
+            (!isYourAccount) &&
+            <button onClick={toggleFollowStatus} className={`${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
+              'bg-green-500 hover:bg-green-600 text-white border-none'} h-9 px-3 rounded-2xl font-semibold cursor-pointer `}>
+              {followStatus?"Following":"Follow"}
+            </button>
+          }
         </div>
       </div>
       <hr />
-      <div className='w-full max-w-screen-md h-auto p-2 m-auto'>
+      <div className='w-full max-w-screen-md h-auto p-2 py-2 m-auto'>
         <div className='w-full '>
           <CommentList postId={postId} />
         </div>

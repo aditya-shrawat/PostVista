@@ -33,7 +33,7 @@ const FollowerItem = ({showFollowers,follower,following}) => {
     }
 
   return (
-    <div className='w-full px-3 py-3 my-2 rounded-lg flex mb-2 hover:bg-gray-100 '>
+    <div className='w-full px-2 py-3 my-2 rounded-lg flex mb-2 hover:bg-gray-100 '>
         <Link to={`/${(showFollowers)?follower.followedBy.username : following.account.username}`} >
             <div className=' h-12 w-12 bg-green-500 rounded-full cursor-pointer '></div>
         </Link>

@@ -101,7 +101,7 @@ const ProfilePage = () => {
     ) : (
       <div className='w-full relative '>
         <div className='max-w-[700px] m-auto '>
-          <div className='w-full border-b-[1px] pt-6 pb-9 px-3'>
+          <div className='w-full border-b-[1px] pt-6 pb-9 px-4'>
             <div className=' w-full flex flex-col sm:flex-row ' >
               <div>
                 <div className='mr-6 sm:mr-8 sm:h-32 sm:w-32 h-24 w-24 bg-green-500 rounded-full cursor-pointer '></div>
@@ -109,10 +109,7 @@ const ProfilePage = () => {
               <div className='mt-1 w-full'>
                 <div className='w-full my-2 flex justify-between items-center '>
                   <div>
-                    {
-                      (userDetails.name)&&
-                      <h1 className='text-2xl font-semibold'>{userDetails.name}</h1>
-                    }
+                    <h1 className='text-xl font-semibold'>{userDetails.name}</h1>
                     <h2 className='text-base text-gray-500 '>{`@${userDetails.username}`}</h2>
                   </div>
                   {
@@ -156,7 +153,7 @@ const ProfilePage = () => {
               </div>
             }
           </div>
-          <div className={` w-full]  `}>
+          <div className={` w-full] p-2 `}>
             <PostList posts={posts} />
           </div>
         </div>

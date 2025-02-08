@@ -54,7 +54,7 @@ const CreateBlogPage = () => {
   }
 
   return ( 
-    <div className='px-2 min-w-screen min-h-screen '>
+    <div className='px-4 min-w-screen min-h-screen '>
       <div className='m-auto max-w-[600px] '>
         <nav className='w-full h-16 px-4 bg-white bg-opacity-55 backdrop-blur-sm flex flex-row justify-between items-center 
             border-b-[1px]  sticky top-0 left-0 z-20'>

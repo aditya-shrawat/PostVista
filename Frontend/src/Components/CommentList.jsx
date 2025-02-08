@@ -42,9 +42,9 @@ const commentList = ({postId}) => {
 
 
   return (
-    <div className='w-full h-auto mt-7 '>
+    <div className='w-full h-auto mt-7 px-2'>
         <h1 className=' text-2xl font-bold'>{`Comments (${commentCount}) `}</h1>
-        <div className=' p-2 px-3 py-10 border-b-[1px] '>
+        <div className='  py-10 border-b-[1px] '>
             <div className='w-full h-12 p-2 flex text-lg rounded-lg shadow-[0px_0px_18px_rgba(0,_0,_0,_0.3)] '>
                 <input onChange={(e)=>handleInput(e)} value={commentContent} type="text" name='commentFeild' placeholder='Write your comment...' 
                 className='w-full h-full  border-none outline-none mr-4  ' />
