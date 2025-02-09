@@ -4,12 +4,14 @@ import HomePage from './Pages/HomePage'
 import PostDetailPage from './Pages/PostDetailPage'
 import ProfilePage from './Pages/ProfilePage'
 import Errorpage from './Pages/Errorpage'
-import LoginPage from './Pages/LoginPage'
+import LoginPage from './Pages/SigninPage'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import SavedPosts from './Pages/SavedPosts'
 import CreateBlogPage from './Pages/CreateBlogPage'
 import FollowerPage from './Pages/FollowerPage'
+import SignupPage from './Pages/SignupPage'
+import SigninPage from './Pages/SigninPage'
 
 
 const router = createBrowserRouter([
@@ -26,8 +28,8 @@ const router = createBrowserRouter([
     ]
   },
   {path:'new-blog', element:<CreateBlogPage /> },
-  {path:'user/signin',element:<LoginPage /> },
-  {path:'user/signup',element:<LoginPage /> },
+  {path:'user/signin',element:<SigninPage /> },
+  {path:'user/signup',element:<SignupPage /> },
   {
     path:'*',
     element:<Errorpage />

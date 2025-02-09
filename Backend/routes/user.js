@@ -1,5 +1,5 @@
 import express from 'express'
-import { handleSignin, handleSignup } from '../controllers/user.js';
+import { checkEmail, createAccount, handleSignin } from '../controllers/user.js';
 import { checkTokenAuthentication } from '../middleware/authentication.js';
 import Post from '../model/post.js';
 import { checkFollowStatus, countFollowerFollowingCount, getFollowers, getFollowing, postFollower } from '../controllers/follow.js';
@@ -7,7 +7,8 @@ import { checkFollowStatus, countFollowerFollowingCount, getFollowers, getFollow
 const route = express.Router() ;
 
 
-route.post('/signup',handleSignup)
+route.post('/check-email',checkEmail) ;
+route.post('/create-account',createAccount)
 route.post('/signin',handleSignin)
 
 route.get('/logout',async (req,res)=>{

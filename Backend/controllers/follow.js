@@ -6,8 +6,8 @@ export const getFollowers = async (req,res)=>{
     try {
         const accountId = req.params.id ;
 
-        const followers = await Follower.find({account:accountId,}).populate('followedBy',"username ") ;
-        const accountData = await User.findById(accountId).select("username") ;
+        const followers = await Follower.find({account:accountId,}).populate('followedBy',"username name") ;
+        const accountData = await User.findById(accountId).select("username name") ;
         return res.status(200).json({followers,accountData,message:"Followers fetched successfully."}) ;
     } catch (error) {
         return res.status(500).json({message:"Internal server error."}) ;
@@ -18,8 +18,8 @@ export const getFollowing = async (req,res)=>{
     try {
         const accountId = req.params.id ;
     
-        const following = await Follower.find({followedBy:accountId,}).populate('account',"username ") ;
-        const accountData = await User.findById(accountId).select("username") ;
+        const following = await Follower.find({followedBy:accountId,}).populate('account',"username name") ;
+        const accountData = await User.findById(accountId).select("username name") ;
         return res.status(200).json({following,accountData,message:"Following fetched successfully."}) ;
     } catch (error) {
         return res.status(500).json({message:"Internal server error."}) ;
