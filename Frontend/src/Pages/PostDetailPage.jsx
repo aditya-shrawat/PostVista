@@ -17,6 +17,7 @@ const PostDetailPage = () => {
   const [isYourAccount,setIsYourAccount] = useState(false) ;
   const [followerCount,setFollowerCount] = useState(0) ;
   const [followingCount,setFollowingCount] = useState(0) ;
+  const [loading,setLoading] = useState(true) ;
 
   const [postTime,setPostTime] = useState('') ;
   const [formatedTime,setFormatedTime] = useState('') ;
@@ -56,6 +57,9 @@ const PostDetailPage = () => {
       setPostTime(response.data.post.createdAt) ;
     } catch (error) {
       console.log("Error in fetching PostData - ",error) ;
+    }
+    finally{
+      setLoading(false)
     }
   }
   
@@ -133,70 +137,110 @@ const PostDetailPage = () => {
   return (
     <div className='min-h-screen min-w-screen pt-6  '>
       <div className='w-full max-w-screen-md h-auto p-4 m-auto '>
-        
-        <h1 className='text-4xl font-bold mb-8 break-words '>{postData.title}</h1> 
-
-        <div className='flex items-center border-t-[1px] pt-3 '>
-          <Link to={`/${writerData.username}`}  className='bg-green-500 block h-11 w-11 rounded-full cursor-pointer mr-4 ' ></Link>
-          <div className=' flex flex-col justify-center ' >
-            <div className=' flex items-center'>
-              <Link to={`/${writerData.username}`} className=' cursor-pointer flex items-baseline '>
-                {
-                  writerData.name!=='' &&
-                  <h1 className='text-lg text-black font-semibold'>{writerData.name}</h1>
-                }
-                <h2 className='text-base text-gray-500 ml-3' >{`@${writerData.username}`}</h2>
-              </Link> 
-              {
-                (!isYourAccount)&&
-                <span onClick={toggleFollowStatus} className={`block ${followStatus?'text-gray-500 hover:text-gray-600':'text-green-600 hover:text-green-800'} font-semibold ml-8 cursor-pointer`}>
-                  {followStatus?'Following':'Follow'}
-                </span> 
-              }
+        {
+          (loading)?
+          <>
+          <div className="flex w-full flex-col gap-4">
+            <div>
+              <div className="skeleton h-4 w-full mt-3"></div>
+              <div className="skeleton h-4 w-full mt-3"></div>
             </div>
-            <div className='text-[14px] flex items-center text-gray-500'>{formatedTime}</div>
+            <div className="flex items-center gap-4">
+              <div className="skeleton h-11 w-11 shrink-0 rounded-full"></div>
+              <div className="flex flex-col gap-2">
+                <div className="skeleton h-3 w-28"></div> 
+                <div className="skeleton h-3 w-20"></div>
+              </div>
+            </div>
+            <div className="skeleton h-4 w-full mt-3"></div>
+            <div className="skeleton h-80 w-full"></div>
+            <div>
+              <div className="skeleton h-4 w-full mt-3"></div>
+              <div className="skeleton h-4 w-full mt-3"></div>
+              <div className="skeleton h-4 w-full mt-3"></div>
+              <div className="skeleton h-4 w-full mt-3"></div>
+            </div>
           </div>
-        </div>
-        
-        <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}  />
-        
-        <div className='w-auto h-auto my-12  bg-red-300'>
-          <img className=' object-contain' src="" alt="" />
-        </div>
-        
-        <p className='text-xl break-words'>{postData.body}</p>
+          </>:
+          <>
+          <h1 className='text-4xl font-bold mb-8 break-words '>{postData.title}</h1> 
 
-        <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}  />
+          <div className='flex items-center border-t-[1px] pt-3 '>
+            <Link to={`/${writerData.username}`}  className='bg-green-500 block h-11 w-11 rounded-full cursor-pointer mr-4 ' ></Link>
+            <div className=' flex flex-col justify-center ' >
+              <div className=' flex items-center'>
+                <Link to={`/${writerData.username}`} className=' cursor-pointer flex items-baseline '>
+                  {
+                    writerData.name!=='' &&
+                    <h1 className='text-lg text-black font-semibold'>{writerData.name}</h1>
+                  }
+                  <h2 className='text-base text-gray-500 ml-3' >{`@${writerData.username}`}</h2>
+                </Link> 
+                {
+                  (!isYourAccount)&&
+                  <span onClick={toggleFollowStatus} className={`block ${followStatus?'text-gray-500 hover:text-gray-600':'text-green-600 hover:text-green-800'} font-semibold ml-8 cursor-pointer`}>
+                    {followStatus?'Following':'Follow'}
+                  </span> 
+                }
+              </div>
+              <div className='text-[14px] flex items-center text-gray-500'>{formatedTime}</div>
+            </div>
+          </div>
 
-        <div className='flex justify-between my-8 '>
-          <Link to={`/${writerData.username}`} className='w-full flex mr-6'>
-            <div className=' mr-4'>
-              <div className='bg-green-500 block h-11 w-11 rounded-full cursor-pointer  ' ></div>
-            </div>
-            <div className=' w-full flex flex-col ' >
-              <div className=' cursor-pointer flex items-baseline '>
-                <h1 className='text-lg text-black font-semibold'>{writerData.name}</h1>
-                <h2 className='text-base text-gray-500 ml-3' >{`@${writerData.username}`}</h2>
-              </div> 
-              <span className='text-[14px] my-1 flex items-center break-words '>{writerData.bio}</span>
-              <span className='text-[14px] my-1 flex items-center text-gray-500'>{`${followerCount} Followers | ${followingCount} following`}</span>
-            </div>
-          </Link>
-          {
-            (!isYourAccount) &&
-            <button onClick={toggleFollowStatus} className={`${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
-              'bg-green-500 hover:bg-green-600 text-white border-none'} h-9 px-3 rounded-2xl font-semibold cursor-pointer `}>
-              {followStatus?"Following":"Follow"}
-            </button>
-          }
-        </div>
+          <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}  />
+
+          <div className='w-auto h-auto my-12  bg-red-300'>
+            <img className=' object-contain' src="" alt="" />
+          </div>
+
+          <p className='text-xl break-words'>{postData.body}</p>
+
+          <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}  />
+
+          <div className='flex justify-between my-8 '>
+            <Link to={`/${writerData.username}`} className='w-full flex mr-6'>
+              <div className=' mr-4'>
+                <div className='bg-green-500 block h-11 w-11 rounded-full cursor-pointer  ' ></div>
+              </div>
+              <div className=' w-full flex flex-col ' >
+                <div className=' cursor-pointer flex items-baseline '>
+                  <h1 className='text-lg text-black font-semibold'>{writerData.name}</h1>
+                  <h2 className='text-base text-gray-500 ml-3' >{`@${writerData.username}`}</h2>
+                </div> 
+                <span className='text-[14px] my-1 flex items-center break-words '>{writerData.bio}</span>
+                <span className='text-[14px] my-1 flex items-center text-gray-500'>{`${followerCount} Followers | ${followingCount} following`}</span>
+              </div>
+            </Link>
+            {
+              (!isYourAccount) &&
+              <button onClick={toggleFollowStatus} className={`${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
+                'bg-green-500 hover:bg-green-600 text-white border-none'} h-9 px-3 rounded-2xl font-semibold cursor-pointer `}>
+                {followStatus?"Following":"Follow"}
+              </button>
+            }
+          </div>    
+          </>
+        }
       </div>
       <hr />
+      {(loading)?
+      <>
+      <div className=' w-full max-w-screen-md h-auto p-2 py-2 m-auto'>
+        <div className='w-full flex flex-col gap-3'>
+          <div className="skeleton h-6 w-28"></div>
+          <div className="skeleton h-10 w-full my-2"></div>
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-4 w-full"></div>
+        </div>
+      </div>
+      </>
+      :
       <div className='w-full max-w-screen-md h-auto p-2 py-2 m-auto'>
         <div className='w-full '>
           <CommentList postId={postId} />
         </div>
       </div>
+      }
     </div>
   )
 }

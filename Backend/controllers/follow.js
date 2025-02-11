@@ -6,7 +6,7 @@ export const getFollowers = async (req,res)=>{
     try {
         const accountId = req.params.id ;
 
-        const followers = await Follower.find({account:accountId,}).populate('followedBy',"username name") ;
+        const followers = await Follower.find({account:accountId,}).populate('followedBy',"username name bio") ;
         const accountData = await User.findById(accountId).select("username name") ;
         return res.status(200).json({followers,accountData,message:"Followers fetched successfully."}) ;
     } catch (error) {
@@ -18,7 +18,7 @@ export const getFollowing = async (req,res)=>{
     try {
         const accountId = req.params.id ;
     
-        const following = await Follower.find({followedBy:accountId,}).populate('account',"username name") ;
+        const following = await Follower.find({followedBy:accountId,}).populate('account',"username name bio") ;
         const accountData = await User.findById(accountId).select("username name") ;
         return res.status(200).json({following,accountData,message:"Following fetched successfully."}) ;
     } catch (error) {
