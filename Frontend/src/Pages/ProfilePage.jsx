@@ -177,7 +177,7 @@ const ProfilePage = () => {
               }
             </div>
           }
-          <div className={` w-full] p-2 `}>
+          <div className={` w-full p-2 `}>
             {
               (postsLoading)?
               <>

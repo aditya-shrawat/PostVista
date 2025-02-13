@@ -14,6 +14,7 @@ import User from './model/user.js';
 import { creatingNewPost, } from './controllers/post.js';
 import Post from './model/post.js';
 import postRouter from './routes/post.js'
+import { getSavedPosts } from './controllers/savePosts.js';
 
 mongoose.connect(process.env.mongodbURL)
 .then(console.log("MongoDb is connected successfully"))
@@ -88,6 +89,8 @@ app.get('/',checkTokenAuthentication,async (req,res)=>{
         return res.status(500).json({message:"Internal server error."})
     }
 })
+
+app.get('/my/bookmarks',checkTokenAuthentication,getSavedPosts) ;
 
 app.use('/post',postRouter) ;
 app.post('/new-blog',checkTokenAuthentication,creatingNewPost)

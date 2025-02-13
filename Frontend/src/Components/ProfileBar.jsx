@@ -34,7 +34,7 @@ const ProfileBar = ({barRef,username}) => {
                     </div>
                 </li>
                 <li className='mb-5 text-gray-500 hover:text-black cursor-pointer'>
-                    <Link to={'mylist'} className=' w-full flex items-center ' > <FaRegBookmark className='mr-3 text-xl' /> Bookmarks</Link>
+                    <Link to={'/my/bookmarks'} className=' w-full flex items-center ' > <FaRegBookmark className='mr-3 text-xl' /> Bookmarks</Link>
                 </li>
                 <li>
                     <div className=' mt-4 border-t-[1px] pt-4'>

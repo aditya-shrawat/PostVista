@@ -18,6 +18,7 @@ const PostDetailPage = () => {
   const [followerCount,setFollowerCount] = useState(0) ;
   const [followingCount,setFollowingCount] = useState(0) ;
   const [loading,setLoading] = useState(true) ;
+  const [bookmarkStatus,setBookmarkStatus] = useState(false) ;
 
   const [postTime,setPostTime] = useState('') ;
   const [formatedTime,setFormatedTime] = useState('') ;
@@ -87,6 +88,7 @@ const PostDetailPage = () => {
     fetchPostData() ;
     fetchCounts();
     isPostIsLiked();
+    checkBookmarkStatus()
   },[])
 
   useEffect(()=>{
@@ -133,6 +135,26 @@ const PostDetailPage = () => {
       console.log("Error in counting Followers -",error) ;
     }
   };
+
+  const bookmarkPost = async ()=>{
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      await axios.post(`${BackendURL}/post/${postId}/bookmark-post`,{},{withCredentials:true,});
+      checkBookmarkStatus()
+    } catch (error) {
+      console.log("error in bookmarking post -",error);
+    }
+  }
+
+  const checkBookmarkStatus = async ()=>{
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      const response = await axios.get(`${BackendURL}/post/${postId}/check-bookmark`,{withCredentials:true,});
+      setBookmarkStatus(response.data.bookmarked) ;
+    } catch (error) {
+      console.log("error in bookmark status -",error);
+    }
+  }
 
   return (
     <div className='min-h-screen min-w-screen pt-6  '>
@@ -187,7 +209,8 @@ const PostDetailPage = () => {
             </div>
           </div>
 
-          <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}  />
+          <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} 
+            comments={commentCount} bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus}  />
 
           <div className='w-auto h-auto my-12  bg-red-300'>
             <img className=' object-contain' src="" alt="" />
@@ -195,7 +218,8 @@ const PostDetailPage = () => {
 
           <p className='text-xl break-words'>{postData.body}</p>
 
-          <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}  />
+          <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}
+           bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus}  />
 
           <div className='flex justify-between my-8 '>
             <Link to={`/${writerData.username}`} className='w-full flex mr-6'>
