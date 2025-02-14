@@ -216,7 +216,7 @@ const ProfilePage = () => {
                 </div>
               </div>
               </>:
-              <PostList posts={posts} />
+              <PostList posts={posts} pageType={'ProfilePage'} />
             }
           </div>
         </div>

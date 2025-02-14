@@ -34,10 +34,10 @@ export const bookmarkPost = async (req,res)=>{
         const isSaved = await SavedPosts.findOneAndDelete({savedBy:userId,post:postId});
 
         if(!isSaved){
-            const savedPost = await SavedPosts.create({savedBy:userId,post:postId}) ;
-            return res.status(200).json({message:"Posted saved successfully.",savedPost});
+            await SavedPosts.create({savedBy:userId,post:postId}) ;
+            return res.status(200).json({message:"Posted saved successfully.",isSaved:true});
         }
-        return res.status(200).json({message:"Posted unsaved successfully."});
+        return res.status(200).json({message:"Posted unsaved successfully.",isSaved:false});
     } catch (error) {
         return res.status(500).json({error:"Internal server error."}) ;
     }

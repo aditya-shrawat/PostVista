@@ -25,7 +25,7 @@ const HomePage = () => {
   return (
     <div className='p-2 min-w-screen min-h-screen relative  '>
       <div className='m-auto max-w-[700px]'>
-        <PostList posts={Posts} />
+        <PostList posts={Posts} pageType={'HomePage'} />
       </div>
 
       <CreateBlogBtn />

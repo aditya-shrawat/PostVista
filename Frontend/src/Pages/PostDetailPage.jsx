@@ -139,8 +139,8 @@ const PostDetailPage = () => {
   const bookmarkPost = async ()=>{
     try {
       const BackendURL = import.meta.env.VITE_backendURL;
-      await axios.post(`${BackendURL}/post/${postId}/bookmark-post`,{},{withCredentials:true,});
-      checkBookmarkStatus()
+      const response = await axios.post(`${BackendURL}/post/${postId}/bookmark-post`,{},{withCredentials:true,});
+      setBookmarkStatus(response.data.isSaved) ;
     } catch (error) {
       console.log("error in bookmarking post -",error);
     }
