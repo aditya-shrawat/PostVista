@@ -109,6 +109,16 @@ const PostItem = ({post,pageType}) => {
     }
   },[showMoreOptions])
 
+  const deletePost = async ()=>{
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      const response = await axios.delete(`${BackendURL}/post/${post._id}`,{withCredentials:true,});
+      console.log(response.data.message)
+    } catch (error) {
+      console.log("Error in deleting post -",error) ;
+    }
+  }
+
   return (
     <div className='my-3 h-auto w-full px-2 py-6 sm:py-8 flex flex-col border-b-[1px] '>
       {
@@ -153,9 +163,9 @@ const PostItem = ({post,pageType}) => {
               }
               {
                 (isYourAccount)&&
-                <div onClick={()=>{setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg text-red-600 hover:bg-gray-100'>
+                <div onClick={()=>{deletePost(); setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg text-red-600 hover:bg-gray-100'>
                   <div className='mr-3'><RiDeleteBin6Line /></div>
-                  <div className=' break-words'>
+                  <div>
                     Delete 
                   </div>
                 </div>

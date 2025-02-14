@@ -1,5 +1,5 @@
 import express from 'express' ;
-import { calculatingCounts, fetchingPostData, getLike, postLike } from '../controllers/post.js';
+import { calculatingCounts, deletePost, fetchingPostData, getLike, postLike } from '../controllers/post.js';
 import { getComments, postComments } from '../controllers/comment.js';
 import { checkTokenAuthentication } from '../middleware/authentication.js';
 import { bookmarkPost, checkBookmarkStatus } from '../controllers/savePosts.js';
@@ -7,6 +7,7 @@ import { bookmarkPost, checkBookmarkStatus } from '../controllers/savePosts.js';
 const route = express.Router() ;
 
 route.get('/:id',fetchingPostData)
+route.delete('/:id',checkTokenAuthentication,deletePost) ;
 route.get('/:id/counts',calculatingCounts)
 route.get('/:id/like',checkTokenAuthentication,getLike);
 route.post('/:id/like',checkTokenAuthentication,postLike);
