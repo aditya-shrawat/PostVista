@@ -11,8 +11,8 @@ import Loading from './Pages/Loading';
 const SavedPosts = lazy(()=>import('./Pages/SavedPosts')) 
 const CreateBlogPage = lazy(()=>import('./Pages/CreateBlogPage')) 
 const FollowerPage = lazy(()=>import('./Pages/FollowerPage')) 
-const SignupPage = lazy(()=>import('./Pages/SignupPage')) 
-const SigninPage = lazy(()=>import('./Pages/SigninPage')) 
+import SignupPage from './Pages/SignupPage' 
+import SigninPage from './Pages/SigninPage' 
 
 
 const router = createBrowserRouter([

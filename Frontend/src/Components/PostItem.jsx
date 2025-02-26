@@ -6,6 +6,9 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoIosShareAlt } from "react-icons/io";
 import { SlUserFollow } from "react-icons/sl";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { BsWhatsapp } from "react-icons/bs";
+import { MdOutlineMail } from "react-icons/md";
+import { FaLink } from "react-icons/fa6";
 import axios from 'axios';
 
 const PostItem = ({post,pageType}) => {
@@ -17,6 +20,9 @@ const PostItem = ({post,pageType}) => {
   const [followStatus,setFollowStatus] = useState(false) ;
   const [isYourAccount,setIsYourAccount] = useState(false) ;
   const optionsRef = useRef(null) ;
+  const [sharing,setSharing] = useState(false) ;
+
+  const pathLink = `${window.location.origin}/post/${post._id}` ;
 
   const fetchCounts = async ()=>{
     try {
@@ -93,6 +99,7 @@ const PostItem = ({post,pageType}) => {
     e.preventDefault(); 
     if(optionsRef.current && !optionsRef.current.contains(e.target)){
       setShowMoreOptions(false) ;
+      setSharing(false)
     }
   }
 
@@ -119,6 +126,12 @@ const PostItem = ({post,pageType}) => {
     }
   }
 
+  const copyLinkToClipboard = ()=>{
+    navigator.clipboard.writeText(pathLink) ;
+    setSharing(false);
+    setShowMoreOptions(false) ;
+  }
+
   return (
     <div className='my-3 h-auto w-full px-2 py-6 sm:py-8 flex flex-col border-b-[1px] '>
       {
@@ -141,34 +154,53 @@ const PostItem = ({post,pageType}) => {
             </div>
 
             { (showMoreOptions) &&
-            <div ref={optionsRef} className='bg-white border-2 z-20 h-auto w-72 p-3 py-5 rounded-xl absolute top-0 -right-2 
+            <div ref={optionsRef} className='bg-white border-2 z-10 h-auto w-72 p-3 py-5 rounded-xl absolute top-0 -right-2 
                 text-base font-semibold flex flex-col shadow-[0px_3px_10px_rgba(0,0,0,0.2)] overflow-hidden'>
-              <div onClick={()=>{setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
-                <div className='mr-3'><IoIosShareAlt /></div>
-                <div>Share</div>
-              </div>
-              <div onClick={()=>{bookmarkPost();setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100 sm:hidden'>
-                <div className='mr-3 '>{(bookmarkStatus)? <FaBookmark /> : <FaRegBookmark  /> }</div>
-                <div>{(bookmarkStatus)? `Bookmarked` : `Bookmark` }</div>
-              </div>
               {
-                (!isYourAccount)&&
-                <div onClick={()=>{followAuthor();setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
-                  <div className='mr-3'><SlUserFollow /></div>
-                  <div className=' break-words'>
-                    {(followStatus)?`Unfollow `:`Follow `} @
-                    {(pageType!=='ProfilePage') && post.createdBy.username}
-                  </div>
+                (!sharing)?
+              <>
+                <div onClick={()=>{setSharing(true)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                  <div className='mr-3'><IoIosShareAlt /></div>
+                  <div>Share</div>
                 </div>
-              }
-              {
-                (isYourAccount)&&
-                <div onClick={()=>{deletePost(); setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg text-red-600 hover:bg-gray-100'>
-                  <div className='mr-3'><RiDeleteBin6Line /></div>
-                  <div>
-                    Delete 
-                  </div>
+                <div onClick={()=>{bookmarkPost();setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100 sm:hidden'>
+                  <div className='mr-3 '>{(bookmarkStatus)? <FaBookmark /> : <FaRegBookmark  /> }</div>
+                  <div>{(bookmarkStatus)? `Bookmarked` : `Bookmark` }</div>
                 </div>
+                {
+                  (!isYourAccount)&&
+                  <div onClick={()=>{followAuthor();setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                    <div className='mr-3'><SlUserFollow /></div>
+                    <div className=' break-words'>
+                      {(followStatus)?`Unfollow `:`Follow `} @
+                      {(pageType!=='ProfilePage') && post.createdBy.username}
+                    </div>
+                  </div>
+                }
+                {
+                  (isYourAccount)&&
+                  <div onClick={()=>{deletePost(); setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg text-red-600 hover:bg-gray-100'>
+                    <div className='mr-3'><RiDeleteBin6Line /></div>
+                    <div>
+                      Delete 
+                    </div>
+                  </div>
+                }
+              </>:
+              <>
+                <div onClick={copyLinkToClipboard} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                  <div className='mr-3'><FaLink /></div>
+                  <div>Copy link</div>
+                </div>
+                <div onClick={()=>{setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100 '>
+                  <div className='mr-3 '><MdOutlineMail /></div>
+                  <div >Emial</div>
+                </div>
+                <div onClick={()=>{setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                  <div className='mr-3 '><BsWhatsapp /></div>
+                  <div >Whatsapp</div>
+                </div>
+              </>
               }
             </div>
             }

@@ -1,6 +1,7 @@
 import Like from '../model/like.js';
 import Comment from '../model/comment.js';
 import Post from '../model/post.js';
+import SavedPosts from '../model/savePosts.js';
 
 export const creatingNewPost = async (req,res)=>{
     try {
@@ -80,6 +81,7 @@ export const deletePost = async (req,res)=>{
         const postId = req.params.id ;
 
         await Post.deleteOne({_id:postId});
+        await SavedPosts.findOneAndDelete({post:postId}) ;
         return res.status(200).json({message:'Post deleted successfully.'});
     } catch (error) {
         return res.status(500).json({message:"Internal server error."}) ;

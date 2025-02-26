@@ -20,6 +20,8 @@ const PostDetailPage = () => {
   const [loading,setLoading] = useState(true) ;
   const [bookmarkStatus,setBookmarkStatus] = useState(false) ;
 
+  const pathLink = `${window.location.origin}/post/${postId}` ;
+
   const [postTime,setPostTime] = useState('') ;
   const [formatedTime,setFormatedTime] = useState('') ;
 
@@ -210,7 +212,7 @@ const PostDetailPage = () => {
           </div>
 
           <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} 
-            comments={commentCount} bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus}  />
+            comments={commentCount} bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
 
           <div className='w-auto h-auto my-12  bg-red-300'>
             <img className=' object-contain' src="" alt="" />
@@ -219,7 +221,7 @@ const PostDetailPage = () => {
           <p className='text-xl break-words'>{postData.body}</p>
 
           <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}
-           bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus}  />
+           bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
 
           <div className='flex justify-between my-8 '>
             <Link to={`/${writerData.username}`} className='w-full flex mr-6'>
