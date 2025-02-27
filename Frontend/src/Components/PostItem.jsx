@@ -139,7 +139,9 @@ const PostItem = ({post,pageType}) => {
         <div className={`mb-3 flex ${(post.createdBy.username===undefined)?`flex-row-reverse`:`justify-between`} items-center`} >
           {(post.createdBy.username) && <div className={`flex items-center`}>
             <div>
-              <Link to={`/${post.createdBy.username}`}  className='block bg-green-500 h-7 w-7 rounded-full mr-3 cursor-pointer '></Link>
+              <Link to={`/${post.createdBy.username}`}  className='block bg-gray-100 h-7 w-7 rounded-full mr-3 cursor-pointer border-[1px] overflow-hidden '>
+                <img src={post.createdBy.profilePicURL} className='h-full w-full object-cover' />
+              </Link>
             </div>
             <div className='w-auto cursor-pointer '>
               <Link to={`/${post.createdBy.username}`} className='flex items-baseline'>

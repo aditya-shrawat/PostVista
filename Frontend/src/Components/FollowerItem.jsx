@@ -35,7 +35,9 @@ const FollowerItem = ({showFollowers,follower,following}) => {
   return (
     <Link to={`/${(showFollowers)?follower.followedBy.username : following.account.username}`} className='w-full px-2 py-3 my-2 rounded-lg flex mb-2 hover:bg-gray-100 '>
         <div >
-            <div className=' h-12 w-12 bg-green-500 rounded-full cursor-pointer '></div>
+            <div className=' h-12 w-12 bg-gray-100 rounded-full cursor-pointer border-[1px] overflow-hidden '>
+                <img src={(showFollowers)?follower.followedBy.profilePicURL : following.account.profilePicURL} className="h-full w-full object-cover" />
+            </div>
         </div>
         <div className='w-full ml-4 '>
             <div className='w-full flex'>

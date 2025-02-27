@@ -6,7 +6,6 @@ import ProfilePicCircle from './ProfilePicCircle';
 
 const Header = () => {
   const userInfo = useContext(UserContext) ;
-  console.log("userInfo = ",userInfo)
 
   return (
     <nav className='w-full h-16 px-6 bg-white bg-opacity-55 backdrop-blur-sm flex flex-row justify-between items-center border-b-[1px]  sticky top-0 left-0 z-20'>

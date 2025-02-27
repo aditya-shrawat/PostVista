@@ -34,7 +34,7 @@ export const fetchingPostData = async (req,res)=>{
     try {
         const PostId = req.params.id ;
 
-        const post = await Post.findById(PostId).populate('createdBy','username name bio') ;
+        const post = await Post.findById(PostId).populate('createdBy','username name bio profilePicURL') ;
         return res.status(200).json({post}) ;
     } catch (error) {
         return res.status(500).json({message:"Internal server error."})

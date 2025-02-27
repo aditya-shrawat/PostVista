@@ -10,7 +10,7 @@ export const getSavedPosts = async (req,res)=>{
         const response = await SavedPosts.find({savedBy:userId}).populate({
             path:'post',
             populate:{
-                path:'createdBy',select:'username name'
+                path:'createdBy',select:'username name profilePicURL'
             }
         }) ;
         const savedPosts = response.map((item)=>item.post) ;

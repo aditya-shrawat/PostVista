@@ -5,7 +5,7 @@ export const getComments = async (req,res)=>{
     try {
         const postId = req.params.id ;
 
-        const allComments = await Comment.find({postId:postId,}).populate('user',"username name").sort({ createdAt: -1 });
+        const allComments = await Comment.find({postId:postId,}).populate('user',"username name profilePicURL").sort({ createdAt: -1 });
         const commentCount = await Comment.countDocuments({postId:postId}) ;
         return res.status(200).json({allComments,commentCount}) ;
     } catch (error) {

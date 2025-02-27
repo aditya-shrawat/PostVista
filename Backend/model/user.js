@@ -19,6 +19,10 @@ const userSchema = mongoose.Schema({
     name:{
         type:String,required:false,
         default:""
+    },
+    profilePicURL:{
+        type:String,required:false,
+        default:'https://res.cloudinary.com/dmeaz48sd/image/upload/v1740665174/defaultProfilePic_qjozwa.jpg'
     }
 },{timestamps:true})
 

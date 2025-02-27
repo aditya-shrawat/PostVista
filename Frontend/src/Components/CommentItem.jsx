@@ -27,7 +27,11 @@ const CommentItem = ({comment,}) => {
   return (
     <div className=' py-5 border-b-[1px]  '>
         <div className='flex items-center mb-2 '>
-            <Link to={`/${comment.user.username}`} className='bg-green-500 block w-8 h-8 rounded-full mr-3 cursor-pointer '></Link>
+            <div>
+              <Link to={`/${comment.user.username}`} className='bg-green-500 block w-8 h-8 rounded-full mr-3 cursor-pointer border-[1px] overflow-hidden '>
+                <img src={comment.user.profilePicURL} className='h-full w-full object-cover' />
+              </Link>
+            </div>
             <Link to={`/${comment.user.username}`} className='flex flex-col'>
                 <div className='flex items-baseline cursor-pointer'>
                   <h2 className='text-black text-lg font-semibold hover:underline'>{comment.user.name}</h2>

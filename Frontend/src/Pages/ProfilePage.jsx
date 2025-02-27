@@ -127,29 +127,36 @@ const ProfilePage = () => {
             <div className='w-full border-b-[1px] pt-6 pb-9 px-4'>
               <div className=' w-full flex flex-col sm:flex-row ' >
                 <div>
-                  <div className='mr-6 sm:mr-8 sm:h-32 sm:w-32 h-24 w-24 bg-green-500 rounded-full cursor-pointer '></div>
+                  <div className='mr-6 sm:mr-8 sm:h-32 sm:w-32 h-24 w-24 bg-gray-100 rounded-full cursor-pointer
+                      border-2 overflow-hidden '>
+                    <img src={userDetails.profilePicURL} className="h-full w-full object-cover" />
+                  </div>
                 </div>
                 <div className='mt-1 w-full'>
                   <div className='w-full my-2 flex justify-between items-center '>
                     <div>
-                      <h1 className='text-xl font-semibold'>{userDetails.name}</h1>
+                      <h1 className='text-lg sm:text-xl font-semibold'>{userDetails.name}</h1>
                       <h2 className='text-base text-gray-500 '>{`@${userDetails.username}`}</h2>
                     </div>
                     {
                       (isYourAccount && canUedit)?
                       <>
-                      <button onClick={()=>{setEdit(true)}} className={`ml-14 bg-gray-100 hover:bg-gray-200 text-black border-2
-                        rounded-xl px-6 py-1 font-semibold cursor-pointer text-[16px]  `}>
-                        Edit Profile
-                      </button>
+                      <div>
+                        <button onClick={()=>{setEdit(true)}} className={`ml-14 bg-gray-100 hover:bg-gray-200 text-black border-2
+                          rounded-xl px-3 sm:px-6 py-1 font-semibold cursor-pointer text-[16px]  `}>
+                          Edit Profile
+                        </button>
+                      </div>
                       </> :
                       <>
-                      <button onClick={toggleFollowStatus} className={`ml-14 
-                        ${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
-                        'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl px-6 py-1 font-semibold cursor-pointer 
-                        text-[16px]  `}>
-                        {followStatus?'Following':'Follow'}
-                      </button>
+                      <div>
+                        <button onClick={toggleFollowStatus} className={`ml-14 
+                          ${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
+                          'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl px-3 sm:px-6 py-1 font-semibold cursor-pointer 
+                          text-[16px]  `}>
+                          {followStatus?'Following':'Follow'}
+                        </button>
+                      </div>
                       </>
                     }
                   </div>

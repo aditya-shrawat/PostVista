@@ -7,6 +7,8 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
     const [initialInfo,setInitialInfo] = useState({});
     const [saveBtnStatus,setSaveBtnStatus] = useState(false) ;
     const divRef = useRef(null)
+    const fileInputRef = useRef(null) ;
+    const [newProfilePic,setNewProfilePic] = useState(null) ;
 
     useEffect(()=>{
         if(userDetails){
@@ -31,9 +33,11 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
             setSaveBtnStatus(false);
         }
         else{
-            setSaveBtnStatus(JSON.stringify(initialInfo) !== JSON.stringify(newProfileInfo));
+            setSaveBtnStatus(
+                (JSON.stringify(initialInfo) !== JSON.stringify(newProfileInfo)) || newProfilePic
+            );
         }
-    }, [newProfileInfo, initialInfo]);
+    }, [newProfileInfo, initialInfo,newProfilePic]);
 
     useEffect(()=>{
         const handleOutsideClick = (e)=>{
@@ -51,14 +55,29 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
 
     const updateUserInfo = async (e)=>{
         e.preventDefault() ;
+
+        const formData = new FormData() ;
+        formData.append('ProfilePic',newProfilePic);
+        formData.append('name',newProfileInfo.name);
+        formData.append('bio',newProfileInfo.bio);
+
         try {
-            const BackendURL = import.meta.env.VITE_backendURL;
-            await axios.put(`${BackendURL}/${userDetails.username}`,newProfileInfo,{withCredentials:true,});
-            setIsProfileUpdated(true) ;
             setEdit(false);
+            const BackendURL = import.meta.env.VITE_backendURL;
+            await axios.put(`${BackendURL}/${userDetails.username}`,formData,{withCredentials:true,});
+            setIsProfileUpdated(true) ;
+            // setEdit(false);
         } catch (error) {
             console.log("Error in updating user info -",error) ;
         }
+    }
+
+    const handleUpdateClick = ()=>{
+        fileInputRef.current.click() ;
+    }
+
+    const handlefileChange = (e)=>{
+        setNewProfilePic(e.target.files[0]);
     }
 
   return (
@@ -67,19 +86,28 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
             <div className="w-full p-5 py-10 bg-white border-2 border-gray-300 rounded-xl">
                 <div className="w-full h-36 flex items-center ">
                     <div>
-                        <div className="mr-6 sm:mr-8 sm:h-32 sm:w-32 h-24 w-24 bg-green-500 rounded-full cursor-pointer "></div>
+                        <div className="mr-6 sm:mr-8 sm:h-32 sm:w-32 h-24 w-24 bg-gray-100 rounded-full cursor-pointer border-2 overflow-hidden">
+                            <img src={newProfileInfo.profilePicURL} className="h-full w-full object-cover" />
+                        </div>
                     </div>
                     <div className="w-auto h-full">
                         <div className="h-full w-full flex flex-col justify-center">
                             <p className="text-base mb-3">Update profile picture</p>
                             <div className="flex ">
-                                <button className="cursor-pointer text-green-500 hover:text-green-700 mr-10 outline-none border-none">
-                                    Update
-                                </button>
-                                <button className="cursor-pointer text-red-500 hover:text-red-700 outline-none border-none">
-                                    Remove
-                                </button>
+                                <div>
+                                    <input type="file" accept="image/*" ref={fileInputRef} onChange={handlefileChange} className="hidden " />
+                                    <button onClick={handleUpdateClick} className="cursor-pointer px-3 rounded-lg hover:bg-gray-100 font-semibold text-green-500 mr-10 outline-none ">
+                                        Update
+                                    </button>
+                                </div>
+                                <div>
+                                    <button className="cursor-pointer px-3 rounded-lg hover:bg-gray-100 font-semibold text-red-500 outline-none ">
+                                        Remove
+                                    </button>
+                                </div>
                             </div>
+                            {/* to inform user that new picture is selected */}
+                            { (newProfilePic) && <div className="mt-3 text-gray-500 ">New profile picture is selected..!</div>}
                         </div>
                     </div>
                 </div>

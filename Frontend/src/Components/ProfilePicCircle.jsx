@@ -31,11 +31,11 @@ const ProfilePicCircle = ({userInfo,}) => {
   return (
     <div onClick={handlePfpClick} className=' h-9 w-9 relative rounded-full border-[1px] '>
         <div className='h-full w-full rounded-full cursor-pointer'>
-        <span className="h-full w-full rounded-full flex items-center justify-center text-white text-xl bg-blue-500">
-            {userInfo && userInfo.username ? userInfo.username[0].toUpperCase() : "x"}
-        </span>
+            <div className="h-full w-full rounded-full flex items-center justify-center border-[1px] overflow-hidden bg-gray-100">
+                {(userInfo && userInfo.profilePicURL) && <img src={userInfo.profilePicURL} className="h-full w-full object-cover" />}
+            </div>
         </div>
-        {showBar && <ProfileBar barRef={barRef} username={userInfo.username} />}
+        {(showBar && userInfo) && <ProfileBar barRef={barRef} username={userInfo.username} />}
     </div>
   )
 }

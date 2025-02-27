@@ -190,7 +190,11 @@ const PostDetailPage = () => {
           <h1 className='text-4xl font-bold mb-8 break-words '>{postData.title}</h1> 
 
           <div className='flex items-center border-t-[1px] pt-3 '>
-            <Link to={`/${writerData.username}`}  className='bg-green-500 block h-11 w-11 rounded-full cursor-pointer mr-4 ' ></Link>
+            <div>
+              <Link to={`/${writerData.username}`}  className='bg-gray-100 block h-11 w-11 rounded-full cursor-pointer mr-4 border-[1px] overflow-hidden ' >
+                <img src={writerData.profilePicURL} className='h-full w-full object-cover' />
+              </Link>
+            </div>
             <div className=' flex flex-col justify-center ' >
               <div className=' flex items-center'>
                 <Link to={`/${writerData.username}`} className=' cursor-pointer flex items-baseline '>
@@ -226,7 +230,9 @@ const PostDetailPage = () => {
           <div className='flex justify-between my-8 '>
             <Link to={`/${writerData.username}`} className='w-full flex mr-6'>
               <div className=' mr-4'>
-                <div className='bg-green-500 block h-11 w-11 rounded-full cursor-pointer  ' ></div>
+                <div className='bg-gray-100 block h-11 w-11 rounded-full cursor-pointer border-[1px] overflow-hidden ' >
+                  <img src={writerData.profilePicURL} className='h-full w-full object-cover' />
+                </div>
               </div>
               <div className=' w-full flex flex-col ' >
                 <div className=' cursor-pointer flex items-baseline '>
