@@ -15,9 +15,8 @@ import { creatingNewPost, } from './controllers/post.js';
 import Post from './model/post.js';
 import postRouter from './routes/post.js'
 import { getSavedPosts } from './controllers/savePosts.js';
-import { v2 as cloudinary } from 'cloudinary';
 import multer from 'multer';
-import fs from 'fs' ;
+import { getUserProfileDetails, updateUserInfo, updateUserProfilePic } from './controllers/profile.js';
 
 mongoose.connect(process.env.mongodbURL)
 .then(console.log("MongoDb is connected successfully"))
@@ -31,46 +30,6 @@ app.use(cors({
     credentials: true
 }));
 
-cloudinary.config({ 
-    cloud_name: process.env.Cloudinary_CloudName , 
-    api_key: process.env.Cloudinary_API , 
-    api_secret: process.env.Cloudinary_APIsecret 
-});
-
-app.use(express.json()) 
-
-app.get("/profile",checkTokenAuthentication,async (req,res)=>{
-    try {
-        const user = req.user;
-        return res.status(200).json(user);
-    } catch (error) {
-        return res.status(500).json({ message: "Internal server error" });
-    }
-})
-
-app.get("/:username",checkTokenAuthentication,async (req,res)=>{
-    try {
-        const username = req.params.username ;
-        const user = await User.findOne({username}) ;
-
-        const isYou = username === req.user.username ;
-        if(user){
-            return res.status(200).json({
-                User:{id:user._id,
-                username:user.username,
-                name:user.name,
-                bio:user.bio,
-                profilePicURL:user.profilePicURL,
-            },
-                isYou:isYou,
-            }) ;
-        }
-        return res.status(400).json({message:"User does not exist"}) ;
-    } catch (error) {
-        return res.status(500).json({ message: "Internal server error",error:error });
-    }
-})
-
 const storage = multer.diskStorage({
     destination :function(req,file,cb){
         cb(null,'./uploads/profilePics');
@@ -83,53 +42,21 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage:storage}) ;
 
+app.use(express.json()) 
 
-app.put('/:username',upload.single('ProfilePic'),checkTokenAuthentication,async (req,res)=>{
+app.get("/profile",checkTokenAuthentication,async (req,res)=>{
     try {
-        const {name,bio} = req.body ;
-        const newInfo = {
-            name:name,
-            bio:bio
-        };
-
-        const username = req.params.username ;
-        const filePath = req.file ? req.file.path : null ;
-
-        if(username !== req.user.username){
-            return res.status(400).json({message:"You are not authorized to update this profile."});
-        }
-
-        const user = await User.findOne({username}) ;
-        if(!user){
-            return res.status(400).json({message:"User not found."}) ;
-        }
-
-        if(req.file){
-            try {
-                const response = await cloudinary.uploader.upload(filePath,{
-                    folder:'profilePics',
-                    type:'upload',
-                    access_mode: 'authenticated',
-                });
-
-                Object.assign(user,{...newInfo,profilePicURL:response.secure_url}) ;
-
-                fs.unlinkSync(filePath);
-            } catch (err) {
-                fs.unlinkSync(filePath);
-                console.error("Error deleting file:", err);
-            }
-        }
-        else{
-            Object.assign(user,newInfo) ;
-        }
-        await user.save();
-        
-        return res.status(200).json({message:"Profile updated successfully."});
+        const user = req.user;
+        return res.status(200).json(user);
     } catch (error) {
-        return res.status(500).json({ message: "Internal server error",error:error });
+        return res.status(500).json({ message: "Internal server error" });
     }
 })
+
+
+app.get('/:username',checkTokenAuthentication,getUserProfileDetails);
+app.put('/:username',checkTokenAuthentication,updateUserInfo) ;
+app.put('/:username/profile-picture',checkTokenAuthentication,upload.single('ProfilePic'),updateUserProfilePic);
 
 app.get('/',checkTokenAuthentication,async (req,res)=>{
     try {

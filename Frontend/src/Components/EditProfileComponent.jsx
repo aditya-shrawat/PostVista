@@ -9,6 +9,10 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
     const divRef = useRef(null)
     const fileInputRef = useRef(null) ;
     const [newProfilePic,setNewProfilePic] = useState(null) ;
+    const [previewPfp,setPreviewPfp] = useState(null) ;
+    const [isProfileInfoChanged,setIsProfileInfoChanged] = useState(false) ;
+    const [defaultProfilePic,setDefaultProfilePic] = useState('https://res.cloudinary.com/dmeaz48sd/image/upload/v1740665174/defaultProfilePic_qjozwa.jpg');
+    const [removeProfilePic,setRemoveProfilePic] = useState(false) ;
 
     useEffect(()=>{
         if(userDetails){
@@ -33,11 +37,12 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
             setSaveBtnStatus(false);
         }
         else{
+            setIsProfileInfoChanged(JSON.stringify(initialInfo) !== JSON.stringify(newProfileInfo)) ;
             setSaveBtnStatus(
-                (JSON.stringify(initialInfo) !== JSON.stringify(newProfileInfo)) || newProfilePic
+                (JSON.stringify(initialInfo) !== JSON.stringify(newProfileInfo)) || newProfilePic || removeProfilePic
             );
         }
-    }, [newProfileInfo, initialInfo,newProfilePic]);
+    }, [newProfileInfo, initialInfo,newProfilePic,removeProfilePic]);
 
     useEffect(()=>{
         const handleOutsideClick = (e)=>{
@@ -56,28 +61,49 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
     const updateUserInfo = async (e)=>{
         e.preventDefault() ;
 
-        const formData = new FormData() ;
-        formData.append('ProfilePic',newProfilePic);
-        formData.append('name',newProfileInfo.name);
-        formData.append('bio',newProfileInfo.bio);
-
         try {
             setEdit(false);
             const BackendURL = import.meta.env.VITE_backendURL;
-            await axios.put(`${BackendURL}/${userDetails.username}`,formData,{withCredentials:true,});
+
+            if(newProfilePic || removeProfilePic){ // only update profile pic not user information
+                const formData = new FormData() ;
+                if (newProfilePic) {
+                    formData.append('ProfilePic', newProfilePic);
+                }
+                formData.append('removeProfilePic',removeProfilePic);
+
+                await axios.put(`${BackendURL}/${userDetails.username}/profile-picture`,formData,{withCredentials:true,});
+            }
+
+            if(isProfileInfoChanged){ // only update the user information , not profile picture 
+                await axios.put(`${BackendURL}/${userDetails.username}`,newProfileInfo,{withCredentials:true,});
+            }
+
             setIsProfileUpdated(true) ;
-            // setEdit(false);
         } catch (error) {
             console.log("Error in updating user info -",error) ;
         }
     }
 
-    const handleUpdateClick = ()=>{
+    const handleUpdateClick = (e)=>{
+        e.preventDefault();
         fileInputRef.current.click() ;
     }
 
     const handlefileChange = (e)=>{
-        setNewProfilePic(e.target.files[0]);
+        const file = e.target.files[0];
+        setRemoveProfilePic(false);
+        if(file){
+            setNewProfilePic(e.target.files[0]);
+            setPreviewPfp(URL.createObjectURL(file));
+        }
+    }
+
+    const handleRemoveClick = (e)=>{
+        e.preventDefault();
+        setRemoveProfilePic(true) ;
+        setNewProfilePic(null);
+        setPreviewPfp(defaultProfilePic) ;
     }
 
   return (
@@ -87,7 +113,7 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                 <div className="w-full h-36 flex items-center ">
                     <div>
                         <div className="mr-6 sm:mr-8 sm:h-32 sm:w-32 h-24 w-24 bg-gray-100 rounded-full cursor-pointer border-2 overflow-hidden">
-                            <img src={newProfileInfo.profilePicURL} className="h-full w-full object-cover" />
+                            <img src={(previewPfp !== null)? previewPfp : newProfileInfo.profilePicURL} className="h-full w-full object-cover" />
                         </div>
                     </div>
                     <div className="w-auto h-full">
@@ -101,13 +127,13 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                                     </button>
                                 </div>
                                 <div>
-                                    <button className="cursor-pointer px-3 rounded-lg hover:bg-gray-100 font-semibold text-red-500 outline-none ">
+                                    <button onClick={handleRemoveClick} className="cursor-pointer px-3 rounded-lg hover:bg-gray-100 font-semibold text-red-500 outline-none ">
                                         Remove
                                     </button>
                                 </div>
                             </div>
-                            {/* to inform user that new picture is selected */}
-                            { (newProfilePic) && <div className="mt-3 text-gray-500 ">New profile picture is selected..!</div>}
+                            {/* to inform user that new picture is selected
+                            { (newProfilePic) && <div className="mt-3 text-gray-500 ">New profile picture is selected..!</div>} */}
                         </div>
                     </div>
                 </div>
