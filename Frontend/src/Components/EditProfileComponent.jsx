@@ -94,7 +94,7 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
         const file = e.target.files[0];
         setRemoveProfilePic(false);
         if(file){
-            setNewProfilePic(e.target.files[0]);
+            setNewProfilePic(file);
             setPreviewPfp(URL.createObjectURL(file));
         }
     }

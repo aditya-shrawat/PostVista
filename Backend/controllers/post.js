@@ -2,15 +2,56 @@ import Like from '../model/like.js';
 import Comment from '../model/comment.js';
 import Post from '../model/post.js';
 import SavedPosts from '../model/savePosts.js';
+import {v2 as cloudinary} from 'cloudinary';
+import fs from 'fs';
+
+cloudinary.config({ 
+    cloud_name: process.env.Cloudinary_CloudName , 
+    api_key: process.env.Cloudinary_API , 
+    api_secret: process.env.Cloudinary_APIsecret 
+});
+
 
 export const creatingNewPost = async (req,res)=>{
     try {
-        const {title,body} = req.body ;
-        const post = await Post.create({
+        const {title,body} = req.body ; 
+        const filePath = req.file ? req.file.path : null ;
+
+        let imageURL = '' ;
+        if(req.file){
+            try {
+                const response = await cloudinary.uploader.upload(filePath,{
+                    folder:'coverImages',
+                    type:'upload',
+                    access_mode: 'authenticated',
+                    transformation: [
+                        { quality: "auto:low" }
+                    ]
+                })
+    
+                imageURL = response.secure_url ;
+            } catch (error) {
+                console.error("Error in cover image uploading:", err);
+                return res.status(500).json({ message: "Failed to upload cover image of Post" });
+            }
+            finally{
+                if(filePath){
+                    try {
+                        fs.unlinkSync(filePath) ;
+                    } catch (error) {
+                        console.log("Failed to delete cover image localy. ",error)
+                    }
+                }
+            }
+        }
+
+        await Post.create({
             title:title,
             body:body,
+            coverImage: imageURL ,
             createdBy:req.user.id,
         });
+        
         return res.status(201).json({message:"Post created successfully."}) ;
     } catch (error) {
         res.status(500).json({message:"Intenal server error.",error})

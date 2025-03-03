@@ -211,7 +211,7 @@ const PostItem = ({post,pageType}) => {
       }
       <Link to={`/post/${post._id}`} className='w-full cursor-pointer '>
         <div className='w-full h-40 flex justify-between items-center cursor-pointer ' >
-          <div className='py-3 h-full w-[58%] sm:w-[70%]  flex flex-col justify-between '>
+          <div className={`py-3 h-full ${(post.coverImage)?`w-[58%] sm:w-[70%]`:`w-full`}  flex flex-col justify-between `}>
             <div className='w-full h-auto'>
               <h3 className='text-2xl font-bold mb-2 line-clamp-2 break-words'>{post.title}</h3>
               <p className=' line-clamp-1  break-words'>{post.body}</p>
@@ -228,9 +228,13 @@ const PostItem = ({post,pageType}) => {
               </div>
             </div>
           </div>
-          <div className='ml-8 min-w-24 min-h-24 sm:w-32 sm:h-32 bg-green-500'>
-
-          </div>
+          { (post.coverImage) && 
+            <div className='ml-8 w-28 h-28 sm:w-32 sm:h-32'>
+              <div className='h-full w-full overflow-hidden bg-gray-100'>
+                <img src={post.coverImage} className='h-full w-full object-cover' />
+              </div>
+            </div>
+          }
         </div>
       </Link> 
     </div>

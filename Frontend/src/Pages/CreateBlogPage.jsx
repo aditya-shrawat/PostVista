@@ -1,6 +1,9 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { BiSolidImageAdd } from "react-icons/bi";
+import { RxCrossCircled } from "react-icons/rx";
 
 
 const initialPostData = {
@@ -10,19 +13,26 @@ const initialPostData = {
 const CreateBlogPage = () => {
 
   const [postData,setPostData]= useState(initialPostData) ;
-  const [title, setTile] = useState("");
-  const [body, setBody] = useState("");
   const navigate = useNavigate();
+  const fileInputRef = useRef() ;
+  const [previewPostImg,setPreviewPostImage] = useState(null);
+  const [postImage,setPostImage] = useState(null) ;
 
   const handleSubmit = async (e)=>{
     e.preventDefault() ;
 
     if(postData.title.trim()==='' || postData.body.trim()===''){
       alert("All felds are required") ;
+      return ;
     }
-    else{
+    
+      const formData = new FormData() ;
+      formData.append('coverImage',postImage) ;
+      formData.append('title',postData.title) ;
+      formData.append('body',postData.body) ;
+
       const BackendURL = import.meta.env.VITE_backendURL;
-      axios.post(`${BackendURL}/new-blog`,postData,{ withCredentials: true })
+      axios.post(`${BackendURL}/new-blog`,formData,{ withCredentials: true })
       .then(response=>{
         if(response.status === 201){
           navigate('/');
@@ -36,7 +46,7 @@ const CreateBlogPage = () => {
           console.log("error :",error) ;
         }
       })
-    }
+    
   }
 
   const handleTitleInput = (e) => {
@@ -53,8 +63,27 @@ const CreateBlogPage = () => {
     setPostData({...postData,[e.target.name]:e.target.value});
   }
 
+  const handleUpload = (e)=>{
+    e.preventDefault();
+    fileInputRef.current.click();
+  }
+
+  const handlefileChange = (e)=>{
+    const file = e.target.files[0];
+    if(file){
+      setPostImage(file);
+      setPreviewPostImage(URL.createObjectURL(file)) ;
+    }
+  }
+
+  const removePostImage = (e)=>{
+    e.preventDefault();
+    setPostImage(null);
+    setPreviewPostImage(null) ;
+  }
+
   return ( 
-    <div className='px-4 min-w-screen min-h-screen '>
+    <div className='px-2 min-w-screen min-h-screen '>
       <div className='m-auto max-w-[600px] '>
         <nav className='w-full h-16 px-4 bg-white bg-opacity-55 backdrop-blur-sm flex flex-row justify-between items-center 
             border-b-[1px]  sticky top-0 left-0 z-20'>
@@ -65,15 +94,44 @@ const CreateBlogPage = () => {
           </div>
         </nav>
 
-        <div className=' mt-8 p-4'>
-          <div className=' mb-3 p-2'>
-            <textarea className="w-full border-none resize-none overflow-hidden outline-none text-3xl font-semibold bg-transparent"
+        <div className=' mt-8 py-4 flex flex-col '>
+          <div className=' mb-0 p-2'>
+            <textarea className="w-full border-none resize-none overflow-hidden outline-none text-4xl font-semibold bg-transparent"
             placeholder="Title" name='title' value={postData.title} onChange={handleTitleInput} />
           </div>
 
-          <div className=' p-2 pt-5 border-t-[1px]'>
+          <div className='w-full flex md:hidden px-2 mb-2 '>
+            { (previewPostImg===null) && 
+            <div>
+              <input type="file" accept="image/*" ref={fileInputRef} onChange={handlefileChange} className="hidden " />
+              <BiSolidImageAdd onClick={handleUpload} className='text-3xl text-gray-500 ' />
+            </div>
+            }
+          </div>
+
+          <div className='w-full p-2 mb-2 relative ' >
+            { (previewPostImg !== null) && 
+              <div className='w-full overflow-hidden'>
+                <img src={previewPostImg} className='h-full w-full object-cover' />
+              </div>
+            }
+            { (previewPostImg !== null) && 
+              <div onClick={removePostImage}
+                className=' bg-white absolute top-4 right-4 cursor-pointer h-8 w-8 flex justify-center items-center text-gray-500 hover:text-black' >
+                <RxCrossCircled className='text-3xl ' />
+              </div>
+            }
+          </div>
+
+          <div className=' p-2 pt-5 border-t-[1px] relative'>
             <textarea className="w-full  border-none resize-none overflow-hidden outline-none text-2xl bg-transparent"
             placeholder="body" name='body' value={postData.body} onChange={handleBodyeInput} />
+
+            {(previewPostImg===null) && 
+            <div onClick={handleUpload} className=' absolute -left-12 top-5 hidden md:block '>
+              <IoIosAddCircleOutline className='text-[40px] text-gray-500' />
+            </div>
+            }
           </div>
         </div>
       </div>

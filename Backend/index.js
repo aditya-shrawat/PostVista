@@ -30,7 +30,7 @@ app.use(cors({
     credentials: true
 }));
 
-const storage = multer.diskStorage({
+const profilePicsStorage = multer.diskStorage({
     destination :function(req,file,cb){
         cb(null,'./uploads/profilePics');
     },
@@ -40,7 +40,19 @@ const storage = multer.diskStorage({
         cb(null, uniqueSuffix + '-' + file.fieldname + '.' + fileExtension);
     }
 })
-const upload = multer({storage:storage}) ;
+const uploadProfilePics = multer({storage:profilePicsStorage}) ;
+
+const blogPostImageStorage = multer.diskStorage({
+    destination :function(req,file,cb){
+        cb(null,'./uploads/blogImages');
+    },
+    filename:function(req,file,cb){
+        const uniqueSuffix = Date.now() ;
+        const fileExtension = file.originalname.split('.').pop(); 
+        cb(null, uniqueSuffix + '-' + file.fieldname + '.' + fileExtension);
+    }
+})
+const uploadBlogPostImage = multer({storage:blogPostImageStorage}) ;
 
 app.use(express.json()) 
 
@@ -56,7 +68,7 @@ app.get("/profile",checkTokenAuthentication,async (req,res)=>{
 
 app.get('/:username',checkTokenAuthentication,getUserProfileDetails);
 app.put('/:username',checkTokenAuthentication,updateUserInfo) ;
-app.put('/:username/profile-picture',checkTokenAuthentication,upload.single('ProfilePic'),updateUserProfilePic);
+app.put('/:username/profile-picture',checkTokenAuthentication,uploadProfilePics.single('ProfilePic'),updateUserProfilePic);
 
 app.get('/',checkTokenAuthentication,async (req,res)=>{
     try {
@@ -70,7 +82,7 @@ app.get('/',checkTokenAuthentication,async (req,res)=>{
 app.get('/my/bookmarks',checkTokenAuthentication,getSavedPosts) ;
 
 app.use('/post',postRouter) ;
-app.post('/new-blog',checkTokenAuthentication,creatingNewPost)
+app.post('/new-blog',checkTokenAuthentication,uploadBlogPostImage.single('coverImage'),creatingNewPost)
 app.use('/user',userRouter) ;
 
 

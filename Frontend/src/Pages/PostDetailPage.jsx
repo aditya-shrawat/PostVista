@@ -191,7 +191,7 @@ const PostDetailPage = () => {
 
           <div className='flex items-center border-t-[1px] pt-3 '>
             <div>
-              <Link to={`/${writerData.username}`}  className='bg-gray-100 block h-11 w-11 rounded-full cursor-pointer mr-4 border-[1px] overflow-hidden ' >
+              <Link to={`/${writerData.username}`}  className='bg-gray-100 block h-14 w-14 rounded-full cursor-pointer mr-4 border-[1px] overflow-hidden ' >
                 <img src={writerData.profilePicURL} className='h-full w-full object-cover' />
               </Link>
             </div>
@@ -218,8 +218,10 @@ const PostDetailPage = () => {
           <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} 
             comments={commentCount} bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
 
-          <div className='w-auto h-auto my-12  bg-red-300'>
-            <img className=' object-contain' src="" alt="" />
+          <div className='w-auto h-auto my-12  '>
+            <div className='w-auto h-auto overflow-hidden bg-gray-100'>
+              <img className=' h-full w-full object-cover' src={postData.coverImage} />
+            </div>
           </div>
 
           <p className='text-xl break-words'>{postData.body}</p>
@@ -230,7 +232,7 @@ const PostDetailPage = () => {
           <div className='flex justify-between my-8 '>
             <Link to={`/${writerData.username}`} className='w-full flex mr-6'>
               <div className=' mr-4'>
-                <div className='bg-gray-100 block h-11 w-11 rounded-full cursor-pointer border-[1px] overflow-hidden ' >
+                <div className='bg-gray-100 block h-14 w-14 rounded-full cursor-pointer border-[1px] overflow-hidden ' >
                   <img src={writerData.profilePicURL} className='h-full w-full object-cover' />
                 </div>
               </div>
@@ -239,8 +241,8 @@ const PostDetailPage = () => {
                   <h1 className='text-lg text-black font-semibold'>{writerData.name}</h1>
                   <h2 className='text-base text-gray-500 ml-3' >{`@${writerData.username}`}</h2>
                 </div> 
-                <span className='text-[14px] my-1 flex items-center break-words '>{writerData.bio}</span>
                 <span className='text-[14px] my-1 flex items-center text-gray-500'>{`${followerCount} Followers | ${followingCount} following`}</span>
+                <span className='text-[16px] font-semibold mt-2 flex items-center break-words '>{writerData.bio}</span>
               </div>
             </Link>
             {
