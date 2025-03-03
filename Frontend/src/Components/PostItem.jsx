@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FaRegHeart,FaRegComment,FaRegBookmark   } from "react-icons/fa6";
+import { FaRegBookmark   } from "react-icons/fa6";
 import { FaBookmark } from "react-icons/fa6";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoIosShareAlt } from "react-icons/io";
@@ -10,6 +10,9 @@ import { BsWhatsapp } from "react-icons/bs";
 import { MdOutlineMail } from "react-icons/md";
 import { FaLink } from "react-icons/fa6";
 import axios from 'axios';
+import { FcLike } from "react-icons/fc";
+import { VscHeart } from "react-icons/vsc";
+import { VscComment } from "react-icons/vsc";
 
 const PostItem = ({post,pageType}) => {
   const [likes,setLikes] = useState(0) ;
@@ -133,20 +136,22 @@ const PostItem = ({post,pageType}) => {
   }
 
   return (
-    <div className='my-3 h-auto w-full px-2 py-6 sm:py-8 flex flex-col border-b-[1px] '>
+    <div className='my-3 h-auto w-full px-2 py-4 sm:py-6 flex flex-col border-b-[1px] '>
       {
         
-        <div className={`mb-3 flex ${(post.createdBy.username===undefined)?`flex-row-reverse`:`justify-between`} items-center`} >
-          {(post.createdBy.username) && <div className={`flex items-center`}>
+        <div className={` flex ${(post.createdBy.username===undefined)?`flex-row-reverse`:`justify-between`} items-center mb-1`} >
+          {(post.createdBy.username) && 
+
+          <div className={`flex items-center`}>
             <div>
-              <Link to={`/${post.createdBy.username}`}  className='block bg-gray-100 h-7 w-7 rounded-full mr-3 cursor-pointer border-[1px] overflow-hidden '>
+              <Link to={`/${post.createdBy.username}`}  className='block bg-gray-100 h-6 w-6 rounded-full mr-3 cursor-pointer border-[1px] overflow-hidden '>
                 <img src={post.createdBy.profilePicURL} className='h-full w-full object-cover' />
               </Link>
             </div>
             <div className='w-auto cursor-pointer '>
               <Link to={`/${post.createdBy.username}`} className='flex items-baseline'>
-                <h1 className='text-lg font-semibold text-black hover:underline '>{post.createdBy.name}</h1>
-                <h2 className='text-gray-500 text-base ml-2 ' >{`@${post.createdBy.username}`}</h2>
+                <h1 className='text-lg font-semibold text-black hover:underline line-clamp-1 break-words mr-2 '>{post.createdBy.name}</h1>
+                {/* <h2 className='text-gray-500 text-[14px] ' >{`@${post.createdBy.username}`}</h2> */}
               </Link>
             </div>
           </div>}
@@ -210,19 +215,22 @@ const PostItem = ({post,pageType}) => {
         </div>
       }
       <Link to={`/post/${post._id}`} className='w-full cursor-pointer '>
-        <div className='w-full h-40 flex justify-between items-center cursor-pointer ' >
-          <div className={`py-3 h-full ${(post.coverImage)?`w-[58%] sm:w-[70%]`:`w-full`}  flex flex-col justify-between `}>
-            <div className='w-full h-auto'>
+        <div className='w-full h-36 py-2 flex justify-between items-start cursor-pointer ' >
+          <div className={` h-full ${(post.coverImage)?`w-[58%] sm:w-[70%]`:`w-full`}  flex flex-col justify-between `}>
+            <div className='w-full h-auto mb-3'>
               <h3 className='text-2xl font-bold mb-2 line-clamp-2 break-words'>{post.title}</h3>
-              <p className=' line-clamp-1  break-words'>{post.body}</p>
+              <p className=' line-clamp-1 break-words font-semibold text-gray-500'>{post.body}</p>
             </div>
             <div className='w-full flex justify-between text-black ' >
               <div className='flex'>
-                <div className=' flex items-center mr-10 cursor-pointer'><FaRegHeart className={`${(likeStatus)?`bg-red-600`:`bg-transparent`} mr-2 text-xl`} />{likes}</div>
-                <div className=' flex items-center cursor-pointer'><FaRegComment className='mr-2 text-xl' />{comments}</div>
+                <div className=' flex items-center mr-10 cursor-pointer'>
+                  {(likeStatus)?<FcLike className={`mr-2 text-[22px]`}/>: <VscHeart className={`mr-2 text-xl`}/>}
+                  {likes}
+                </div>
+                <div className=' flex items-center cursor-pointer'><VscComment className='mr-2 text-xl' />{comments}</div>
               </div>
               <div className='flex'>
-                <div className={`text-xl sm:block hidden cursor-pointer`}>
+                <div className={`text-lg sm:block hidden cursor-pointer`}>
                   {(bookmarkStatus)? <FaBookmark /> : <FaRegBookmark  /> }
                 </div>
               </div>

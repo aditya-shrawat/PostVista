@@ -1,11 +1,14 @@
 
 import { useEffect, useRef, useState } from "react";
-import { FaRegHeart,FaRegComment,FaRegBookmark  } from "react-icons/fa6";
+import { FaRegComment,FaRegBookmark  } from "react-icons/fa6";
 import { FaBookmark } from "react-icons/fa6";
-import { MdOutlineIosShare } from "react-icons/md";
+import { GoShare } from "react-icons/go";
 import { BsWhatsapp } from "react-icons/bs";
 import { MdOutlineMail } from "react-icons/md";
 import { FaLink } from "react-icons/fa6";
+import { FcLike } from "react-icons/fc";
+import { VscHeart } from "react-icons/vsc";
+import { VscComment } from "react-icons/vsc";
 
 const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookmarkStatus,pathLink}) => {
   const [sharing,setSharing] = useState(false) ;
@@ -40,13 +43,16 @@ const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookm
     <div>
         <div className='w-full h-14 px-3 mt-6 border-t-[1px] border-b-[1px] flex justify-between items-center text-gray-500 '>
             <div className=' flex text-xl items-baseline'>
-              <div onClick={toggleLike} className=' flex items-center mr-8 cursor-pointer hover:text-black'><FaRegHeart className={` ${(likeStatus)?`bg-red-600`:`bg-transparent`} mr-2`} />{likes}</div>
-              <div className=' flex items-center cursor-pointer hover:text-black'><FaRegComment className='mr-2' />{comments}</div>
+              <div onClick={toggleLike} className=' flex items-center mr-8 cursor-pointer hover:text-black'>
+                {(likeStatus)?<FcLike className={`mr-2 text-[22px]`}/>: <VscHeart className={`mr-2 text-xl`}/>}
+                {likes}
+              </div>
+              <div className=' flex items-center cursor-pointer hover:text-black'><VscComment className='mr-2' />{comments}</div>
             </div>
             <div className="flex items-baseline">
               <div className="mr-5 relative ">
                 <div onClick={()=>{setSharing(true)}} className="text-2xl font-semibold hover:text-black cursor-pointer">
-                  <MdOutlineIosShare />
+                  <GoShare  />
                 </div>
 
                 { (sharing) &&

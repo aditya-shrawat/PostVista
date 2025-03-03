@@ -189,9 +189,9 @@ const PostDetailPage = () => {
           <>
           <h1 className='text-4xl font-bold mb-8 break-words '>{postData.title}</h1> 
 
-          <div className='flex items-center border-t-[1px] pt-3 '>
+          <div className='flex items-center border-t-[1px] pt-4 '>
             <div>
-              <Link to={`/${writerData.username}`}  className='bg-gray-100 block h-14 w-14 rounded-full cursor-pointer mr-4 border-[1px] overflow-hidden ' >
+              <Link to={`/${writerData.username}`}  className='bg-gray-100 block h-12 w-12 rounded-full cursor-pointer mr-4 border-[1px] overflow-hidden ' >
                 <img src={writerData.profilePicURL} className='h-full w-full object-cover' />
               </Link>
             </div>
@@ -200,13 +200,14 @@ const PostDetailPage = () => {
                 <Link to={`/${writerData.username}`} className=' cursor-pointer flex items-baseline '>
                   {
                     writerData.name!=='' &&
-                    <h1 className='text-lg text-black font-semibold'>{writerData.name}</h1>
+                    <h1 className='text-lg text-black font-semibold line-clamp-1 break-words mr-3'>{writerData.name}</h1>
                   }
-                  <h2 className='text-base text-gray-500 ml-3' >{`@${writerData.username}`}</h2>
+                  {/* <h2 className='text-[14px] text-gray-500 line-clamp-1 break-words' >{`@${writerData.username}`}</h2> */}
                 </Link> 
                 {
                   (!isYourAccount)&&
-                  <span onClick={toggleFollowStatus} className={`block ${followStatus?'text-gray-500 hover:text-gray-600':'text-green-600 hover:text-green-800'} font-semibold ml-8 cursor-pointer`}>
+                  <span onClick={toggleFollowStatus} className={`block ${followStatus?'text-gray-500 hover:text-gray-600':'text-green-600 hover:text-green-800'}
+                     font-semibold ml-6 cursor-pointer`}>
                     {followStatus?'Following':'Follow'}
                   </span> 
                 }
@@ -218,40 +219,44 @@ const PostDetailPage = () => {
           <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} 
             comments={commentCount} bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
 
-          <div className='w-auto h-auto my-12  '>
+          { (postData.coverImage) &&
+          <div className='w-auto h-auto mt-8 mb-3  '>
             <div className='w-auto h-auto overflow-hidden bg-gray-100'>
               <img className=' h-full w-full object-cover' src={postData.coverImage} />
             </div>
           </div>
+          }
 
-          <p className='text-xl break-words'>{postData.body}</p>
+          <p className='text-xl break-words mt-4'>{postData.body}</p>
 
           <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}
            bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
 
-          <div className='flex justify-between my-8 '>
-            <Link to={`/${writerData.username}`} className='w-full flex mr-6'>
-              <div className=' mr-4'>
-                <div className='bg-gray-100 block h-14 w-14 rounded-full cursor-pointer border-[1px] overflow-hidden ' >
-                  <img src={writerData.profilePicURL} className='h-full w-full object-cover' />
-                </div>
-              </div>
-              <div className=' w-full flex flex-col ' >
-                <div className=' cursor-pointer flex items-baseline '>
-                  <h1 className='text-lg text-black font-semibold'>{writerData.name}</h1>
-                  <h2 className='text-base text-gray-500 ml-3' >{`@${writerData.username}`}</h2>
-                </div> 
-                <span className='text-[14px] my-1 flex items-center text-gray-500'>{`${followerCount} Followers | ${followingCount} following`}</span>
-                <span className='text-[16px] font-semibold mt-2 flex items-center break-words '>{writerData.bio}</span>
+          <div className='flex my-6 '>
+            <Link to={`/${writerData.username}`} className='pt-3 mr-4'>
+              <div className='bg-gray-100 block h-16 w-16 rounded-full cursor-pointer border-[1px] overflow-hidden ' >
+                <img src={writerData.profilePicURL} className='h-full w-full object-cover' />
               </div>
             </Link>
-            {
-              (!isYourAccount) &&
-              <button onClick={toggleFollowStatus} className={`${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
-                'bg-green-500 hover:bg-green-600 text-white border-none'} h-9 px-3 rounded-2xl font-semibold cursor-pointer `}>
-                {followStatus?"Following":"Follow"}
-              </button>
-            }
+            <div className='w-full flex flex-col'>
+              <div className='w-full flex justify-between'>
+                <Link to={`/${writerData.username}`} className=' w-full flex flex-col ' >
+                  <div className=' cursor-pointer flex flex-col sm:flex-row items-baseline '>
+                    <h1 className='text-lg text-black font-semibold line-clamp-1 break-words mr-3'>{writerData.name}</h1>
+                    <h2 className='text-[14px] text-gray-500 line-clamp-1 break-words' >{`@${writerData.username}`}</h2>
+                  </div> 
+                  <span className='text-[14px] my-1 flex items-center text-gray-500'>{`${followerCount} Followers | ${followingCount} following`}</span>
+                </Link>
+                {
+                  (!isYourAccount) &&
+                  <button onClick={toggleFollowStatus} className={` ${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
+                    'bg-green-500 hover:bg-green-600 text-white border-none'} h-9 px-3 rounded-2xl font-semibold cursor-pointer `}>
+                    {followStatus?"Following":"Follow"}
+                  </button>
+                }
+              </div>
+              <span className='text-base font-semibold mt-2 flex items-center break-words '>{writerData.bio}</span>
+            </div>
           </div>    
           </>
         }
