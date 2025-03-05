@@ -23,7 +23,7 @@ route.get('/:id/post',checkTokenAuthentication,async (req,res)=>{
     try {
         const userId = req.params.id ;
 
-        const allPosts = await Post.find({createdBy:userId,}) ;
+        const allPosts = await Post.find({createdBy:userId,}).sort({createdAt:-1}) ;
         return res.status(200).json({allPosts,});
     } catch (error) {
         return res.status(500).json({message:"Internal server error."}) ;

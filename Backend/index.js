@@ -17,6 +17,7 @@ import postRouter from './routes/post.js'
 import { getSavedPosts } from './controllers/savePosts.js';
 import multer from 'multer';
 import { getUserProfileDetails, updateUserInfo, updateUserProfilePic } from './controllers/profile.js';
+import homeRouter from './routes/home.js';
 
 mongoose.connect(process.env.mongodbURL)
 .then(console.log("MongoDb is connected successfully"))
@@ -65,25 +66,15 @@ app.get("/profile",checkTokenAuthentication,async (req,res)=>{
     }
 })
 
-
-app.get('/:username',checkTokenAuthentication,getUserProfileDetails);
-app.put('/:username',checkTokenAuthentication,updateUserInfo) ;
-app.put('/:username/profile-picture',checkTokenAuthentication,uploadProfilePics.single('ProfilePic'),updateUserProfilePic);
-
-app.get('/',checkTokenAuthentication,async (req,res)=>{
-    try {
-        const allPosts = await Post.find({}).populate('createdBy','username name bio profilePicURL').sort({ createdAt: -1 });
-        return res.status(200).json({allPosts});
-    } catch (error) {
-        return res.status(500).json({message:"Internal server error."})
-    }
-})
-
+app.use('/home',homeRouter);
 app.get('/my/bookmarks',checkTokenAuthentication,getSavedPosts) ;
 
 app.use('/post',postRouter) ;
 app.post('/new-blog',checkTokenAuthentication,uploadBlogPostImage.single('coverImage'),creatingNewPost)
 app.use('/user',userRouter) ;
 
+app.get('/:username',checkTokenAuthentication,getUserProfileDetails);
+app.put('/:username',checkTokenAuthentication,updateUserInfo) ;
+app.put('/:username/profile-picture',checkTokenAuthentication,uploadProfilePics.single('ProfilePic'),updateUserProfilePic);
 
 app.listen(PORT,()=>console.log(`server is running on port ${PORT}`)) ;

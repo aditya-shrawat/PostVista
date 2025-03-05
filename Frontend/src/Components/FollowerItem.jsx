@@ -33,18 +33,18 @@ const FollowerItem = ({showFollowers,follower,following}) => {
     }
 
   return (
-    <Link to={`/${(showFollowers)?follower.followedBy.username : following.account.username}`} className='w-full px-2 py-3 my-2 rounded-lg flex mb-2 hover:bg-gray-100 '>
-        <div >
+    <div className='w-full px-2 py-3 my-2 rounded-lg flex mb-2 hover:bg-gray-100 '>
+        <Link to={`/${(showFollowers)?follower.followedBy.username : following.account.username}`} >
             <div className=' h-12 w-12 bg-gray-100 rounded-full cursor-pointer border-[1px] overflow-hidden '>
                 <img src={(showFollowers)?follower.followedBy.profilePicURL : following.account.profilePicURL} className="h-full w-full object-cover" />
             </div>
-        </div>
+        </Link>
         <div className='w-full ml-4 '>
             <div className='w-full flex'>
-                <div className='w-full flex flex-col  '>
+                <Link to={`/${(showFollowers)?follower.followedBy.username : following.account.username}`} className='w-full flex flex-col  '>
                     <h1 className=' text-lg font-semibold hover:underline'>{(showFollowers)?follower.followedBy.name : following.account.name}</h1>
                     <h1 className=' text-gray-500 text-[15px] '>{(showFollowers)?follower.followedBy.username : following.account.username}</h1>
-                </div>
+                </Link>
                 <div>
                     <button onClick={toggleFollowStatus} className={`ml-4 ${followStatus?'bg-gray-100 text-black hover:bg-gray-200 border-2':
                 'bg-green-500 hover:bg-green-600 text-white border-none'} z-10 rounded-xl px-3 py-1 font-semibold cursor-pointer 
@@ -52,11 +52,11 @@ const FollowerItem = ({showFollowers,follower,following}) => {
                     </button>
                 </div>
             </div>
-            <div className='w-full mt-1 h-auto'>
+            <Link to={`/${(showFollowers)?follower.followedBy.username : following.account.username}`} className='w-full mt-1 h-auto'>
                 <p className='break-words text-base'>{(showFollowers)?follower.followedBy.bio : following.account.bio}</p>
-            </div>
+            </Link>
         </div>
-    </Link>
+    </div>
   )
 }
 
