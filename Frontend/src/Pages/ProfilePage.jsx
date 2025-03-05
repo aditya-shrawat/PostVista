@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import PostList from '../Components/PostList';
 import EditProfileComponent from '../Components/EditProfileComponent';
+import { BsChat } from "react-icons/bs";
+import { HiOutlineUserCircle } from "react-icons/hi2";
 
 const ProfilePage = () => {
   const {username} = useParams();
@@ -174,16 +176,54 @@ const ProfilePage = () => {
                   </div>
                 </div>
               </div>
-              {
-                ((userDetails.bio==='' || userDetails.name==='')&&canUedit)&&
-                <div className='w-full mt-2'>
-                  <p className='text-lg text-blue-400  '>
-                    {`Add ${(userDetails.bio==='')?`bio and`:``} ${(userDetails.name==='')?'name.':''}`}
-                    </p>
-                </div>
-              }
             </div>
           }
+
+          { (!userLoading && (userDetails.bio==='' || userDetails.profilePicPublicId==='')&&canUedit)&&
+            <div className='w-full border-b-2 pt-3 pb-5 px-4  '>
+              <h2 className='text-lg font-semibold mb-3'>Complete your profile </h2>
+              <div className='w-full flex overflow-x-auto'>
+                { (userDetails.bio==='') &&
+                <div className="card bg-base-100 min-w-[280px] border-2 mr-5 ">
+                  <div className='w-full h-auto pt-8 flex justify-center items-center'>
+                    <div className='h-16 w-16 rounded-full border-[3px] border-black'>
+                      <div className='rounded-full w-full h-full flex justify-center items-center'>
+                        <BsChat className='text-4xl' />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body items-center text-center">
+                    <h2 className="card-title">Add a bio</h2>
+                    <p>Tell others a little about yourself on PostHub.</p>
+                    <div className="card-actions">
+                      <button onClick={()=>{setEdit(true)}} className="bg-blue-500 hover:bg-blue-400 cursor-pointer px-3 py-1 font-semibold text-lg text-white rounded-lg mt-2 outline-none border-none ">Add Bio</button>
+                    </div>
+                  </div>
+                </div>
+                }
+
+                { (userDetails.profilePicPublicId==='') &&
+                <div className="card bg-base-100 min-w-[280px] border-2 ">
+                  <div className='w-full h-auto pt-8 flex justify-center items-center'>
+                    <div className='w-16 h-16 rounded-full p-2 border-[3px] border-black'>
+                      <div className='rounded-full w-full h-full flex justify-center items-center'>
+                        <HiOutlineUserCircle  className='text-5xl' />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body items-center text-center">
+                    <h2 className="card-title">Add a profile photo</h2>
+                    <p>Choose a photo to represent yourself on PostHub.</p>
+                    <div className="card-actions">
+                      <button onClick={()=>{setEdit(true)}} className="bg-blue-500 hover:bg-blue-400 cursor-pointer px-3 py-1 font-semibold text-lg text-white rounded-lg mt-2 outline-none border-none ">Add Photo</button>
+                    </div>
+                  </div>
+                </div>
+                }
+              </div>
+            </div>
+          }
+
           <div className={` w-full p-2 `}>
             {
               (postsLoading)?

@@ -33,7 +33,7 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
     }
 
     useEffect(() => {
-        if(newProfileInfo.name ==='' || newProfileInfo.bio ===''){
+        if(newProfileInfo.name ==='' && newProfileInfo.bio ===''){
             setSaveBtnStatus(false);
         }
         else{
