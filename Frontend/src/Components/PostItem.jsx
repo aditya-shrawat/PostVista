@@ -78,7 +78,7 @@ const PostItem = ({post,pageType}) => {
   const followAuthor = async ()=>{
     try {
       const BackendURL = import.meta.env.VITE_backendURL;
-      const response = await axios.post(`${BackendURL}/user/${(pageType==='ProfilePage')? post.createdBy : post.createdBy._id}/follower`,
+      const response = await axios.post(`${BackendURL}/user/${post.createdBy._id}/follower`,
       {},{withCredentials:true,});
       setFollowStatus(response.data.isFollowed) ;
     } catch (error) {
@@ -89,7 +89,7 @@ const PostItem = ({post,pageType}) => {
   const checkFollowStatus = async ()=>{
     try {
         const BackendURL = import.meta.env.VITE_backendURL;
-        const response = await axios.get(`${BackendURL}/user/${(pageType==='ProfilePage')? post.createdBy : post.createdBy._id}/follow/status`,
+        const response = await axios.get(`${BackendURL}/user/${post.createdBy._id}/follow/status`,
         {withCredentials:true,});
         setFollowStatus(response.data.isFollowed) ;
         setIsYourAccount(response.data.isYou) ;
@@ -139,8 +139,8 @@ const PostItem = ({post,pageType}) => {
     <div className='my-3 h-auto w-full px-2 py-4 sm:py-6 flex flex-col border-b-[1px] '>
       {
         
-        <div className={` flex ${(post.createdBy.username===undefined)?`flex-row-reverse`:`justify-between`} items-center mb-1`} >
-          {(post.createdBy.username) && 
+        <div className={` flex ${(!post.createdBy.profilePicURL)?`flex-row-reverse`:`justify-between`} items-center mb-1`} >
+          {(post.createdBy.profilePicURL) && 
 
           <div className={`flex items-center`}>
             <div>
@@ -154,7 +154,8 @@ const PostItem = ({post,pageType}) => {
                 {/* <h2 className='text-gray-500 text-[14px] ' >{`@${post.createdBy.username}`}</h2> */}
               </Link>
             </div>
-          </div>}
+          </div>
+          }
           <div className=' ml-5 relative '>
             <div onClick={()=>{setShowMoreOptions(true)}}>
               <BsThreeDotsVertical  className='text-xl text-gray-500 hover:text-black cursor-pointer' />
@@ -166,27 +167,26 @@ const PostItem = ({post,pageType}) => {
               {
                 (!sharing)?
               <>
-                <div onClick={()=>{setSharing(true)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                <div onClick={()=>{setSharing(true)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
                   <div className='mr-3'><IoIosShareAlt /></div>
                   <div>Share</div>
                 </div>
-                <div onClick={()=>{bookmarkPost();setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100 sm:hidden'>
+                <div onClick={()=>{bookmarkPost();setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100 sm:hidden'>
                   <div className='mr-3 '>{(bookmarkStatus)? <FaBookmark /> : <FaRegBookmark  /> }</div>
                   <div>{(bookmarkStatus)? `Bookmarked` : `Bookmark` }</div>
                 </div>
                 {
                   (!isYourAccount)&&
-                  <div onClick={()=>{followAuthor();setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                  <div onClick={()=>{followAuthor();setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
                     <div className='mr-3'><SlUserFollow /></div>
                     <div className=' break-words'>
-                      {(followStatus)?`Unfollow `:`Follow `} @
-                      {(pageType!=='ProfilePage') && post.createdBy.username}
+                      {`${(followStatus)?`Unfollow `:`Follow `} @${post.createdBy.username}`}
                     </div>
                   </div>
                 }
                 {
                   (isYourAccount)&&
-                  <div onClick={()=>{deletePost(); setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg text-red-600 hover:bg-gray-100'>
+                  <div onClick={()=>{deletePost(); setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg text-red-600 hover:bg-gray-100'>
                     <div className='mr-3'><RiDeleteBin6Line /></div>
                     <div>
                       Delete 
@@ -195,15 +195,15 @@ const PostItem = ({post,pageType}) => {
                 }
               </>:
               <>
-                <div onClick={copyLinkToClipboard} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
                   <div className='mr-3'><FaLink /></div>
                   <div>Copy link</div>
                 </div>
-                <div onClick={()=>{setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100 '>
+                <div onClick={()=>{setShowMoreOptions(false); setSharing(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100 '>
                   <div className='mr-3 '><MdOutlineMail /></div>
                   <div >Emial</div>
                 </div>
-                <div onClick={()=>{setShowMoreOptions(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                <div onClick={()=>{setShowMoreOptions(false); setSharing(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
                   <div className='mr-3 '><BsWhatsapp /></div>
                   <div >Whatsapp</div>
                 </div>

@@ -1,5 +1,5 @@
 import express from 'express'
-import { checkEmail, createAccount, handleSignin } from '../controllers/user.js';
+import { blockUnblockAccount, checkEmail, createAccount, getBlockStatus, handleSignin } from '../controllers/user.js';
 import { checkTokenAuthentication } from '../middleware/authentication.js';
 import Post from '../model/post.js';
 import { checkFollowStatus, countFollowerFollowingCount, getFollowers, getFollowing, postFollower } from '../controllers/follow.js';
@@ -23,7 +23,7 @@ route.get('/:id/post',checkTokenAuthentication,async (req,res)=>{
     try {
         const userId = req.params.id ;
 
-        const allPosts = await Post.find({createdBy:userId,}).sort({createdAt:-1}) ;
+        const allPosts = await Post.find({createdBy:userId,}).populate('createdBy','username').sort({createdAt:-1}) ;
         return res.status(200).json({allPosts,});
     } catch (error) {
         return res.status(500).json({message:"Internal server error."}) ;
@@ -35,6 +35,9 @@ route.get('/:id/following',checkTokenAuthentication,getFollowing)
 route.post('/:id/follower',checkTokenAuthentication,postFollower)
 route.get('/:id/follower/count',checkTokenAuthentication,countFollowerFollowingCount)
 route.get('/:id/follow/status',checkTokenAuthentication,checkFollowStatus)
+
+route.get('/:id/block',checkTokenAuthentication,getBlockStatus)
+route.post('/:id/block',checkTokenAuthentication,blockUnblockAccount)
 
 export default route ;
 

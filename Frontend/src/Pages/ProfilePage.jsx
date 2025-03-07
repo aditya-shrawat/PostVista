@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import PostList from '../Components/PostList';
 import EditProfileComponent from '../Components/EditProfileComponent';
 import { BsChat } from "react-icons/bs";
 import { HiOutlineUserCircle } from "react-icons/hi2";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { IoIosShareAlt } from "react-icons/io";
+import { FaLink } from "react-icons/fa6";
+import { BsWhatsapp } from "react-icons/bs";
+import { MdOutlineMail } from "react-icons/md";
+import { MdBlock } from "react-icons/md";
 
 const ProfilePage = () => {
   const {username} = useParams();
@@ -20,6 +26,11 @@ const ProfilePage = () => {
   const [canUedit,setCanUedit] = useState(false) ;
   const [userLoading,setUserLoading] = useState(true) ;
   const [postsLoading,setPostsLoading] = useState(true) ;
+  const [showMoreOptions,setShowMoreOptions] = useState(false) ;
+  const optionsRef = useRef(null) ;
+  const [sharing,setSharing] = useState(false) ;
+  const [pathLink,setPathLink] = useState(null);
+  const [blockStatus,setBlockStatus] = useState(false) ;
 
   const fetchPosts =async ()=>{
     try {
@@ -38,11 +49,14 @@ const ProfilePage = () => {
 
   useEffect(()=>{
     if (userDetails ){
-      fetchPosts() ;
+      blockStatusOfAccount();
+      if(!blockStatus && userDetails.id){
+        fetchPosts() ;
+      }
       countFollowers();
       checkFollowStatus();
     }
-  },[userDetails]) ;
+  },[userDetails,blockStatus]) ;
 
   const fetchingUser = async ()=>{
     try {
@@ -64,7 +78,10 @@ const ProfilePage = () => {
   }
 
   useEffect(()=>{
-    fetchingUser();
+    if(username){
+      setPathLink(`${window.location.origin}/${username}`) ;
+      fetchingUser();
+    }
   },[username]);
 
   const checkFollowStatus = async ()=>{
@@ -105,6 +122,59 @@ const ProfilePage = () => {
     fetchingUser() ;
   },[isProfileUpdated]) ;
 
+  const handleClickOutsideMoreOptionDiv = (e)=>{
+    e.preventDefault(); 
+    if(optionsRef.current && !optionsRef.current.contains(e.target)){
+      setShowMoreOptions(false) ;
+      setSharing(false)
+    }
+  }
+
+  useEffect(()=>{
+    if(showMoreOptions){
+      document.addEventListener('mousedown',handleClickOutsideMoreOptionDiv)
+    }
+    else{
+      document.removeEventListener('mousedown',handleClickOutsideMoreOptionDiv)
+    }
+
+    return ()=>{
+      document.removeEventListener('mousedown',handleClickOutsideMoreOptionDiv)
+    }
+  },[showMoreOptions])
+
+  const copyLinkToClipboard = ()=>{
+    navigator.clipboard.writeText(pathLink) ;
+    setSharing(false);
+    setShowMoreOptions(false) ;
+  }
+
+  const blockStatusOfAccount = async ()=>{
+    try {
+      if(!isYourAccount){
+        const BackendURL = import.meta.env.VITE_backendURL;
+        const response = await axios.get(`${BackendURL}/user/${userDetails.id}/block`,{withCredentials:true,});
+        setBlockStatus(response.data.blockStatus);
+      }
+    } catch (error) {
+      console.log("Error in block-Unblock - ",error);
+    }
+  }
+
+  const blockUnblockAccount = async (e)=>{
+    e.preventDefault();
+    try {
+      if(!isYourAccount){
+        const BackendURL = import.meta.env.VITE_backendURL;
+        const response = await axios.post(`${BackendURL}/user/${userDetails.id}/block`,{},{withCredentials:true,});
+        setBlockStatus(response.data.blockStatus);
+        setShowMoreOptions(false);
+      }
+    } catch (error) {
+      console.log("Error in block-Unblock - ",error);
+    }
+  }
+
   return (
       <div className='w-full relative '>
         <div className='max-w-[700px] m-auto '>
@@ -140,27 +210,78 @@ const ProfilePage = () => {
                       <h1 className='text-lg sm:text-xl font-semibold'>{userDetails.name}</h1>
                       <h2 className='text-base text-gray-500 '>{`@${userDetails.username}`}</h2>
                     </div>
+                    <div className='w-auto h-auto flex  '>
                     {
                       (isYourAccount && canUedit)?
                       <>
                       <div>
-                        <button onClick={()=>{setEdit(true)}} className={`ml-14 bg-gray-100 hover:bg-gray-200 text-black border-2
+                        <button onClick={()=>{setEdit(true)}} className={`ml-3 bg-gray-100 hover:bg-gray-200 text-black border-2
                           rounded-xl px-3 sm:px-6 py-1 font-semibold cursor-pointer text-[16px]  `}>
                           Edit Profile
                         </button>
                       </div>
                       </> :
                       <>
-                      <div>
-                        <button onClick={toggleFollowStatus} className={`ml-14 
+                      { (!blockStatus)?
+                        <div>
+                        <button onClick={toggleFollowStatus} className={`ml-1 
                           ${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
                           'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl px-3 sm:px-6 py-1 font-semibold cursor-pointer 
                           text-[16px]  `}>
                           {followStatus?'Following':'Follow'}
                         </button>
                       </div>
+                      :
+                      <div>
+                        <button onClick={blockUnblockAccount} className={`ml-1
+                          bg-red-600 text-white border-none rounded-xl px-3 sm:px-6 py-1 font-semibold cursor-pointer 
+                          text-[16px]  `}>
+                          Blocked
+                        </button>
+                      </div>
+                      }
                       </>
                     }
+                    <div className=' ml-3 relative '>
+                      <div onClick={()=>{setShowMoreOptions(true)}} className='hover:bg-gray-100 cursor-pointer rounded-full p-1 border-2 flex justify-center items-center text-black '>
+                        <BsThreeDotsVertical className='rounded-full text-xl ' />
+                      </div>
+
+                        {(showMoreOptions) &&
+                          <div ref={optionsRef} className='bg-white border-2 z-10 h-auto w-72 p-3 py-5 rounded-xl absolute top-0 -right-2 
+                            text-base font-semibold flex flex-col shadow-[0px_3px_10px_rgba(0,0,0,0.2)] overflow-hidden '>
+                            { (!sharing)?
+                            <>
+                              <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                                <div className='mr-3'><FaLink /></div>
+                                <div>Copy link to profile</div>
+                              </div>
+                              <div onClick={()=>{setSharing(true)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                                <div className='mr-3'><IoIosShareAlt /></div>
+                                <div>Share profile</div>
+                              </div>
+                              {(!isYourAccount)&&
+                              <div onClick={blockUnblockAccount} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                                <div className='mr-3'><MdBlock  /></div>
+                                <div>{`${blockStatus?`Unblock`:`Block`} ${`@${userDetails.username}`} `}</div>
+                              </div>
+                              }
+                            </>:
+                            <>
+                              <div onClick={()=>{setShowMoreOptions(false); setSharing(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100 '>
+                                <div className='mr-3 '><MdOutlineMail /></div>
+                                <div >Emial</div>
+                              </div>
+                              <div onClick={()=>{setShowMoreOptions(false); setSharing(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                                <div className='mr-3 '><BsWhatsapp /></div>
+                                <div >Whatsapp</div>
+                              </div>
+                            </>
+                            }
+                          </div>
+                        }
+                    </div>
+                    </div>
                   </div>
                   {
                     (userDetails.bio!=='') && 
@@ -263,7 +384,22 @@ const ProfilePage = () => {
                 </div>
               </div>
               </>:
-              <PostList posts={posts} pageType={'ProfilePage'} />
+              <>
+                {
+                  (blockStatus)?
+                  <>
+                  <div className='w-full pt-16 px-8 '>
+                    <div className='w-full flex justify-center '>
+                      <div className='block w-auto h-auto'>
+                      <h1 className=' text-3xl text-black font-bold'>{`@${userDetails.username} is blocked.`}</h1>
+                      <p className='text-lg mt-2'>{`Unblock @${userDetails.username} to see their posts.`}</p>
+                      </div>
+                    </div>
+                  </div>
+                  </>:
+                  <><PostList posts={posts} pageType={'ProfilePage'} /></>
+                }
+              </>
             }
           </div>
         </div>

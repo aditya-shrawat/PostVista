@@ -1,9 +1,11 @@
 import Follower from "../model/follower.js";
 import Post from "../model/post.js";
+import User from "../model/user.js";
 
 export const getGeneralPosts = async (req,res)=>{
     try {
-        const allPosts = await Post.find({}).populate('createdBy','username name bio profilePicURL').sort({ createdAt: -1 });
+        const user = await User.findById(req.user.id).select('blockedUsers');
+        const allPosts = await Post.find({createdBy:{$nin:user.blockedUsers}}).populate('createdBy','username name bio profilePicURL').sort({ createdAt: -1 });
         return res.status(200).json({allPosts});
     } catch (error) {
         return res.status(500).json({message:"Internal server error."})
@@ -22,8 +24,9 @@ const findingFollowingFeed = async (createdBy)=>{
 
 export const getFollowingPosts = async (req,res)=>{
     try {
-        const user = req.user.id ;
-        const following = await Follower.find({followedBy:user}).populate('account',"_id");
+        const userId = req.user.id ;
+        const user = await User.findById(userId);
+        const following = await Follower.find({followedBy:userId}).populate('account',"_id");
 
         // let allPosts = [];
         // for(const author of following){
@@ -34,7 +37,11 @@ export const getFollowingPosts = async (req,res)=>{
         // }
 
         const allPosts = (await Promise.all(
-            following.map(author => findingFollowingFeed(author.account._id))
+            following
+            .filter(author => !user.blockedUsers.includes(author.account._id))
+            .map(author =>{
+                return findingFollowingFeed(author.account._id)
+            } )
         )).flat();
         
         allPosts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));

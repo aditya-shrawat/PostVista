@@ -100,3 +100,39 @@ export const handleSignin = async (req,res)=>{
     }
 }
 
+
+export const getBlockStatus = async (req,res)=>{
+    try {
+        const account = req.params.id ;
+        const user = await User.findById(req.user.id) ;
+        if(!user.blockedUsers.includes(account)){
+            return res.status(200).json({message:"Block status Fetched.",blockStatus:false})
+        }
+        return res.status(200).json({message:"Block status Fetched.",blockStatus:true})
+    } catch (error) {
+        console.log("Error in getting block status -",error);
+        return res.status(500).json({message:"Internal server error."});
+    }
+}
+
+
+export const blockUnblockAccount = async (req,res)=>{
+    try {
+        const account = req.params.id ;
+        const user = await User.findById(req.user.id) ;
+        if(!user.blockedUsers.includes(account)){
+            user.blockedUsers.push(account);
+            await user.save();
+            return res.status(200).json({message:"User is blocked.",blockStatus:true});
+        }
+        else{
+            user.blockedUsers = user.blockedUsers.filter(id => id.toString() !== account);
+            await user.save();
+            return res.status(200).json({message:"User is unblocked.",blockStatus:false});
+        }
+    } catch (error) {
+        console.log("Error in blocking-unblocking -",error);
+        return res.status(500).json({message:"Internal server error."});
+    }
+}
+
