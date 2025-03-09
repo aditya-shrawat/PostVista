@@ -160,7 +160,7 @@ const PostDetailPage = () => {
 
   return (
     <div className='min-h-screen min-w-screen pt-6  '>
-      <div className='w-full max-w-screen-md h-auto p-4 m-auto '>
+      <div className='w-full max-w-screen-lg h-auto p-4 m-auto '>
         {
           (loading)?
           <>
@@ -274,7 +274,7 @@ const PostDetailPage = () => {
       </div>
       </>
       :
-      <div className='w-full max-w-screen-md h-auto p-2 py-2 m-auto'>
+      <div className='w-full max-w-screen-lg h-auto p-2 py-2 m-auto'>
         <div className='w-full '>
           <CommentList postId={postId} />
         </div>

@@ -177,7 +177,7 @@ const ProfilePage = () => {
 
   return (
       <div className='w-full relative '>
-        <div className='max-w-[700px] m-auto '>
+        <div className='w-full '>
           {
             (userLoading)?
             <div className='w-full flex flex-col sm:flex-row px-4 py-5'>
@@ -345,7 +345,7 @@ const ProfilePage = () => {
             </div>
           }
 
-          <div className={` w-full p-2 `}>
+          <div className={` w-full `}>
             {
               (postsLoading)?
               <>

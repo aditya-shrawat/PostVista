@@ -25,7 +25,10 @@ const SavedPosts = () => {
 
   return (
     <div className='w-full '>
-      <div className={`max-w-[700px] min-h-screen m-auto relative  `}>
+      <div className={`w-full min-h-screen relative  `}>
+        <div className='w-full bg-white text-2xl font-bold px-4 py-4 border-b-[1px] sticky top-0 left-0 '>
+          <h1>Bookmarks</h1>
+        </div>
         {
           (loading)?
           <>
@@ -85,10 +88,7 @@ const SavedPosts = () => {
             </div>
             </> :
             <>
-            <div className='w-full text-2xl font-bold px-4 py-5 border-b-[1px] '>
-              <h1>Bookmarks</h1>
-            </div>
-            <div className='w-full p-2 '>
+            <div className='w-full '>
               <PostList posts={savedPosts} />
             </div>
             </>

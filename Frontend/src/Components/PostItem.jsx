@@ -136,7 +136,7 @@ const PostItem = ({post,pageType}) => {
   }
 
   return (
-    <div className='my-3 h-auto w-full px-2 py-4 sm:py-6 flex flex-col border-b-[1px] '>
+    <div className='my-3 h-auto w-full px-5 py-4 sm:py-6 flex flex-col border-b-[1px] '>
       {
         
         <div className={` flex ${(!post.createdBy.profilePicURL)?`flex-row-reverse`:`justify-between`} items-center mb-1`} >
