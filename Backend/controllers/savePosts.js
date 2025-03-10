@@ -57,4 +57,22 @@ export const checkBookmarkStatus = async (req,res)=>{
 }
 
 
+export const getRecentBookmarks = async (req,res)=>{
+    try {
+        const userId = req.user.id ;
+
+        const response = await SavedPosts.find({savedBy:userId}).sort({createdAt:-1}).limit(2).populate({
+            path:'post',
+            populate:{
+                path:'createdBy',select:'username name profilePicURL'
+            }
+        }) ;
+        const recentBookmarks = response.map((item)=>item.post) ;
+
+        return res.status(200).json({message:"Fetched recent bookmarks.",recentBookmarks})      
+    } catch (err) {
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
 

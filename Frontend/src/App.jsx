@@ -22,12 +22,12 @@ const router = createBrowserRouter([
     element:<Layout />,
     children:[
       {path:'/', element: <Suspense fallback={<Loading />}><HomePage /></Suspense> },
-      {path:'/:username',element: <Suspense fallback={<Loading />}><ProfilePage /></Suspense> },
       {path:'user/:id/follower',element: <Suspense fallback={<Loading />}><FollowerPage /></Suspense> },
       {path:'user/:id/following',element: <Suspense fallback={<Loading />}><FollowerPage /></Suspense> },
       {path:'/my/bookmarks', element: <Suspense fallback={<Loading />}><SavedPosts /></Suspense>},
     ]
   },
+  {path:'/:username',element: <Suspense fallback={<Loading />}><ProfilePage /></Suspense> },
   {path:'/post/:id',element: <Suspense fallback={<Loading />}><PostDetailPage /></Suspense> },
   { path: '/settings', element: <Suspense fallback={<Loading />}><SettingsPage /></Suspense> },
   {path:'/settings/:contentType', element: <Suspense fallback={<Loading />}><SettingsPage /></Suspense> },

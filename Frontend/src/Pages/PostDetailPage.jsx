@@ -4,6 +4,7 @@ import LikeCommentBar from '../Components/LikeCommentBar';
 import CommentList from '../Components/CommentList';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import Header from '../Components/Header';
 
 const PostDetailPage = () => {
   const postId = useParams().id ;
@@ -159,7 +160,8 @@ const PostDetailPage = () => {
   }
 
   return (
-    <div className='min-h-screen min-w-screen pt-6  '>
+    <div className='min-h-screen w-screen '>
+      <Header />
       <div className='w-full max-w-screen-lg h-auto p-4 m-auto '>
         {
           (loading)?

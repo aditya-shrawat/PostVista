@@ -11,6 +11,7 @@ import { FaLink } from "react-icons/fa6";
 import { BsWhatsapp } from "react-icons/bs";
 import { MdOutlineMail } from "react-icons/md";
 import { MdBlock } from "react-icons/md";
+import Header from '../Components/Header';
 
 const ProfilePage = () => {
   const {username} = useParams();
@@ -176,8 +177,9 @@ const ProfilePage = () => {
   }
 
   return (
-      <div className='w-full relative '>
-        <div className='w-full '>
+      <div className='w-screen relative '>
+        <Header />
+        <div className='w-full max-w-screen-lg m-auto'>
           {
             (userLoading)?
             <div className='w-full flex flex-col sm:flex-row px-4 py-5'>

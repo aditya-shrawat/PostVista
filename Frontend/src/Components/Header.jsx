@@ -1,11 +1,26 @@
-import React, { useContext, } from 'react'
-import { UserContext } from '../Context/UserProvider';
+import React, { useEffect, useState, } from 'react'
 import { LuSquarePen } from "react-icons/lu";
 import { Link } from 'react-router-dom';
 import ProfilePicCircle from './ProfilePicCircle';
+import axios from 'axios';
 
 const Header = () => {
-  const userInfo = useContext(UserContext) ;
+  const [userInfo,setUserInfo] = useState(null);
+  useEffect(()=>{
+    const fetchUser = async ()=>{
+      try {
+        const BackendURL = import.meta.env.VITE_backendURL
+        const response = await axios.get(`${BackendURL}/profile`,{
+          withCredentials: true,
+        });
+        setUserInfo(response.data) ;
+      } catch (error) {
+        console.log("Error : ",error);
+      }
+    }
+
+    fetchUser();
+  },[])
 
   return (
     <nav className='w-full h-16 px-6 bg-white bg-opacity-55 backdrop-blur-sm flex flex-row justify-between items-center border-b-[1px] sticky top-0 z-30'>

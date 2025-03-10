@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import UserProvider from '../Context/UserProvider'
 import Header from '../Components/Header'
 import { FaRegUser } from "react-icons/fa";
 import { VscColorMode } from "react-icons/vsc";
@@ -39,7 +38,8 @@ const SettingsPage = () => {
     }, [location.pathname, navigate]);
 
   return (
-      <div className='w-screen h-screen overflow-hidden'>
+    <div className='w-screen h-screen overflow-hidden'>
+        <Header />
         <div className=' w-full lg:max-w-[1200px] lg:m-auto flex relative'>
             <div className='lg:max-w-[670px] w-full min-h-screen '>
                 <div className='w-full px-4 py-6'>
