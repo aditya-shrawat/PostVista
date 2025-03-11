@@ -1,16 +1,90 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+
+
+const initialPasswordData = {
+  currentPassword:'',
+  newPassword:'',
+  confirmPassword:'',
+}
 
 const ChangePass = () => {
+    const [errorMsg,setErrorMsg] = useState('') ;
+    const [passwordData,setPasswordData] = useState(initialPasswordData)
+    const [resetBtnStatus,setResetBtnStatus] = useState(false);
+
+    const onPasswordInputChange = (e)=>{
+      setPasswordData({...passwordData,[e.target.name]:e.target.value}) ;
+    }
+
+    const checkPasswordLength  = ()=>{
+      if(passwordData.newPassword.length < 8){
+        setErrorMsg('Password must be at least 8 characters!');
+      }
+    };
+
+    useEffect(()=>{
+      if((passwordData.newPassword.length > 0 && passwordData.newPassword.length < 8) && (passwordData.newPassword.trim()!=='') ){
+        checkPasswordLength()
+        setResetBtnStatus(true);
+      }
+      else if(passwordData.newPassword.length <8){
+        if(passwordData.newPassword.length !== 0){
+          setErrorMsg('Password must be at least 8 characters!');
+        }
+        setResetBtnStatus(false);
+      }
+      else{
+        setErrorMsg('');
+      }
+    },[passwordData.newPassword]);
+
+    const isPasswordAndConfirmpasswordSame = ()=>{
+      if(passwordData.newPassword<8 || passwordData.newPassword===''){
+        setErrorMsg("Password must be at least 8 characters!");
+        return false;
+      }
+      if(passwordData.newPassword !== passwordData.confirmPassword){
+       setErrorMsg("Password is not same.");
+       return false;
+      }
+      setErrorMsg('');
+      return true;
+    }
+
+    const resetPassword = async (e)=>{
+      e.preventDefault();
+      try {
+        if(!isPasswordAndConfirmpasswordSame()){
+          return null;
+        }
+
+        setResetBtnStatus(false);
+        const BackendURL = import.meta.env.VITE_backendURL;
+        const response = await axios.put(`${BackendURL}/settings/change-password`,passwordData,{withCredentials:true,});
+        console.log("Password reset successfully.")
+        setPasswordData(initialPasswordData);
+      } catch (error) {
+        if(error.response && error.response.data.error){
+          setErrorMsg(error.response.data.error) ;
+        }
+        else{
+          setErrorMsg("Something went wrong, please try again")
+        }
+      }
+    }
+
   return (
     <div className="w-full h-full flex flex-col ">
       <div className="w-full px-2 mb-5">
         <h1 className="text-xl font-bold text-black">Change your password</h1>
-        <p className="text-base text-gray-500">@username</p>
       </div>
       <div className="w-full border-b-2">
         <form className="w-full px-2 flex flex-col mb-7">
           <label className="mb-1 ">Current password</label>
           <input
+          onChange={onPasswordInputChange}
+          value={passwordData.currentPassword}
             type="password"
             name="currentPassword"
             className=" p-1 px-2 text-lg rounded-lg border-2 outline-blue-400"
@@ -21,6 +95,8 @@ const ChangePass = () => {
         <form className="w-full flex flex-col">
           <label className="mb-1 ">New password</label>
           <input
+          onChange={onPasswordInputChange}
+          value={passwordData.newPassword}
             type="password"
             name="newPassword"
             className=" mb-5 w-full p-1 px-2 text-lg rounded-lg border-2 outline-blue-400"
@@ -29,13 +105,22 @@ const ChangePass = () => {
           <label className="mb-1 ">Confirm password</label>
           <div className="w-full">
             <input
+            onChange={onPasswordInputChange}
+            value={passwordData.confirmPassword}
               type="password"
               name="confirmPassword"
               className="w-full mb-2 p-1 px-2 text-lg rounded-lg border-2 outline-blue-400"
             />
-            {/* {passwordError!=='' && <div className='text-red-500 px-2' >{passwordError}</div> } */}
+            {errorMsg!=='' && <div className='text-red-500 px-2' >{errorMsg}</div> }
           </div>
         </form>
+      </div>
+      <div className="w-full">
+        <div >
+          <button onClick={resetPassword} className={`outline-none px-4 py-1 text-lg mt-5 text-white font-semibold rounded-3xl 
+            ${resetBtnStatus?`bg-blue-500 hover:bg-blue-400 cursor-pointer`:`bg-blue-400 cursor-not-allowed`} `} 
+            disabled={!resetBtnStatus}>Reset password</button>
+        </div>
       </div>
     </div>
   );

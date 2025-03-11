@@ -12,13 +12,12 @@ import userRouter from './routes/user.js';
 import { checkTokenAuthentication } from './middleware/authentication.js';
 import User from './model/user.js';
 import { creatingNewPost, } from './controllers/post.js';
-import Post from './model/post.js';
 import postRouter from './routes/post.js'
 import { getRecentBookmarks, getSavedPosts } from './controllers/savePosts.js';
 import multer from 'multer';
 import { getUserProfileDetails, updateUserInfo, updateUserProfilePic } from './controllers/profile.js';
 import homeRouter from './routes/home.js';
-import SavedPosts from './model/savePosts.js';
+import settingsRouter from './routes/settings.js';
 
 mongoose.connect(process.env.mongodbURL)
 .then(console.log("MongoDb is connected successfully"))
@@ -79,6 +78,7 @@ app.get('/recommend/accounts',checkTokenAuthentication,async (req,res)=>{
         return res.status(500).json({ error: "Internal server error" });
     }
 })
+app.use('/settings',settingsRouter) ;
 
 app.use('/post',postRouter) ;
 app.post('/new-blog',checkTokenAuthentication,uploadBlogPostImage.single('coverImage'),creatingNewPost)

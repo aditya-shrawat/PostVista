@@ -406,7 +406,7 @@ const ProfilePage = () => {
           </div>
         </div>
         {
-          (edit && canUedit)?<EditProfileComponent setEdit={setEdit} userDetails={userDetails} setIsProfileUpdated={setIsProfileUpdated} />:<></>
+          (edit && canUedit)&&<EditProfileComponent setEdit={setEdit} userDetails={userDetails} setIsProfileUpdated={setIsProfileUpdated} />
         }
       </div>
   )
