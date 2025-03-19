@@ -23,7 +23,7 @@ const PostItem = ({post,pageType}) => {
   const [followStatus,setFollowStatus] = useState(false) ;
   const [isYourAccount,setIsYourAccount] = useState(false) ;
   const optionsRef = useRef(null) ;
-  const [sharing,setSharing] = useState(false) ;
+  // const [sharing,setSharing] = useState(false) ;
 
   const pathLink = `${window.location.origin}/post/${post._id}` ;
 
@@ -102,7 +102,6 @@ const PostItem = ({post,pageType}) => {
     e.preventDefault(); 
     if(optionsRef.current && !optionsRef.current.contains(e.target)){
       setShowMoreOptions(false) ;
-      setSharing(false)
     }
   }
 
@@ -131,15 +130,27 @@ const PostItem = ({post,pageType}) => {
 
   const copyLinkToClipboard = ()=>{
     navigator.clipboard.writeText(pathLink) ;
-    setSharing(false);
     setShowMoreOptions(false) ;
   }
 
+  const toggleLike = async ()=>{
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      const response = await axios.post(`${BackendURL}/post/${post._id}/like`,{},{withCredentials:true}) ;
+      setLikeStatus(response.data.isLiked) ;
+    } catch (error) {
+      console.log("Error in toggling like -",error) ;
+    }
+  }
+
+  useEffect(()=>{
+    fetchCounts();
+  },[likeStatus])
+
   return (
-    <div className='my-3 h-auto w-full px-5 py-4 sm:py-6 flex flex-col border-b-[1px] '>
+    <div className='my-2 h-auto w-full px-5 py-3 sm:py-5 flex flex-col border-b-[1px] '>
       {
-        
-        <div className={` flex ${(!post.createdBy.profilePicURL)?`flex-row-reverse`:`justify-between`} items-center mb-1`} >
+        <div className={` flex ${(!post.createdBy.profilePicURL)?`flex-row-reverse`:`justify-between`} items-center`} >
           {(post.createdBy.profilePicURL) && 
 
           <div className={`flex items-center`}>
@@ -150,7 +161,7 @@ const PostItem = ({post,pageType}) => {
             </div>
             <div className='w-auto cursor-pointer '>
               <Link to={`/${post.createdBy.username}`} className='flex items-baseline'>
-                <h1 className='text-lg font-semibold text-black hover:underline line-clamp-1 break-words mr-2 '>{post.createdBy.name}</h1>
+                <h1 className=' font-semibold text-black hover:underline line-clamp-1 break-words mr-2 font-plex'>{post.createdBy.name}</h1>
                 {/* <h2 className='text-gray-500 text-[14px] ' >{`@${post.createdBy.username}`}</h2> */}
               </Link>
             </div>
@@ -158,18 +169,19 @@ const PostItem = ({post,pageType}) => {
           }
           <div className=' ml-5 relative '>
             <div onClick={()=>{setShowMoreOptions(true)}}>
-              <BsThreeDotsVertical  className='text-xl text-gray-500 hover:text-black cursor-pointer' />
+              <BsThreeDotsVertical  className='text-lg text-gray-500 hover:text-black cursor-pointer' />
             </div>
 
             { (showMoreOptions) &&
-            <div ref={optionsRef} className='bg-white border-2 z-10 h-auto w-72 p-3 py-5 rounded-xl absolute top-0 -right-2 
-                text-base font-semibold flex flex-col shadow-[0px_3px_10px_rgba(0,0,0,0.2)] overflow-hidden'>
-              {
-                (!sharing)?
-              <>
-                <div onClick={()=>{setSharing(true)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+              <div ref={optionsRef} className='bg-white border-2 z-10 h-auto w-72 p-3 py-5 rounded-xl absolute top-0 -right-2 
+                text-base flex flex-col shadow-[0px_3px_10px_rgba(0,0,0,0.2)] overflow-hidden font-plex'>
+                <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                  <div className='mr-3'><FaLink /></div>
+                  <div>Copy link</div>
+                </div>
+                <div className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
                   <div className='mr-3'><IoIosShareAlt /></div>
-                  <div>Share</div>
+                  <div>Share via</div>
                 </div>
                 <div onClick={()=>{bookmarkPost();setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100 sm:hidden'>
                   <div className='mr-3 '>{(bookmarkStatus)? <FaBookmark /> : <FaRegBookmark  /> }</div>
@@ -179,7 +191,7 @@ const PostItem = ({post,pageType}) => {
                   (!isYourAccount)&&
                   <div onClick={()=>{followAuthor();setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
                     <div className='mr-3'><SlUserFollow /></div>
-                    <div className=' break-words'>
+                    <div className='line-clamp-1 break-words'>
                       {`${(followStatus)?`Unfollow `:`Follow `} @${post.createdBy.username}`}
                     </div>
                   </div>
@@ -193,58 +205,44 @@ const PostItem = ({post,pageType}) => {
                     </div>
                   </div>
                 }
-              </>:
-              <>
-                <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
-                  <div className='mr-3'><FaLink /></div>
-                  <div>Copy link</div>
-                </div>
-                <div onClick={()=>{setShowMoreOptions(false); setSharing(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100 '>
-                  <div className='mr-3 '><MdOutlineMail /></div>
-                  <div >Emial</div>
-                </div>
-                <div onClick={()=>{setShowMoreOptions(false); setSharing(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
-                  <div className='mr-3 '><BsWhatsapp /></div>
-                  <div >Whatsapp</div>
-                </div>
-              </>
-              }
-            </div>
+              </div>
             }
           </div>
         </div>
       }
-      <Link to={`/post/${post._id}`} className='w-full cursor-pointer '>
-        <div className='w-full h-36 py-2 flex justify-between items-start cursor-pointer ' >
-          <div className={` h-full ${(post.coverImage)?`w-[58%] sm:w-[70%]`:`w-full`}  flex flex-col justify-between `}>
-            <div className='w-full h-auto mb-3'>
-              <h3 className='text-2xl font-bold mb-2 line-clamp-2 break-words'>{post.title}</h3>
-              <p className=' line-clamp-1 break-words font-semibold text-gray-500'>{post.body}</p>
+      <div className='w-full cursor-pointer '>
+        <div className='w-full h-[170px] py-2 cursor-pointer flex flex-col justify-between ' >
+          <Link to={`/post/${post._id}`} className={` h-full w-full flex items-center justify-between mb-2 `}>
+            <div className='w-full h-auto'>
+              <h3 className='text-xl font-bold mb-2 line-clamp-2 break-words font-plex'>{post.title}</h3>
+              <p className=' line-clamp-2 break-words text-gray-500 font-plex '>{post.body}</p>
             </div>
-            <div className='w-full flex justify-between text-black ' >
-              <div className='flex'>
-                <div className=' flex items-center mr-10 cursor-pointer'>
-                  {(likeStatus)?<FcLike className={`mr-2 text-[22px]`}/>: <VscHeart className={`mr-2 text-xl`}/>}
-                  {likes}
+            { (post.coverImage) && 
+              <div className='ml-4 w-full h-full max-w-24 max-h-24 sm:max-w-32 sm:max-h-32'>
+                <div className='h-full w-full overflow-hidden bg-gray-100'>
+                  <img src={post.coverImage} className='h-full w-full object-cover' />
                 </div>
-                <div className=' flex items-center cursor-pointer'><VscComment className='mr-2 text-xl' />{comments}</div>
               </div>
-              <div className='flex'>
-                <div className={`text-lg sm:block hidden cursor-pointer`}>
-                  {(bookmarkStatus)? <FaBookmark /> : <FaRegBookmark  /> }
-                </div>
+            }
+          </Link>
+          <div className='w-full max-w-[75%] min-h-6 flex items-center justify-between text-black font-plex' >
+            <div className='flex'>
+              <div onClick={toggleLike} className=' flex items-center mr-10 cursor-pointer '>
+                {(likeStatus)?<FcLike className={`mr-2 text-xl`}/>: <VscHeart className={`mr-2 text-xl`}/>}
+                {likes}
+              </div>
+              <Link to={`/post/${post._id}`} className=' flex items-center cursor-pointer'>
+                <VscComment className='mr-2 text-xl' />{comments}
+              </Link>
+            </div>
+            <div className='flex'>
+              <div onClick={bookmarkPost} className={`text-lg sm:block hidden cursor-pointer `}>
+                {(bookmarkStatus)? <FaBookmark /> : <FaRegBookmark  /> }
               </div>
             </div>
           </div>
-          { (post.coverImage) && 
-            <div className='ml-8 w-28 h-28 sm:w-32 sm:h-32'>
-              <div className='h-full w-full overflow-hidden bg-gray-100'>
-                <img src={post.coverImage} className='h-full w-full object-cover' />
-              </div>
-            </div>
-          }
         </div>
-      </Link> 
+      </div> 
     </div>
   )
 }

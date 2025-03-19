@@ -75,7 +75,7 @@ const ChangePass = () => {
     }
 
   return (
-    <div className="w-full h-full flex flex-col ">
+    <div className="w-full h-full flex flex-col font-plex ">
       <div className="w-full px-2 mb-5">
         <h1 className="text-xl font-bold text-black">Change your password</h1>
       </div>

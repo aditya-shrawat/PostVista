@@ -109,7 +109,7 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
   return (
     <div className="w-screen h-screen overflow-x-hidden bg-transparent z-20 fixed top-0 left-0 bg-black bg-opacity-15 backdrop-blur-sm ">
         <div ref={divRef} className=" max-w-[95%] md:max-w-lg w-full sm:max-w-md absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
-            <div className="w-full p-5 py-10 bg-white border-2 border-gray-300 rounded-xl">
+            <div className="w-full p-5 py-6 bg-white border-2 border-gray-300 rounded-xl">
                 <div className="w-full h-36 flex items-center ">
                     <div>
                         <div className="mr-6 sm:mr-8 sm:h-32 sm:w-32 h-24 w-24 bg-gray-100 rounded-full cursor-pointer border-2 overflow-hidden">
@@ -117,7 +117,7 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                         </div>
                     </div>
                     <div className="w-auto h-full">
-                        <div className="h-full w-full flex flex-col justify-center">
+                        <div className="h-full w-full flex flex-col justify-center font-plex">
                             <p className="text-base mb-3">Update profile picture</p>
                             <div className="flex ">
                                 <div>
@@ -132,8 +132,6 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                                     </button>
                                 </div>
                             </div>
-                            {/* to inform user that new picture is selected
-                            { (newProfilePic) && <div className="mt-3 text-gray-500 ">New profile picture is selected..!</div>} */}
                         </div>
                     </div>
                 </div>
@@ -141,7 +139,7 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                     (!newProfileInfo)?
                     <></>:
                     <>
-                    <form className="w-full ">
+                    <form className="w-full font-plex">
                         <div className="w-full text-lg my-6">
                             <label name="name" className="w-full font-semibold ">
                                 Name

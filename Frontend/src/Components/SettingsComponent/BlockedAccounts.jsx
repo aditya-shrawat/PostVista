@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const BlockedAccounts = () => {
@@ -26,8 +26,8 @@ const BlockedAccounts = () => {
   return (
     <div className="w-full">
       <div className="w-full">
-        <div className="w-full px-2 mb-5">
-          <h1 className="text-xl font-bold text-black">Blocked accounts</h1>
+        <div className="w-full px-2 mb-5 ">
+          <h1 className="text-xl font-bold text-black font-plex">Blocked accounts</h1>
         </div>
         <div className="w-full">
           {(loadingBlockedAccounts) &&
@@ -50,8 +50,8 @@ const BlockedAccounts = () => {
           }
           { (!loadingBlockedAccounts && blockedAccounts.length===0)?
             <>
-            <div className="w-full text-center ">
-              <h1 className="mt-16 text-xl font-semibold ">You haven't blocked anyone yet.</h1>
+            <div className="w-full h-screen text-center relative ">
+              <h1 className=" text-xl font-semibold font-plex mt-28">You haven't blocked anyone yet!</h1>
             </div>
             </>:
             blockedAccounts.map((account)=>{
@@ -65,15 +65,56 @@ const BlockedAccounts = () => {
 };
 
 const AccountItem = ({account}) => {
+  const [blockStatus,setBlockStatus] = useState(true) ;
+  const [followStatus,setFollowStatus] = useState(false) ;
+
+  const blockUnblockAccount = async (e)=>{
+    e.preventDefault();
+    try {
+        const BackendURL = import.meta.env.VITE_backendURL;
+        const response = await axios.post(`${BackendURL}/user/${account._id}/block`,{},{withCredentials:true,});
+        setBlockStatus(response.data.blockStatus);
+    } catch (error) {
+      console.log("Error in block-Unblock - ",error);
+    }
+  }
+
+  const checkFollowStatus = async ()=>{
+      try {
+          const BackendURL = import.meta.env.VITE_backendURL;
+          const response = await axios.get(`${BackendURL}/user/${account._id}/follow/status`,{withCredentials:true,});
+          setFollowStatus(response.data.isFollowed) ;
+      } catch (error) {
+          console.log("Error in checking Followe status -",error) ;
+      }
+  }
+
+  useEffect(()=>{
+    if(!blockStatus){
+      checkFollowStatus();
+    }
+  },[blockStatus]) ;
+
+  const toggleFollowStatus = async ()=>{
+    try {
+        const BackendURL = import.meta.env.VITE_backendURL;
+        const response = await axios.post(`${BackendURL}/user/${account._id}/follower`,{},{withCredentials:true,});
+        checkFollowStatus();
+    } catch (error) {
+        console.log("Error in toggling FollowStatus -",error) ;
+    }
+  }
+
+
   return (
-    <div className="w-full px-2 py-3 rounded-lg flex mb-3 hover:bg-gray-100 ">
+    <div className="w-full px-2 py-3 rounded-lg flex items-center mb-3 hover:bg-gray-100 ">
       <Link to={`/${account.username}`} >
         <div className="mt-2 h-10 w-10 bg-gray-100 rounded-full cursor-pointer border-[1px] overflow-hidden ">
           <img src={account.profilePicURL} className="h-full w-full object-cover" />
         </div>
       </Link>
-      <div className="w-full ml-4 ">
-        <div className="w-full flex">
+      <div className="w-full ml-4 font-plex">
+        <div className="w-full flex items-center">
           <Link to={`/${account.username}`} className="w-full flex flex-col  ">
             <h1 className=" text-lg font-semibold hover:underline">
               {account.name}
@@ -83,18 +124,25 @@ const AccountItem = ({account}) => {
             </h1>
           </Link>
           <div>
-            <button 
-              className={`ml-2 bg-red-600 text-white border-none rounded-xl px-3 py-1 
-                font-semibold cursor-pointer text-[14px] hover:bg-red-500 `}>
-              Blocked
-            </button>
+            {
+              (blockStatus)?
+              <button  onClick={blockUnblockAccount}
+                className={`ml-2 bg-red-600 text-white border-none rounded-xl px-3 py-1 
+                  font-semibold cursor-pointer text-[14px] hover:bg-red-500 `}>
+                Blocked
+              </button> :
+              <button onClick={toggleFollowStatus} className={`ml-2 ${followStatus?'bg-gray-100 text-black hover:bg-gray-200 border-2':
+                'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl px-3 py-1 font-semibold cursor-pointer 
+                text-[14px] `}>{(followStatus)?'Following':'Follow'}
+              </button>
+            }
           </div>
         </div>
-        <Link to={`/${account.username}`} className="w-full mt-1 h-auto">
+        {/* <Link to={`/${account.username}`} className="w-full mt-1 h-auto">
           <p className="break-words text-base">
             {account.bio}
           </p>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

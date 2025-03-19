@@ -71,7 +71,7 @@ const SettingsPage = () => {
         <Header />
         <div className=' w-full lg:max-w-[1200px] lg:m-auto flex relative'>
             <div className='lg:max-w-[670px] w-full min-h-screen '>
-                <div className='w-full px-4 py-6'>
+                <div className='w-full px-4 py-6 font-plex'>
                     <div className='w-full px-2 mb-5'>
                         <h1 className='text-xl font-bold'>Settings</h1>
                         {(userDetails) && <p className="text-base text-gray-500">{`@${userDetails.username}`}</p>}
@@ -89,10 +89,10 @@ const SettingsPage = () => {
                             <div className='flex items-center'><MdBlock className='mr-4 text-xl' /><span>Blocked accounts</span></div>
                             <div><IoIosArrowForward /></div>
                         </div>
-                        <div onClick={()=>{handleNavigation('archive')}} className='w-full flex items-center justify-between text-lg hover:bg-gray-100 rounded-lg p-2 cursor-pointer '>
+                        {/* <div onClick={()=>{handleNavigation('archive')}} className='w-full flex items-center justify-between text-lg hover:bg-gray-100 rounded-lg p-2 cursor-pointer '>
                             <div className='flex items-center'><MdOutlineArchive className='mr-4 text-xl' /><span>Archive</span></div>
                             <div><IoIosArrowForward /></div>
-                        </div>
+                        </div> */}
                         <div className='w-full flex items-center text-lg hover:bg-gray-100 rounded-lg p-2 cursor-pointer '>
                             <VscColorMode className='mr-4 text-xl' /><span>Theme</span>
                         </div>
@@ -103,7 +103,7 @@ const SettingsPage = () => {
                 </div>
             </div>
           
-            <div className={`fixed top-0 right-0 w-full h-screen 
+            <div className={`fixed top-16 lg:top-0 right-0 w-full h-screen 
                 ${(location.pathname==="/settings")?"translate-x-full lg:translate-x-0":"translate-x-0"} 
                 bg-white lg:relative  lg:min-w-[430px] lg:max-w-[530px] lg:border-l-[1px] lg:pl-5 lg:pr-4 `}>
                 <div className='w-full h-full px-4 py-6'>
@@ -173,11 +173,11 @@ const DeletePopup = ({setDeleteAccount})=>{
             <div className="w-full p-5 py-10 bg-white border-2 border-gray-300 rounded-xl">
                 <div className="w-full">
                     <div className='w-full'>
-                        <h1 className='text-base sm:text-lg font-semibold break-words'>
+                        <h1 className='text-base sm:text-lg font-semibold break-words font-plex'>
                             Deleting your account will remove all your posts, comments, likes, followers, and other data permanently. This action is irreversible.
                         </h1>
                     </div>
-                    <div className='w-full mt-6 mb-2'>
+                    <div className='w-full mt-6 mb-2 font-plex'>
                         <label>Enter account password</label>
                         <div className='w-full'>
                             <input onChange={onPasswordInputChange} value={enteredPassword} type="password" name="password"

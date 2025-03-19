@@ -5,7 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        plex: ['IBM Plex Sans', 'sans-serif'],
+        serif2: ["'Source Serif 4'", "Georgia", "Cambria", "'Times New Roman'", "Times", "serif"],
+      },
+    },
   },
   plugins: [
     require('daisyui'),

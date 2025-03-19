@@ -7,10 +7,10 @@ import axios from 'axios';
 const HomePage = () => {
   const navigate = useNavigate();
   const [Posts,setPosts] = useState([]) ;
-  // const [followedPosts,setFollowedPosts] = useState([]) ;
   const [showGeneralList,setShowGeneralList] = useState(true);
+  const [loadingPosts,setLoadingPosts] = useState(true);
 
-   const initialFxn = async ()=>{
+   const fetchPosts = async ()=>{
     try {
       const BackendURL = import.meta.env.VITE_backendURL;
       if(showGeneralList){
@@ -24,14 +24,17 @@ const HomePage = () => {
     } catch (error) {
       navigate('/user/signin')
     }
+    finally{
+      setLoadingPosts(false);
+    }
    }
 
    useEffect(()=>{
-    initialFxn();
+    fetchPosts();
    },[showGeneralList]);
 
    useEffect(()=>{
-    initialFxn();
+    fetchPosts();
    },[]);
 
   return (
@@ -49,7 +52,34 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        <PostList posts={Posts} pageType={'HomePage'} />
+        {(loadingPosts) &&
+        <div>
+          { [...Array(4)].map((_,index)=>(
+            <div key={index} className='px-4 w-full h-40 flex justify-between items-center cursor-pointer ' >
+              <div className=' w-[55%] sm:w-[65%] '>
+                <div className='w-full h-auto flex flex-col gap-2'>
+                  <div className="skeleton h-4 w-full"></div>
+                  <div className="skeleton h-4 w-full"></div>
+                  <div className="skeleton h-4 w-full"></div>
+                </div>
+              </div>
+             <div className='ml-4 w-24 h-24 sm:w-32 sm:h-32 skeleton'></div>
+            </div>
+          ))
+          }
+        </div>
+        }
+        { (!loadingPosts) &&
+        <>
+          {
+            (Posts.length===0) ? 
+            <div className="w-full px-2 text-center  ">
+              <h1 className="text-xl font-semibold text-black mt-20 mb-20 font-plex">You're not following anyone yet!</h1>
+            </div>:
+            <PostList posts={Posts} pageType={'HomePage'} />
+          }
+        </>
+        }
       </div>
 
       <CreateBlogBtn />

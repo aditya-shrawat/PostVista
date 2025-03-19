@@ -83,20 +83,21 @@ const CreateBlogPage = () => {
   }
 
   return ( 
-    <div className='px-2 min-w-screen min-h-screen '>
-      <div className='m-auto max-w-[600px] '>
-        <nav className='w-full h-16 px-4 bg-white bg-opacity-55 backdrop-blur-sm flex flex-row justify-between items-center 
+    <div className=' w-full min-h-screen '>
+      <nav className='w-full h-16 px-4 bg-white bg-opacity-55 backdrop-blur-sm flex flex-row justify-between items-center 
             border-b-[1px]  sticky top-0 left-0 z-20'>
           <div className='bg-red-300'>logo image</div>
           <div className='flex items-center '>
-            <div onClick={handleSubmit} className=' flex items-center h-8 px-4 cursor-pointer bg-blue-400 rounded-3xl text-white 
-                font-semibold hover:shadow-md hover:scale-105 '>Post</div>
+            <div onClick={handleSubmit} className=' flex items-center h-8 px-6 cursor-pointer bg-blue-500 hover:bg-blue-400 rounded-3xl text-white 
+                font-semibold shadow-md scale-105 '>Post</div>
           </div>
         </nav>
+      <div className='m-auto w-full max-w-screen-lg px-2'>
+        
 
         <div className=' mt-8 py-4 flex flex-col '>
           <div className=' mb-0 p-2'>
-            <textarea className="w-full border-none resize-none overflow-hidden outline-none text-4xl font-semibold bg-transparent"
+            <textarea className="w-full border-none resize-none overflow-hidden outline-none text-3xl md:text-5xl font-semibold bg-transparent font-plex"
             placeholder="Title" name='title' value={postData.title} onChange={handleTitleInput} />
           </div>
 
@@ -124,12 +125,12 @@ const CreateBlogPage = () => {
           </div>
 
           <div className=' p-2 pt-5 border-t-[1px] relative'>
-            <textarea className="w-full  border-none resize-none overflow-hidden outline-none text-2xl bg-transparent"
+            <textarea className="w-full  border-none resize-none overflow-hidden outline-none text-2xl bg-transparent font-serif2"
             placeholder="body" name='body' value={postData.body} onChange={handleBodyeInput} />
 
             {(previewPostImg===null) && 
             <div onClick={handleUpload} className=' absolute -left-12 top-5 hidden md:block '>
-              <IoIosAddCircleOutline className='text-[40px] text-gray-500' />
+              <IoIosAddCircleOutline className='text-4xl text-gray-500' />
             </div>
             }
           </div>

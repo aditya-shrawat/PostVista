@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-import LikeCommentBar from '../Components/LikeCommentBar';
 import CommentList from '../Components/CommentList';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Components/Header';
 
+import { FaRegBookmark  } from "react-icons/fa6";
+import { FaBookmark } from "react-icons/fa6";
+import { GoShare } from "react-icons/go";
+import { IoIosShareAlt } from "react-icons/io";
+import { FaLink } from "react-icons/fa6";
+import { FcLike } from "react-icons/fc";
+import { VscHeart } from "react-icons/vsc";
+import { VscComment } from "react-icons/vsc";
+
 const PostDetailPage = () => {
   const postId = useParams().id ;
-  const navigate = useNavigate();
   const [postData,setPostData] = useState({}) ;
   const [writerData,setWriterData] = useState({})
   const [likesCount,setLikesCount] = useState(0) ;
@@ -160,9 +167,9 @@ const PostDetailPage = () => {
   }
 
   return (
-    <div className='min-h-screen w-screen '>
+    <div className='min-h-screen w-full '>
       <Header />
-      <div className='w-full max-w-screen-lg h-auto p-4 m-auto '>
+      <div className='w-full max-w-screen-lg h-auto px-4 py-5 m-auto '>
         {
           (loading)?
           <>
@@ -189,9 +196,9 @@ const PostDetailPage = () => {
           </div>
           </>:
           <>
-          <h1 className='text-4xl font-bold mb-8 break-words '>{postData.title}</h1> 
+          <h1 className='text-3xl md:text-5xl font-bold break-words font-plex '>{postData.title}</h1> 
 
-          <div className='flex items-center border-t-[1px] pt-4 '>
+          <div className='flex items-center mt-5 py-4 md:py-7 '>
             <div>
               <Link to={`/${writerData.username}`}  className='bg-gray-100 block h-12 w-12 rounded-full cursor-pointer mr-4 border-[1px] overflow-hidden ' >
                 <img src={writerData.profilePicURL} className='h-full w-full object-cover' />
@@ -199,22 +206,22 @@ const PostDetailPage = () => {
             </div>
             <div className=' flex flex-col justify-center ' >
               <div className=' flex items-center'>
-                <Link to={`/${writerData.username}`} className=' cursor-pointer flex items-baseline '>
+                <Link to={`/${writerData.username}`} className=' cursor-pointer md:flex items-baseline '>
                   {
                     writerData.name!=='' &&
-                    <h1 className='text-lg text-black font-semibold line-clamp-1 break-words mr-3'>{writerData.name}</h1>
+                    <h1 className='text-lg text-black font-semibold line-clamp-1 break-words mr-3 font-plex hover:underline'>{writerData.name}</h1>
                   }
-                  {/* <h2 className='text-[14px] text-gray-500 line-clamp-1 break-words' >{`@${writerData.username}`}</h2> */}
+                  {/* <h2 className='text-base text-gray-500 line-clamp-1 break-words font-plex' >{`@${writerData.username}`}</h2> */}
                 </Link> 
                 {
                   (!isYourAccount)&&
                   <span onClick={toggleFollowStatus} className={`block ${followStatus?'text-gray-500 hover:text-gray-600':'text-green-600 hover:text-green-800'}
-                     font-semibold ml-6 cursor-pointer`}>
+                     font-semibold ml-8 cursor-pointer`}>
                     {followStatus?'Following':'Follow'}
                   </span> 
                 }
               </div>
-              <div className='text-[14px] flex items-center text-gray-500'>{formatedTime}</div>
+              <div className='text-[14px] mt-1 flex items-center text-gray-500 font-plex '>{formatedTime}</div>
             </div>
           </div>
 
@@ -222,21 +229,21 @@ const PostDetailPage = () => {
             comments={commentCount} bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
 
           { (postData.coverImage) &&
-          <div className='w-auto h-auto mt-8 mb-3  '>
+          <div className='w-auto h-auto mt-12  '>
             <div className='w-auto h-auto overflow-hidden bg-gray-100'>
               <img className=' h-full w-full object-cover' src={postData.coverImage} />
             </div>
           </div>
           }
 
-          <p className='text-xl break-words mt-4'>{postData.body}</p>
+          <p className='text-xl break-words my-12 font-serif2'>{postData.body}</p>
 
           <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}
            bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
 
-          <div className='flex my-6 '>
-            <Link to={`/${writerData.username}`} className='pt-3 mr-4'>
-              <div className='bg-gray-100 block h-16 w-16 rounded-full cursor-pointer border-[1px] overflow-hidden ' >
+          <div className='flex my-10 md:my-14 '>
+            <Link to={`/${writerData.username}`} className=' mr-4'>
+              <div className='bg-gray-100 block h-14 w-14 md:h-20 md:w-20 rounded-full cursor-pointer border-[1px] overflow-hidden ' >
                 <img src={writerData.profilePicURL} className='h-full w-full object-cover' />
               </div>
             </Link>
@@ -244,44 +251,107 @@ const PostDetailPage = () => {
               <div className='w-full flex justify-between'>
                 <Link to={`/${writerData.username}`} className=' w-full flex flex-col ' >
                   <div className=' cursor-pointer flex flex-col sm:flex-row items-baseline '>
-                    <h1 className='text-lg text-black font-semibold line-clamp-1 break-words mr-3'>{writerData.name}</h1>
-                    <h2 className='text-[14px] text-gray-500 line-clamp-1 break-words' >{`@${writerData.username}`}</h2>
+                    <h1 className='text-lg text-black font-semibold line-clamp-1 break-words mr-3 font-plex'>{writerData.name}</h1>
+                    <h2 className='text-base text-gray-500 line-clamp-1 break-words font-plex' >{`@${writerData.username}`}</h2>
                   </div> 
-                  <span className='text-[14px] my-1 flex items-center text-gray-500'>{`${followerCount} Followers | ${followingCount} following`}</span>
                 </Link>
                 {
                   (!isYourAccount) &&
-                  <button onClick={toggleFollowStatus} className={` ${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
-                    'bg-green-500 hover:bg-green-600 text-white border-none'} h-9 px-3 rounded-2xl font-semibold cursor-pointer `}>
-                    {followStatus?"Following":"Follow"}
-                  </button>
+                  <div>
+                    <button onClick={toggleFollowStatus} className={` ${followStatus?'bg-gray-100 text-base hover:bg-gray-200 text-black border-2':
+                      'bg-green-500 hover:bg-green-600 text-white border-none'} py-1 px-3 rounded-2xl font-semibold cursor-pointer `}>
+                      {followStatus?"Following":"Follow"}
+                    </button>
+                  </div>
                 }
               </div>
-              <span className='text-base font-semibold mt-2 flex items-center break-words '>{writerData.bio}</span>
+              <Link Link to={`/${writerData.username}`} className='w-full' >
+                <span className='text-[14px] my-1 flex items-center text-gray-500'>{`${followerCount} Followers | ${followingCount} following`}</span>
+                <span className='text-base font-semibold flex items-center break-words font-plex '>{writerData.bio}</span>
+              </Link>
             </div>
           </div>    
           </>
         }
       </div>
       <hr />
-      {(loading)?
-      <>
-      <div className=' w-full max-w-screen-md h-auto p-2 py-2 m-auto'>
-        <div className='w-full flex flex-col gap-3'>
-          <div className="skeleton h-6 w-28"></div>
-          <div className="skeleton h-10 w-full my-2"></div>
-          <div className="skeleton h-4 w-full"></div>
-          <div className="skeleton h-4 w-full"></div>
-        </div>
-      </div>
-      </>
-      :
+      {(!loading)&&
       <div className='w-full max-w-screen-lg h-auto p-2 py-2 m-auto'>
         <div className='w-full '>
           <CommentList postId={postId} />
         </div>
       </div>
       }
+    </div>
+  )
+}
+
+
+const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookmarkStatus,pathLink}) => {
+
+  const [sharing,setSharing] = useState(false) ;
+  const optionsRef = useRef(null) ;
+
+  const copyLinkToClipboard = ()=>{
+    navigator.clipboard.writeText(pathLink) ;
+    setSharing(false);
+  }
+
+  const handleClickOutsideMoreOptionDiv = (e)=>{
+    e.preventDefault(); 
+    if(optionsRef.current && !optionsRef.current.contains(e.target)){
+      setSharing(false)
+    }
+  }
+
+  useEffect(()=>{
+    if(sharing){
+      document.addEventListener('mousedown',handleClickOutsideMoreOptionDiv)
+    }
+    else{
+      document.removeEventListener('mousedown',handleClickOutsideMoreOptionDiv)
+    }
+
+    return ()=>{
+      document.removeEventListener('mousedown',handleClickOutsideMoreOptionDiv)
+    }
+  },[sharing])
+
+  return (
+    <div>
+        <div className='w-full px-3 py-2 mt-6 border-y-[1px] flex justify-between items-center text-gray-500 '>
+            <div className=' flex text-lg items-baseline'>
+              <div onClick={toggleLike} className=' flex items-center mr-8 cursor-pointer hover:text-black font-plex'>
+                {(likeStatus)?<FcLike className={`mr-2 text-xl`}/>: <VscHeart className={`mr-2 text-xl`}/>}
+                {likes}
+              </div>
+              <div className=' flex items-center cursor-pointer hover:text-black font-plex'><VscComment className='mr-2 text-xl' />{comments}</div>
+            </div>
+            <div className="flex items-baseline">
+              <div className="mr-5 relative ">
+                <div onClick={()=>{setSharing(true)}} className="text-2xl font-semibold hover:text-black cursor-pointer">
+                  <GoShare  />
+                </div>
+
+                { (sharing) &&
+                  <div ref={optionsRef} className='bg-white text-black border-2 z-10 h-auto w-56 sm:w-72 p-3 py-4 rounded-xl absolute top-0 -right-2 
+                      text-base font-semibold flex flex-col shadow-[0px_3px_10px_rgba(0,0,0,0.2)] overflow-hidden'>
+                      <div onClick={copyLinkToClipboard} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                        <div className='mr-3'><FaLink /></div>
+                        <div>Copy link</div>
+                      </div>
+                      <div onClick={()=>{setSharing(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100 '>
+                        <div className='mr-3 '><IoIosShareAlt /></div>
+                        <div >Share via</div>
+                      </div>
+                  </div>
+                }
+              </div>
+              <div onClick={bookmarkPost} className={`text-lg cursor-pointer ${(bookmarkStatus)?'text-black':`hover:text-black`} `}>
+                {(bookmarkStatus)? <FaBookmark /> : <FaRegBookmark  /> }
+              </div>
+            </div> 
+        </div>
     </div>
   )
 }

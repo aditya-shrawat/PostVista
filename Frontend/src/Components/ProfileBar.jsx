@@ -27,22 +27,22 @@ const ProfileBar = ({barRef,username}) => {
         <div className=' w-64 md:w-72 h-auto px-2 py-4 text-lg '>
             <div className='w-full'>
                 <div className='w-full'>
-                    <div className='w-full flex flex-col'>
+                    <div className='w-full flex flex-col font-plex'>
                         <div>
-                            <Link to={`/${username}`} className='w-full flex items-center p-3 text-xl font-semibold cursor-pointer hover:bg-gray-100 rounded-lg'>
-                            <FaRegUser className='mr-5 text-2xl' /><span>Profile</span>
+                            <Link to={`/${username}`} className='w-full flex items-center px-3 py-2 text-lg cursor-pointer hover:bg-gray-100 rounded-lg'>
+                            <FaRegUser className='mr-5 text-xl' /><span>Profile</span>
                             </Link>
                         </div>
                         <div>
-                            <Link to={'/my/bookmarks'} className='w-full flex items-center p-3 text-lg font-semibold cursor-pointer hover:bg-gray-100 rounded-lg'>
+                            <Link to={'/my/bookmarks'} className='w-full flex items-center px-3 py-2 text-lg cursor-pointer hover:bg-gray-100 rounded-lg'>
                             <FaRegBookmark className='mr-5 text-xl' /><span>Bookmarks</span>
                             </Link>
                         </div>
-                        <Link to={'/settings'} className='w-full flex items-center p-3 text-lg font-semibold cursor-pointer hover:bg-gray-100 rounded-lg'>
+                        <Link to={'/settings'} className='w-full flex items-center px-3 py-2 text-lg cursor-pointer hover:bg-gray-100 rounded-lg'>
                             <MdOutlineSettings className='mr-5 text-2xl' /><span>Settings</span>
                         </Link>
-                        <div className='mt-3 pt-3 border-t-2 '>
-                            <div onClick={handleLogout} className='w-full flex items-center p-3 text-red-500 text-lg font-semibold cursor-pointer hover:bg-gray-100 rounded-lg'>
+                        <div className='mt-3 pt-3 border-t-[1px] '>
+                            <div onClick={handleLogout} className='w-full flex items-center px-3 py-2 text-red-500 text-lg cursor-pointer hover:bg-gray-100 rounded-lg'>
                                 <RiLogoutBoxRLine className='mr-5 text-2xl' /><span>Logout</span>
                             </div>
                         </div>

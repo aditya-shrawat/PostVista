@@ -6,7 +6,7 @@ const AccountInfo = ({setEdit,userDetails}) => {
 
   return (
     <div className="w-full ">
-        <div className="w-full ">
+        <div className="w-full font-plex">
             <div className='w-full px-2 mb-5 '>
                 <h1 className='text-xl font-bold'>Account information</h1>
             </div>       
@@ -32,7 +32,7 @@ const AccountInfo = ({setEdit,userDetails}) => {
                     {userDetails.name}
                     </p>}
                 </div>
-                <div onClick={()=>setEdit(true)} className="w-full flex items-center justify-between mt-4 hover:bg-gray-100 p-2 rounded-lg border-[1px] ">
+                <div onClick={()=>setEdit(true)} className="w-full flex items-center justify-between mt-4 hover:bg-gray-100 p-2 rounded-lg border-[1px] cursor-pointer ">
                     <div className="w-full flex flex-col">
                         <p className="text-black font-semibold">Edit profile information</p>
                         <p className="text-gray-500 text-base">

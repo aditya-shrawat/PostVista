@@ -17,6 +17,16 @@ export const getUserProfileDetails = async (req,res)=>{
         const user = await User.findOne({username}) ;
 
         const isYou = username === req.user.username ;
+        const reqUser = req.user.id ;
+        let blockedYou ;
+
+        if(!isYou){
+            blockedYou = user.blockedUsers.includes(reqUser) ;
+        }
+        else{
+            blockedYou = false ;
+        }
+
         if(user){
             return res.status(200).json({
                 User:{id:user._id,
@@ -24,9 +34,10 @@ export const getUserProfileDetails = async (req,res)=>{
                 name:user.name,
                 bio:user.bio,
                 profilePicURL:user.profilePicURL,
-                profilePicPublicId:user.profilePicPublicId
+                // profilePicPublicId:user.profilePicPublicId
             },
                 isYou:isYou,
+                blockedYou:blockedYou,
             }) ;
         }
         return res.status(400).json({message:"User does not exist"}) ;

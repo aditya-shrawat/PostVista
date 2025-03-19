@@ -98,6 +98,7 @@ const LayoutPage = () => {
                   )}
                 </div>
 
+                { (recentBookmarks.length>0) && 
                 <div className="w-full border-[1px] rounded-2xl p-3 px-4 mt-7 ">
                   <h2 className="text-lg font-bold mb-2">Recently saved</h2>
                   {loadingrecentBookmarks &&
@@ -131,6 +132,7 @@ const LayoutPage = () => {
                     </>
                   )}
                 </div>
+                }
               </div>
             </div>
           </div>
@@ -183,10 +185,10 @@ const RecomendedAccountComponent = ({ account }) => {
         <div className="w-full ml-4 ">
           <div className="w-full flex">
             <Link to={`/${account.username}`} className="w-full flex flex-col  ">
-              <h1 className=" text-base font-bold hover:underline line-clamp-2 break-words">
+              <h1 className=" text-lg font-semibold hover:underline line-clamp-1 break-words font-plex">
                 {account.name}
               </h1>
-              <h1 className=" text-gray-500 text-base line-clamp-2 break-words">{`@${account.username}`}</h1>
+              <h1 className=" text-gray-500 text-base line-clamp-1 break-words font-plex">{`@${account.username}`}</h1>
             </Link>
             <div>
               <button onClick={toggleFollowStatus}
@@ -208,8 +210,8 @@ const RecomendedRecentPostComponent = ({ post }) => {
     <div className="w-full py-2 my-1 flex cursor-pointer  ">
       <Link to={`/post/${post._id}`} className="w-full">
         <div className="w-full ">
-          <div className="flex items-center">
-            <div className="block bg-gray-500 h-7 w-7 rounded-full mr-3 cursor-pointer border-[1px] overflow-hidden ">
+          <div className="flex items-center mb-2">
+            <div className="block bg-gray-500 h-6 w-6 rounded-full mr-3 cursor-pointer border-[1px] overflow-hidden ">
               <img
                 src={post.createdBy.profilePicURL}
                 className="h-full w-full object-cover"
@@ -217,14 +219,14 @@ const RecomendedRecentPostComponent = ({ post }) => {
             </div>
             <div className="w-auto cursor-pointer ">
               <div className="flex items-baseline">
-                <h1 className="text-base font-semibold text-black hover:underline line-clamp-1 break-words ">
+                <h1 className=" font-semibold text-black hover:underline line-clamp-1 break-words font-plex">
                   {post.createdBy.name}
                 </h1>
               </div>
             </div>
           </div>
           <div className="w-full ">
-            <h1 className="text-lg font-bold line-clamp-2 break-words">
+            <h1 className="text-lg font-bold line-clamp-2 break-words font-plex">
               {post.body}
             </h1>
           </div>
