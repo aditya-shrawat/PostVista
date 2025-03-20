@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Header from "./Header.jsx";
 import { Link, Outlet } from "react-router-dom";
 import { IoSearchSharp } from "react-icons/io5";
@@ -9,6 +9,9 @@ const LayoutPage = () => {
   const [loadingrecentBookmarks, setLoadingrecentBookmarks] = useState(true);
   const [recommendedAccounts, setRecommendedAccounts] = useState([]);
   const [loadingRecommendedAccounts, setLoadingRecommendedAccounts] = useState(true);
+  const [searchQueary,setSearchQueary] = useState('');
+  const [searchedAccounts,setSearchedAccounts] = useState([]);
+  const divRef = useRef();
 
   const fetchRecentBookmarks = async () => {
     try {
@@ -43,10 +46,40 @@ const LayoutPage = () => {
     fetchRecommendedAccounts();
   }, []);
 
+  const searchAccounts = async (e)=>{
+    e.preventDefault();
+    const value = e.target.value.trim();
+    setSearchQueary(value)
+    if(value==='') return ;
+
+    try {
+      const BackendURL = import.meta.env.VITE_backendURL;
+      const response = await axios.get(`${BackendURL}/search?query=${value}`,{withCredentials:true})
+      setSearchedAccounts(response.data.accounts)
+    } catch (error) {
+      console.log("Error while searching users: ",error)
+    }
+  }
+
+  useEffect(()=>{
+    const handleOutsideClick = (e)=>{
+      if( divRef.current && !divRef.current.contains(e.target) ){
+        setSearchedAccounts([])
+        setSearchQueary('')
+      }
+    }
+
+    document.addEventListener('mousedown',handleOutsideClick) ;
+
+    return ()=>{
+     document.removeEventListener('mousedown',handleOutsideClick)
+    }
+  },[setSearchedAccounts]);
+
   return (
     <div className="w-screen h-screen overflow-auto">
         <Header />
-        <div className=" w-screen lg:max-w-[1200px] lg:m-auto flex relative">
+        <div className=" w-full lg:max-w-[1200px] lg:m-auto flex relative">
           <div className="max-w-[730px] w-full min-h-screen m-auto lg:m-0 ">
             <Outlet />
           </div>
@@ -54,14 +87,39 @@ const LayoutPage = () => {
           <div className="hidden lg:flex flex-1 w-full min-w-[370px] max-w-[470px] h-screen sticky top-0 border-l-[1px] ">
             <div className="w-full">
               <div className="pl-7 pr-5 relative">
-                <div className="h-14 pb-2 pt-3 ">
-                  <div className="flex items-center w-full px-2 border-[1px] rounded-3xl h-full overflow-hidden">
+                <div ref={divRef} className="h-14 pb-2 pt-3 relative ">
+                  <div className="flex items-center w-full px-2 py-1 border-[1px] rounded-3xl h-full overflow-hidden">
                     <IoSearchSharp className="mr-1 text-2xl" />
-                    <input
-                      type="text"
+                    <input type="text" onChange={searchAccounts} value={searchQueary} placeholder="Search"
                       className="px-2 py-1 w-full text-lg bg-transparent outline-none border-none"
                     />
                   </div>
+
+                  {(searchedAccounts.length!==0)&&
+                  <div className="w-full max-h-80 px-4 rounded-lg absolute top-14 border-[1px] left-0 bg-white z-10 overflow-y-auto shadow-[0px_3px_10px_rgba(0,0,0,0.2)]">
+                    {
+                      searchedAccounts.map((account)=>{
+                        return <div key={account._id} className="w-full py-2 my-1 flex items-center cursor-pointer ">
+                          <Link to={`/${account.username}`}>
+                            <div className=" h-8 w-8 bg-gray-500 rounded-full cursor-pointer border-[1px] overflow-hidden ">
+                              <img src={account.profilePicURL} className="h-full w-full object-cover"/>
+                            </div>
+                          </Link>
+                          <div className="w-full ml-4 ">
+                            <div className="w-full ">
+                              <Link to={`/${account.username}`} className="w-full flex flex-col  ">
+                                <h1 className=" text-base font-semibold hover:underline line-clamp-1 break-words font-plex">
+                                  {account.name}
+                                </h1>
+                                <h1 className=" text-gray-500 text-[14px] line-clamp-1 break-words font-plex">{`@${account.username}`}</h1>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      })
+                    }
+                  </div>
+                  }
                 </div>
 
                 <div className="w-full border-[1px] rounded-2xl p-3 px-4 mt-7 ">
@@ -176,7 +234,7 @@ const RecomendedAccountComponent = ({ account }) => {
 
   return (
     <div className="w-full">
-      <div className="w-full py-2 my-1 flex cursor-pointer ">
+      <div className="w-full py-2 my-1 flex items-center cursor-pointer ">
         <Link to={`/${account.username}`}>
           <div className=" h-12 w-12 bg-gray-500 rounded-full cursor-pointer border-[1px] overflow-hidden ">
             <img src={account.profilePicURL} className="h-full w-full object-cover"/>

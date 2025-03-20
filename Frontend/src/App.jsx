@@ -14,6 +14,7 @@ const FollowerPage = lazy(()=>import('./Pages/FollowerPage'))
 import SignupPage from './Pages/SignupPage' 
 import SigninPage from './Pages/SigninPage' 
 import SettingsPage from './Pages/SettingsPage';
+import SearchPage from './Pages/SearchPage';
 
 
 const router = createBrowserRouter([
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
   {path:'new-blog', element: <Suspense fallback={<Loading />}><CreateBlogPage /></Suspense> },
   {path:'user/signin',element: <SigninPage /> },
   {path:'user/signup',element: <SignupPage /> },
+  {path:'/search',element: <Suspense fallback={<Loading />}><SearchPage /></Suspense> },
   {
     path:'*',
     element:<Errorpage />

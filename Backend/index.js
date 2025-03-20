@@ -80,6 +80,23 @@ app.get('/recommend/accounts',checkTokenAuthentication,async (req,res)=>{
 })
 app.use('/settings',settingsRouter) ;
 
+app.get('/search',checkTokenAuthentication,async (req,res)=>{
+    try {
+        const {query} = req.query ;
+
+        if(!query){
+            return res.status(400).json({error:"Search query is required"});
+        }
+
+        const accounts = await User.find({
+            username:{ $regex: query, $options: "i" }
+        }).select("username name profilePicURL")
+
+        return res.status(200).json({message:"Users searched.",accounts});
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error" });
+    }
+})
 app.use('/post',postRouter) ;
 app.post('/new-blog',checkTokenAuthentication,uploadBlogPostImage.single('coverImage'),creatingNewPost)
 app.use('/user',userRouter) ;

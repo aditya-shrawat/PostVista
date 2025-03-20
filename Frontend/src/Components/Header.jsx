@@ -3,6 +3,7 @@ import { LuSquarePen } from "react-icons/lu";
 import { Link } from 'react-router-dom';
 import ProfilePicCircle from './ProfilePicCircle';
 import axios from 'axios';
+import { IoSearchSharp } from "react-icons/io5";
 
 const Header = () => {
   const [userInfo,setUserInfo] = useState(null);
@@ -30,6 +31,9 @@ const Header = () => {
           <div className='mr-6 flex items-center px-2 py-1 cursor-pointer text-gray-500 hover:text-black hover:scale-105 rounded-xl '>
             <LuSquarePen className='mr-2 text-xl' />Post
           </div>
+        </Link>
+        <Link to={'/search'} className='mr-5 text-2xl text-black sm:hidden flex items-center'>
+          <IoSearchSharp />
         </Link>
         <ProfilePicCircle userInfo={userInfo} />
       </div>
