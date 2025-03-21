@@ -84,8 +84,8 @@ const CreateBlogPage = () => {
 
   return ( 
     <div className=' w-full min-h-screen '>
-      <nav className='w-full h-16 px-4 bg-white bg-opacity-55 backdrop-blur-sm flex flex-row justify-between items-center 
-            border-b-[1px]  sticky top-0 left-0 z-20'>
+      <nav className='w-full h-16 px-4 bg-white dark:bg-black bg-opacity-55 backdrop-blur-sm flex flex-row justify-between items-center 
+            border-b-[1px] dark:border-gray-500  sticky top-0 left-0 z-20'>
           <div className='bg-red-300'>logo image</div>
           <div className='flex items-center '>
             <div onClick={handleSubmit} className=' flex items-center h-8 px-6 cursor-pointer bg-blue-500 hover:bg-blue-400 rounded-3xl text-white 
@@ -118,13 +118,13 @@ const CreateBlogPage = () => {
             }
             { (previewPostImg !== null) && 
               <div onClick={removePostImage}
-                className=' bg-white absolute top-4 right-4 cursor-pointer h-8 w-8 flex justify-center items-center text-gray-500 hover:text-black' >
+                className=' bg-white dark:bg-black absolute top-4 right-4 cursor-pointer h-8 w-8 flex justify-center items-center text-gray-500' >
                 <RxCrossCircled className='text-3xl ' />
               </div>
             }
           </div>
 
-          <div className=' p-2 pt-5 border-t-[1px] relative'>
+          <div className=' p-2 pt-5 border-t-[1px] dark:border-gray-500 relative'>
             <textarea className="w-full  border-none resize-none overflow-hidden outline-none text-2xl bg-transparent font-serif2"
             placeholder="body" name='body' value={postData.body} onChange={handleBodyeInput} />
 

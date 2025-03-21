@@ -26,7 +26,7 @@ const SavedPosts = () => {
   return (
     <div className='w-full '>
       <div className={`w-full min-h-screen relative  `}>
-        <div className='w-full bg-white text-2xl font-bold px-4 py-4 border-b-[1px] sticky top-0 left-0 font-plex'>
+        <div className='w-full bg-white dark:bg-black text-2xl font-bold px-4 py-4 border-b-[1px] dark:border-gray-500 sticky top-0 left-0 font-plex'>
           <h1>Bookmarks</h1>
         </div>
         {

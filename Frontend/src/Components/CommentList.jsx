@@ -44,11 +44,11 @@ const commentList = ({postId}) => {
   return (
     <div className='w-full h-auto mt-4 px-2'>
         <h1 className=' text-2xl font-bold font-plex'>{`Comments (${commentCount}) `}</h1>
-        <div className='  py-8 border-b-[1px] '>
-            <div className='w-full h-12 p-2 flex text-lg rounded-lg shadow-[0px_0px_18px_rgba(0,_0,_0,_0.3)] '>
+        <div className='  py-8 border-b-[1px] dark:border-gray-500 '>
+            <div className='w-full h-12 p-2 flex text-lg rounded-lg shadow-[0px_0px_10px_rgba(0,0,0,0.3)] dark:shadow-[0px_0px_10px_rgba(252,252,252,0.5)] '>
                 <input onChange={(e)=>handleInput(e)} value={commentContent} type="text" name='commentFeild' placeholder='Write your comment...' 
-                className='w-full h-full  border-none outline-none mr-4  ' />
-                <button onClick={postComments} className={`flex items-center outline-none border-[1px] font-semibold cursor-pointer bg-green-500 text-white px-3  rounded-md`}>
+                className='w-full h-full dark:bg-black border-none outline-none mr-4  ' />
+                <button onClick={postComments} className={`flex items-center outline-none font-semibold cursor-pointer bg-green-500 text-white px-3  rounded-md`}>
                     <span className='sm:block hidden mr-2 font-plex' >Reply</span><FaLocationArrow className=' text-lg' />
                 </button>
             </div>

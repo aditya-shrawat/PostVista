@@ -200,7 +200,7 @@ const PostDetailPage = () => {
 
           <div className='flex items-center mt-5 py-4 md:py-7 '>
             <div>
-              <Link to={`/${writerData.username}`}  className='bg-gray-100 block h-12 w-12 rounded-full cursor-pointer mr-4 border-[1px] overflow-hidden ' >
+              <Link to={`/${writerData.username}`}  className=' block h-12 w-12 rounded-full cursor-pointer mr-4 overflow-hidden ' >
                 <img src={writerData.profilePicURL} className='h-full w-full object-cover' />
               </Link>
             </div>
@@ -209,7 +209,7 @@ const PostDetailPage = () => {
                 <Link to={`/${writerData.username}`} className=' cursor-pointer md:flex items-baseline '>
                   {
                     writerData.name!=='' &&
-                    <h1 className='text-lg text-black font-semibold line-clamp-1 break-words mr-3 font-plex hover:underline'>{writerData.name}</h1>
+                    <h1 className='text-lg font-semibold line-clamp-1 break-words mr-3 font-plex hover:underline'>{writerData.name}</h1>
                   }
                   {/* <h2 className='text-base text-gray-500 line-clamp-1 break-words font-plex' >{`@${writerData.username}`}</h2> */}
                 </Link> 
@@ -221,7 +221,7 @@ const PostDetailPage = () => {
                   </span> 
                 }
               </div>
-              <div className='text-[14px] mt-1 flex items-center text-gray-500 font-plex '>{formatedTime}</div>
+              <div className='text-[13px] mt-1 flex items-center text-gray-500 font-plex '>{formatedTime}</div>
             </div>
           </div>
 
@@ -251,14 +251,14 @@ const PostDetailPage = () => {
               <div className='w-full flex justify-between'>
                 <Link to={`/${writerData.username}`} className=' w-full flex flex-col ' >
                   <div className=' cursor-pointer flex flex-col sm:flex-row items-baseline '>
-                    <h1 className='text-lg text-black font-semibold line-clamp-1 break-words mr-3 font-plex'>{writerData.name}</h1>
+                    <h1 className='text-lg font-semibold line-clamp-1 break-words mr-3 font-plex'>{writerData.name}</h1>
                     <h2 className='text-base text-gray-500 line-clamp-1 break-words font-plex' >{`@${writerData.username}`}</h2>
                   </div> 
                 </Link>
                 {
                   (!isYourAccount) &&
                   <div>
-                    <button onClick={toggleFollowStatus} className={` ${followStatus?'bg-gray-100 text-base hover:bg-gray-200 text-black border-2':
+                    <button onClick={toggleFollowStatus} className={` ${followStatus?' text-base border-[1px] dark:border-gray-500':
                       'bg-green-500 hover:bg-green-600 text-white border-none'} py-1 px-3 rounded-2xl font-semibold cursor-pointer `}>
                       {followStatus?"Following":"Follow"}
                     </button>
@@ -319,35 +319,35 @@ const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookm
 
   return (
     <div>
-        <div className='w-full px-3 py-2 mt-6 border-y-[1px] flex justify-between items-center text-gray-500 '>
+        <div className='w-full px-3 py-2 mt-6 border-y-[1px] dark:border-gray-500 flex justify-between items-center '>
             <div className=' flex text-lg items-baseline'>
-              <div onClick={toggleLike} className=' flex items-center mr-8 cursor-pointer hover:text-black font-plex'>
+              <div onClick={toggleLike} className=' flex items-center mr-8 cursor-pointer font-plex'>
                 {(likeStatus)?<FcLike className={`mr-2 text-xl`}/>: <VscHeart className={`mr-2 text-xl`}/>}
                 {likes}
               </div>
-              <div className=' flex items-center cursor-pointer hover:text-black font-plex'><VscComment className='mr-2 text-xl' />{comments}</div>
+              <div className=' flex items-center cursor-pointer font-plex'><VscComment className='mr-2 text-xl' />{comments}</div>
             </div>
             <div className="flex items-baseline">
               <div className="mr-5 relative ">
-                <div onClick={()=>{setSharing(true)}} className="text-2xl font-semibold hover:text-black cursor-pointer">
+                <div onClick={()=>{setSharing(true)}} className="text-2xl font-semibold cursor-pointer">
                   <GoShare  />
                 </div>
 
                 { (sharing) &&
-                  <div ref={optionsRef} className='bg-white text-black border-2 z-10 h-auto w-56 sm:w-72 p-3 py-4 rounded-xl absolute top-0 -right-2 
-                      text-base font-semibold flex flex-col shadow-[0px_3px_10px_rgba(0,0,0,0.2)] overflow-hidden'>
-                      <div onClick={copyLinkToClipboard} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                  <div ref={optionsRef} className='bg-white dark:bg-black dark:text-white border-[1px] dark:border-gray-500 z-10 h-auto w-56 sm:w-72 p-3 py-3 rounded-xl absolute top-0 -right-2 
+                      text-base font-semibold flex flex-col shadow-[0px_0px_10px_rgba(0,0,0,0.3)] dark:shadow-[0px_0px_10px_rgba(252,252,252,0.5)] overflow-hidden'>
+                      <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer '>
                         <div className='mr-3'><FaLink /></div>
                         <div>Copy link</div>
                       </div>
-                      <div onClick={()=>{setSharing(false)}} className='flex items-center py-1 px-2 cursor-pointer rounded-lg hover:bg-gray-100 '>
+                      <div onClick={()=>{setSharing(false)}} className='flex items-center py-2 px-2 cursor-pointer '>
                         <div className='mr-3 '><IoIosShareAlt /></div>
                         <div >Share via</div>
                       </div>
                   </div>
                 }
               </div>
-              <div onClick={bookmarkPost} className={`text-lg cursor-pointer ${(bookmarkStatus)?'text-black':`hover:text-black`} `}>
+              <div onClick={bookmarkPost} className={`text-lg cursor-pointer dark:text-white `}>
                 {(bookmarkStatus)? <FaBookmark /> : <FaRegBookmark  /> }
               </div>
             </div> 

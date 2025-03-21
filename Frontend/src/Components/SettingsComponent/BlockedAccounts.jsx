@@ -26,10 +26,10 @@ const BlockedAccounts = () => {
   return (
     <div className="w-full">
       <div className="w-full">
-        <div className="w-full px-2 mb-5 ">
-          <h1 className="text-xl font-bold text-black font-plex">Blocked accounts</h1>
+        <div className="w-full px-2 pb-4 border-b-[1px] dark:border-gray-500 ">
+          <h1 className="text-xl font-bold font-plex">Blocked accounts</h1>
         </div>
-        <div className="w-full">
+        <div className="w-full mt-4">
           {(loadingBlockedAccounts) &&
             [...Array(6)].map((_, index) => (
               <div key={index} className="w-full flex mb-5">
@@ -107,9 +107,9 @@ const AccountItem = ({account}) => {
 
 
   return (
-    <div className="w-full px-2 py-3 rounded-lg flex items-center mb-3 hover:bg-gray-100 ">
+    <div className="w-full px-2 py-2 flex items-center mb-1">
       <Link to={`/${account.username}`} >
-        <div className="mt-2 h-10 w-10 bg-gray-100 rounded-full cursor-pointer border-[1px] overflow-hidden ">
+        <div className="mt-2 h-10 w-10 rounded-full cursor-pointer overflow-hidden ">
           <img src={account.profilePicURL} className="h-full w-full object-cover" />
         </div>
       </Link>
@@ -131,7 +131,7 @@ const AccountItem = ({account}) => {
                   font-semibold cursor-pointer text-[14px] hover:bg-red-500 `}>
                 Blocked
               </button> :
-              <button onClick={toggleFollowStatus} className={`ml-2 ${followStatus?'bg-gray-100 text-black hover:bg-gray-200 border-2':
+              <button onClick={toggleFollowStatus} className={`ml-2 ${followStatus?' border-2 dark:border-gray-500':
                 'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl px-3 py-1 font-semibold cursor-pointer 
                 text-[14px] `}>{(followStatus)?'Following':'Follow'}
               </button>

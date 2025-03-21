@@ -49,7 +49,7 @@ const LayoutPage = () => {
   const searchAccounts = async (e)=>{
     e.preventDefault();
     const value = e.target.value.trim();
-    setSearchQueary(value)
+    setSearchQueary(e.target.value)
     if(value==='') return ;
 
     try {
@@ -84,24 +84,33 @@ const LayoutPage = () => {
             <Outlet />
           </div>
 
-          <div className="hidden lg:flex flex-1 w-full min-w-[370px] max-w-[470px] h-screen sticky top-0 border-l-[1px] ">
+          <div className="hidden lg:flex flex-1 w-full min-w-[370px] max-w-[470px] h-screen sticky top-0 border-l-[1px] dark:border-gray-500 ">
             <div className="w-full">
               <div className="pl-7 pr-5 relative">
                 <div ref={divRef} className="h-14 pb-2 pt-3 relative ">
-                  <div className="flex items-center w-full px-2 py-1 border-[1px] rounded-3xl h-full overflow-hidden">
+                  <div className="flex items-center w-full px-2 py-1 border-[1px] dark:border-gray-500 rounded-3xl h-full overflow-hidden">
                     <IoSearchSharp className="mr-1 text-2xl" />
                     <input type="text" onChange={searchAccounts} value={searchQueary} placeholder="Search"
                       className="px-2 py-1 w-full text-lg bg-transparent outline-none border-none"
                     />
                   </div>
 
+                  {(searchedAccounts.length===0 && searchQueary.trim()!=='' ) && 
+                  <div className="w-full h-80 mt-2 px-2 text-center bg-white dark:bg-black rounded-lg border-[1px] dark:border-gray-500
+                      flex justify-center items-center">
+                    <h1 className="text-2xl font-semibold dark:text-white font-plex ">
+                    No user found.
+                    </h1>
+                  </div>
+                  }
+
                   {(searchedAccounts.length!==0)&&
-                  <div className="w-full max-h-80 px-4 rounded-lg absolute top-14 border-[1px] left-0 bg-white z-10 overflow-y-auto shadow-[0px_3px_10px_rgba(0,0,0,0.2)]">
+                  <div className="w-full max-h-80 px-4 rounded-lg absolute top-14 border-[1px] dark:border-gray-500 left-0 bg-white dark:bg-black z-10 overflow-y-auto shadow-[0px_3px_10px_rgba(0,0,0,0.2)]">
                     {
                       searchedAccounts.map((account)=>{
                         return <div key={account._id} className="w-full py-2 my-1 flex items-center cursor-pointer ">
                           <Link to={`/${account.username}`}>
-                            <div className=" h-8 w-8 bg-gray-500 rounded-full cursor-pointer border-[1px] overflow-hidden ">
+                            <div className=" h-8 w-8 rounded-full cursor-pointer overflow-hidden ">
                               <img src={account.profilePicURL} className="h-full w-full object-cover"/>
                             </div>
                           </Link>
@@ -122,7 +131,7 @@ const LayoutPage = () => {
                   }
                 </div>
 
-                <div className="w-full border-[1px] rounded-2xl p-3 px-4 mt-7 ">
+                <div className="w-full border-[1px] dark:border-gray-500 rounded-2xl p-3 px-4 mt-7 ">
                   <h2 className="text-lg font-bold mb-2">Who to follow</h2>
                   {loadingRecommendedAccounts &&
                     [...Array(3)].map((_, index) => (
@@ -157,7 +166,7 @@ const LayoutPage = () => {
                 </div>
 
                 { (recentBookmarks.length>0) && 
-                <div className="w-full border-[1px] rounded-2xl p-3 px-4 mt-7 ">
+                <div className="w-full border-[1px] dark:border-gray-500 rounded-2xl p-3 px-4 mt-7 ">
                   <h2 className="text-lg font-bold mb-2">Recently saved</h2>
                   {loadingrecentBookmarks &&
                     [...Array(2)].map((_, index) => (
@@ -236,7 +245,7 @@ const RecomendedAccountComponent = ({ account }) => {
     <div className="w-full">
       <div className="w-full py-2 my-1 flex items-center cursor-pointer ">
         <Link to={`/${account.username}`}>
-          <div className=" h-12 w-12 bg-gray-500 rounded-full cursor-pointer border-[1px] overflow-hidden ">
+          <div className=" h-12 w-12 rounded-full cursor-pointer overflow-hidden ">
             <img src={account.profilePicURL} className="h-full w-full object-cover"/>
           </div>
         </Link>
@@ -250,7 +259,7 @@ const RecomendedAccountComponent = ({ account }) => {
             </Link>
             <div>
               <button onClick={toggleFollowStatus}
-                className={`ml-4 ${followStatus?'bg-gray-100 text-black hover:bg-gray-200 border-2':
+                className={`ml-4 ${followStatus?' border-[1px] dark:border-gray-500':
                 'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl 
                 px-3 py-1 font-semibold cursor-pointer text-[14px] block `}>
                 {(followStatus)?'Following':'Follow'}
@@ -269,7 +278,7 @@ const RecomendedRecentPostComponent = ({ post }) => {
       <Link to={`/post/${post._id}`} className="w-full">
         <div className="w-full ">
           <div className="flex items-center mb-2">
-            <div className="block bg-gray-500 h-6 w-6 rounded-full mr-3 cursor-pointer border-[1px] overflow-hidden ">
+            <div className="block h-6 w-6 rounded-full mr-3 cursor-pointer overflow-hidden ">
               <img
                 src={post.createdBy.profilePicURL}
                 className="h-full w-full object-cover"
@@ -277,7 +286,7 @@ const RecomendedRecentPostComponent = ({ post }) => {
             </div>
             <div className="w-auto cursor-pointer ">
               <div className="flex items-baseline">
-                <h1 className=" font-semibold text-black hover:underline line-clamp-1 break-words font-plex">
+                <h1 className=" font-semibold hover:underline line-clamp-1 break-words font-plex">
                   {post.createdBy.name}
                 </h1>
               </div>

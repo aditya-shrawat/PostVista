@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -16,6 +17,7 @@ export default {
     require('daisyui'),
   ],
   daisyui: {
-    themes: ["light"], // Set the default theme to light
+    base: false,
+    themes: ["light", "dark"],
   },
 }

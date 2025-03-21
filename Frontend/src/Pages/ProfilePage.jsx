@@ -177,7 +177,7 @@ const ProfilePage = () => {
   }
 
   return (
-      <div className='w-full relative'>
+      <div className='w-full min-h-screen relative'>
         <Header />
         <div className='w-full max-w-screen-lg m-auto'>
           {
@@ -198,13 +198,13 @@ const ProfilePage = () => {
               </div>
             </div>
             :
-            <div className='w-full border-b-[1px] pt-4 pb-6 px-4'>
+            <div className='w-full border-b-[1px] dark:border-gray-500 pt-4 pb-6 px-4'>
 
               <div>
                 <div className=' w-full flex justify-between items-end ' >
                   <div className='h-auto w-full'>
-                    <div className=' sm:h-32 sm:w-32 h-24 w-24 bg-gray-100 rounded-full cursor-pointer
-                        border-2 overflow-hidden '>
+                    <div className=' sm:h-32 sm:w-32 h-24 w-24 rounded-full cursor-pointer border-[1px] dark:border-gray-600
+                       overflow-hidden '>
                       <img src={userDetails.profilePicURL} className="h-full w-full object-cover" />
                     </div>
                   </div>
@@ -212,23 +212,23 @@ const ProfilePage = () => {
                     <div className='w-full'>
                       <div className='w-auto h-auto flex flex-row-reverse justify-start items-center '>
                         <div className=' ml-3 relative '>
-                          <div onClick={()=>{setShowMoreOptions(true)}} className='hover:bg-gray-100 cursor-pointer rounded-full p-1 sm:p-2 border-2 flex justify-center items-center text-black '>
+                          <div onClick={()=>{setShowMoreOptions(true)}} className='dark:text-white cursor-pointer rounded-full p-1 sm:p-2 border-[1px] dark:border-gray-500 flex justify-center items-center text-black '>
                             <BsThreeDots className='rounded-full text-lg sm:text-xl ' />
                           </div>
 
                             {(showMoreOptions) &&
-                              <div ref={optionsRef} className='bg-white border-2 z-10 h-auto w-72 p-3 py-5 rounded-xl absolute top-0 -right-2 
-                                text-base flex flex-col shadow-[0px_3px_10px_rgba(0,0,0,0.2)] overflow-hidden font-plex'>
-                                  <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                              <div ref={optionsRef} className='bg-white dark:bg-black z-10 h-auto w-72 p-3 py-5 rounded-xl absolute -top-1 right-0 
+                                text-base flex flex-col shadow-[0px_0px_10px_rgba(0,0,0,0.3)] dark:shadow-[0px_0px_10px_rgba(252,252,252,0.5)] overflow-hidden font-plex'>
+                                  <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer'>
                                     <div className='mr-3'><FaLink /></div>
                                     <div>Copy link to profile</div>
                                   </div>
-                                  <div onClick={()=>{setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                                  <div onClick={()=>{setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer'>
                                     <div className='mr-3'><IoIosShareAlt /></div>
                                     <div>Share profile via</div>
                                   </div>
                                   {(!isYourAccount)&&
-                                  <div onClick={()=>{setBlockPopupOn(true);setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                                  <div onClick={()=>{setBlockPopupOn(true);setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer'>
                                     <div className='mr-3'><MdBlock  /></div>
                                     <div>{`${blockStatus?`Unblock`:`Block`} ${`@${userDetails.username}`} `}</div>
                                   </div>
@@ -237,7 +237,7 @@ const ProfilePage = () => {
                             }
                         </div>
 
-                        <div className='ml-3 hover:bg-gray-100 cursor-pointer rounded-full p-1 sm:p-2 border-2 flex justify-center items-center text-black '>
+                        <div className='ml-3 dark:text-white cursor-pointer rounded-full p-1 sm:p-2 border-[1px] dark:border-gray-500 flex justify-center items-center text-black '>
                           <MdOutlineEmail className='rounded-full text-lg sm:text-xl ' />
                         </div>
                         
@@ -245,7 +245,7 @@ const ProfilePage = () => {
                           (isYourAccount && canUedit)?
                           <>
                           <div>
-                            <button onClick={()=>{setEdit(true)}} className={`ml-3 bg-gray-100 hover:bg-gray-200 text-black border-2
+                            <button onClick={()=>{setEdit(true)}} className={`ml-3 dark:text-white border-[1px] dark:border-gray-500
                               rounded-3xl px-5 py-1 sm:py-2 font-semibold cursor-pointer text-[14px] `}>
                               Edit Profile
                             </button>
@@ -256,7 +256,7 @@ const ProfilePage = () => {
                             <>{ (!isYourAccount && !blockedYou) &&
                             <div>
                               <button onClick={toggleFollowStatus} className={`ml-3 
-                                ${followStatus?'bg-gray-100 hover:bg-gray-200 text-black border-2':
+                                ${followStatus?' dark:text-white border-[1px] dark:border-gray-500':
                                 'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-3xl px-5 py-1 sm:py-2 font-semibold cursor-pointer 
                                 text-[14px] `}>
                                 {followStatus?'Following':'Follow'}
@@ -280,12 +280,12 @@ const ProfilePage = () => {
                 </div>
                 <div className='mt-3 w-full'>
                   <div className='w-full mb-2'>
-                    <h1 className='text-xl font-bold font-plex line-clamp-1 break-words '>{userDetails.name}</h1>
+                    <h1 className='text-xl font-bold font-plex line-clamp-1 break-words dark:text-white '>{userDetails.name}</h1>
                     <h2 className='text-[16px] text-gray-500 font-plex line-clamp-1 break-words'>{`@${userDetails.username}`}</h2>
                   </div>
                   {
                     (userDetails.bio!=='') && 
-                    <h3 className='break-words text-lg font-plex'>{userDetails.bio}</h3>
+                    <h3 className='break-words text-lg dark:text-white font-plex'>{userDetails.bio}</h3>
                   }
 
                   <div className='flex text-gray-500 text-base mt-2 '>
@@ -303,13 +303,13 @@ const ProfilePage = () => {
           }
 
           { (!userLoading && (userDetails.bio==='' || userDetails.profilePicPublicId==='')&&canUedit)&&
-            <div className='w-full border-b-2 pt-3 pb-5 px-4  '>
+            <div className='w-full border-b-[1px] dark:border-gray-500 pt-3 pb-5 px-4  '>
               <h2 className='text-lg font-semibold mb-3 font-plex'>Complete your profile </h2>
               <div className='w-full flex overflow-x-auto'>
                 { (userDetails.bio==='') &&
-                <div className="card bg-base-100 min-w-[280px] border-2 mr-5 ">
+                <div className="card bg-base-100 min-w-[280px] border-[1px] mr-5 dark:bg-black dark:border-gray-500 ">
                   <div className='w-full h-auto pt-8 flex justify-center items-center'>
-                    <div className='h-16 w-16 rounded-full border-[3px] border-black'>
+                    <div className='h-16 w-16 rounded-full border-[3px]'>
                       <div className='rounded-full w-full h-full flex justify-center items-center'>
                         <BsChat className='text-4xl' />
                       </div>
@@ -327,9 +327,9 @@ const ProfilePage = () => {
                 }
 
                 { (userDetails.profilePicPublicId==='') &&
-                <div className="card bg-base-100 min-w-[280px] border-2 ">
+                <div className="card bg-base-100 min-w-[280px] border-[1px] dark:bg-black dark:border-gray-500 ">
                   <div className='w-full h-auto pt-8 flex justify-center items-center'>
-                    <div className='w-16 h-16 rounded-full p-2 border-[3px] border-black'>
+                    <div className='w-16 h-16 rounded-full p-2 border-[3px]'>
                       <div className='rounded-full w-full h-full flex justify-center items-center'>
                         <HiOutlineUserCircle  className='text-5xl' />
                       </div>
@@ -354,7 +354,7 @@ const ProfilePage = () => {
               (postsLoading)?
               <>
                 <div className='w-full mt-5 '>
-                  { [...Array(2)].map((_,index)=>(
+                  { [...Array(4)].map((_,index)=>(
                     <div key={index} className='px-4 w-full h-40 flex justify-between items-center cursor-pointer ' >
                       <div className=' w-[55%] sm:w-[65%] '>
                         <div className='w-full h-auto flex flex-col gap-2'>
@@ -376,8 +376,8 @@ const ProfilePage = () => {
                   <div className='w-full pt-16 px-8 '>
                     <div className='w-full flex justify-center '>
                       <div className='block w-auto h-auto'>
-                      <h1 className=' text-2xl text-black font-bold font-plex'>{`@${userDetails.username} is blocked.`}</h1>
-                      <p className='text-base font-plex'>{`Unblock @${userDetails.username} to see their posts.`}</p>
+                      <h1 className=' text-2xl dark:text-white font-bold font-plex'>{`@${userDetails.username} is blocked.`}</h1>
+                      <p className='text-base font-plex text-gray-500'>{`Unblock @${userDetails.username} to see their posts.`}</p>
                       </div>
                     </div>
                   </div>
@@ -387,11 +387,11 @@ const ProfilePage = () => {
                   <div className="w-full px-2 text-center  ">
                     {
                       (isYourAccount)&&
-                      <h1 className="text-2xl font-semibold text-black font-plex mt-20 mb-20 ">You haven't posted anything yet.</h1>
+                      <h1 className="text-2xl font-semibold dark:text-white font-plex mt-20 mb-20 ">You haven't posted anything yet.</h1>
                     }
                     {
                       (!isYourAccount)&&
-                      <h1 className="text-2xl font-semibold text-black font-plex mt-20 mb-20 ">No posts yet.</h1>
+                      <h1 className="text-2xl font-semibold dark:text-white font-plex mt-20 mb-20 ">No posts yet.</h1>
                     }
                   </div>:
                   <PostList posts={posts} pageType={'ProfilePage'} />
@@ -437,7 +437,7 @@ const BlockPopup = ({setBlockPopupOn,blockUnblockAccount,blockStatus,username})=
   return (
     <div className="w-screen h-screen overflow-x-hidden bg-transparent z-20 fixed top-0 left-0 bg-black bg-opacity-15 backdrop-blur-sm ">
       <div ref={divRef} className=" max-w-[95%] md:max-w-lg w-full sm:max-w-md absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
-          <div className="w-full p-5 py-10 bg-white border-2 border-gray-300 rounded-xl">
+          <div className="w-full p-5 py-10 bg-white dark:bg-black border-[1px] border-gray-300 dark:border-gray-500 rounded-xl">
               <div className="w-full">
                   <div className='w-full'>
                       <h1 className='text-lg font-semibold break-words font-plex'>
@@ -452,7 +452,7 @@ const BlockPopup = ({setBlockPopupOn,blockUnblockAccount,blockStatus,username})=
                   </div>
                   <div className='w-full flex justify-evenly mt-6'>
                       <button onClick={()=>{setBlockPopupOn(false)}} className="border-2 border-gray-200 outline-none bg-transparent
-                      text-black px-6 py-1 text-lg  font-semibold cursor-pointer rounded-3xl">
+                     px-6 py-1 text-lg  font-semibold cursor-pointer rounded-3xl">
                       Cancel
                       </button>
                       <button onClick={(e)=>{setBlockPopupOn(false);blockUnblockAccount(e)}} className={`outline-none px-6 py-1 text-lg text-white font-semibold 

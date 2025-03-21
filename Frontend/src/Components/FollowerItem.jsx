@@ -33,9 +33,9 @@ const FollowerItem = ({showFollowers,follower,following}) => {
     }
 
   return (
-    <div className='w-full px-2 py-3 my-2 rounded-lg flex mb-2 hover:bg-gray-100 '>
+    <div className='w-full px-2 py-2 my-2 flex mb-2 '>
         <Link to={`/${(showFollowers)?follower.followedBy.username : following.account.username}`} >
-            <div className=' h-12 w-12 bg-gray-100 rounded-full cursor-pointer border-[1px] overflow-hidden '>
+            <div className=' h-12 w-12 rounded-full cursor-pointer overflow-hidden '>
                 <img src={(showFollowers)?follower.followedBy.profilePicURL : following.account.profilePicURL} className="h-full w-full object-cover" />
             </div>
         </Link>
@@ -46,7 +46,7 @@ const FollowerItem = ({showFollowers,follower,following}) => {
                     <h1 className=' text-gray-500 text-base font-plex'>{`@${(showFollowers)?follower.followedBy.username : following.account.username}`}</h1>
                 </Link>
                 <div>
-                    <button onClick={toggleFollowStatus} className={`ml-4 ${followStatus?'bg-gray-100 text-black hover:bg-gray-200 border-2':
+                    <button onClick={toggleFollowStatus} className={`ml-4 ${followStatus?' border-[1px] dark:border-gray-500':
                 'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl px-3 py-1 font-semibold cursor-pointer 
                 text-[14px] ${isYourAccount?'hidden':'block'} `}>{(followStatus)?'Following':'Follow'}
                     </button>

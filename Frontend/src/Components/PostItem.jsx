@@ -148,20 +148,20 @@ const PostItem = ({post,pageType}) => {
   },[likeStatus])
 
   return (
-    <div className='my-2 h-auto w-full px-5 py-3 sm:py-5 flex flex-col border-b-[1px] '>
+    <div className='my-2 h-auto w-full px-5 py-3 sm:py-5 flex flex-col border-b-[1px] dark:border-gray-500 '>
       {
         <div className={` flex ${(!post.createdBy.profilePicURL)?`flex-row-reverse`:`justify-between`} items-center`} >
           {(post.createdBy.profilePicURL) && 
 
           <div className={`flex items-center`}>
             <div>
-              <Link to={`/${post.createdBy.username}`}  className='block bg-gray-100 h-6 w-6 rounded-full mr-3 cursor-pointer border-[1px] overflow-hidden '>
+              <Link to={`/${post.createdBy.username}`}  className='block h-6 w-6 rounded-full mr-3 cursor-pointer overflow-hidden '>
                 <img src={post.createdBy.profilePicURL} className='h-full w-full object-cover' />
               </Link>
             </div>
             <div className='w-auto cursor-pointer '>
               <Link to={`/${post.createdBy.username}`} className='flex items-baseline'>
-                <h1 className=' font-semibold text-black hover:underline line-clamp-1 break-words mr-2 font-plex'>{post.createdBy.name}</h1>
+                <h1 className=' font-semibold dark:text-white hover:underline line-clamp-1 break-words mr-2 font-plex'>{post.createdBy.name}</h1>
                 {/* <h2 className='text-gray-500 text-[14px] ' >{`@${post.createdBy.username}`}</h2> */}
               </Link>
             </div>
@@ -169,27 +169,27 @@ const PostItem = ({post,pageType}) => {
           }
           <div className=' ml-5 relative '>
             <div onClick={()=>{setShowMoreOptions(true)}}>
-              <BsThreeDotsVertical  className='text-lg text-gray-500 hover:text-black cursor-pointer' />
+              <BsThreeDotsVertical  className='text-lg text-gray-400 hover:text-black dark:hover:text-white cursor-pointer' />
             </div>
 
             { (showMoreOptions) &&
-              <div ref={optionsRef} className='bg-white border-2 z-10 h-auto w-72 p-3 py-5 rounded-xl absolute top-0 -right-2 
-                text-base flex flex-col shadow-[0px_3px_10px_rgba(0,0,0,0.2)] overflow-hidden font-plex'>
-                <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+              <div ref={optionsRef} className='bg-white dark:bg-black  z-10 h-auto w-72 p-3 py-4 rounded-xl absolute top-0 -right-2 
+                text-base flex flex-col shadow-[0px_0px_10px_rgba(0,0,0,0.3)] dark:shadow-[0px_0px_10px_rgba(252,252,252,0.5)] overflow-hidden font-plex'>
+                <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer dark:text-white'>
                   <div className='mr-3'><FaLink /></div>
                   <div>Copy link</div>
                 </div>
-                <div className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                <div className='flex items-center py-2 px-2 cursor-pointer dark:text-white'>
                   <div className='mr-3'><IoIosShareAlt /></div>
                   <div>Share via</div>
                 </div>
-                <div onClick={()=>{bookmarkPost();setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100 sm:hidden'>
+                <div onClick={()=>{bookmarkPost();setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer sm:hidden dark:text-white'>
                   <div className='mr-3 '>{(bookmarkStatus)? <FaBookmark /> : <FaRegBookmark  /> }</div>
                   <div>{(bookmarkStatus)? `Bookmarked` : `Bookmark` }</div>
                 </div>
                 {
                   (!isYourAccount)&&
-                  <div onClick={()=>{followAuthor();setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg hover:bg-gray-100'>
+                  <div onClick={()=>{followAuthor();setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer dark:text-white'>
                     <div className='mr-3'><SlUserFollow /></div>
                     <div className='line-clamp-1 break-words'>
                       {`${(followStatus)?`Unfollow `:`Follow `} @${post.createdBy.username}`}
@@ -198,7 +198,7 @@ const PostItem = ({post,pageType}) => {
                 }
                 {
                   (isYourAccount)&&
-                  <div onClick={()=>{deletePost(); setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer rounded-lg text-red-600 hover:bg-gray-100'>
+                  <div onClick={()=>{deletePost(); setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer text-red-600'>
                     <div className='mr-3'><RiDeleteBin6Line /></div>
                     <div>
                       Delete 
@@ -219,13 +219,13 @@ const PostItem = ({post,pageType}) => {
             </div>
             { (post.coverImage) && 
               <div className='ml-4 w-full h-full max-w-24 max-h-24 sm:max-w-32 sm:max-h-32'>
-                <div className='h-full w-full overflow-hidden bg-gray-100'>
+                <div className='h-full w-full overflow-hidden '>
                   <img src={post.coverImage} className='h-full w-full object-cover' />
                 </div>
               </div>
             }
           </Link>
-          <div className='w-full max-w-[75%] min-h-6 flex items-center justify-between text-black font-plex' >
+          <div className='w-full max-w-[75%] min-h-6 flex items-center justify-between font-plex' >
             <div className='flex'>
               <div onClick={toggleLike} className=' flex items-center mr-10 cursor-pointer '>
                 {(likeStatus)?<FcLike className={`mr-2 text-xl`}/>: <VscHeart className={`mr-2 text-xl`}/>}

@@ -109,10 +109,10 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
   return (
     <div className="w-screen h-screen overflow-x-hidden bg-transparent z-20 fixed top-0 left-0 bg-black bg-opacity-15 backdrop-blur-sm ">
         <div ref={divRef} className=" max-w-[95%] md:max-w-lg w-full sm:max-w-md absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
-            <div className="w-full p-5 py-6 bg-white border-2 border-gray-300 rounded-xl">
+            <div className="w-full p-5 py-6 bg-white dark:bg-black border-[1px] border-gray-300 dark:border-gray-500 rounded-xl">
                 <div className="w-full h-36 flex items-center ">
                     <div>
-                        <div className="mr-6 sm:mr-8 sm:h-32 sm:w-32 h-24 w-24 bg-gray-100 rounded-full cursor-pointer border-2 overflow-hidden">
+                        <div className="mr-6 sm:mr-8 sm:h-32 sm:w-32 h-24 w-24 rounded-full cursor-pointer overflow-hidden">
                             <img src={(previewPfp !== null)? previewPfp : newProfileInfo.profilePicURL} className="h-full w-full object-cover" />
                         </div>
                     </div>
@@ -122,12 +122,12 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                             <div className="flex ">
                                 <div>
                                     <input type="file" accept="image/*" ref={fileInputRef} onChange={handlefileChange} className="hidden " />
-                                    <button onClick={handleUpdateClick} className="cursor-pointer px-3 rounded-lg hover:bg-gray-100 font-semibold text-green-500 mr-10 outline-none ">
+                                    <button onClick={handleUpdateClick} className="cursor-pointer px-3 font-semibold text-green-500 mr-10 outline-none ">
                                         Update
                                     </button>
                                 </div>
                                 <div>
-                                    <button onClick={handleRemoveClick} className="cursor-pointer px-3 rounded-lg hover:bg-gray-100 font-semibold text-red-500 outline-none ">
+                                    <button onClick={handleRemoveClick} className="cursor-pointer px-3 font-semibold text-red-500 outline-none ">
                                         Remove
                                     </button>
                                 </div>
@@ -141,18 +141,18 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                     <>
                     <form className="w-full font-plex">
                         <div className="w-full text-lg my-6">
-                            <label name="name" className="w-full font-semibold ">
+                            <label name="name" className="w-full text-gray-500 ">
                                 Name
                             </label>
                             <input onChange={(e)=>{handleNameInput(e)}} name="name" value={newProfileInfo.name || ''} type="text" placeholder="Enter new name" 
-                                className="w-full mt-2 p-2 outline-blue-500 border-2 rounded-lg "/>
+                                className="w-full mt-2 p-2 outline-none border-[1px] dark:border-gray-500 dark:bg-black rounded-lg "/>
                         </div>
                         <div className="w-full text-lg my-6">
-                            <label name="bio" className="w-full font-semibold ">
+                            <label name="bio" className="w-full text-gray-500 ">
                                 Bio
                             </label>
                             <textarea onChange={(e)=>{handleBioInput(e)}} name="bio"type="text" value={newProfileInfo.bio || ''} placeholder="Enter new bio" 
-                                className="w-full resize-none overflow-hidden mt-2 p-2 outline-blue-500 border-2 rounded-lg "/>
+                                className="w-full resize-none overflow-hidden mt-2 p-2 outline-none border-[1px] rounded-lg dark:bg-black dark:border-gray-500 "/>
                         </div>
                     </form>
                     </>

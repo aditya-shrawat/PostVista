@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Header from '../Components/Header'
 import { FaRegUser } from "react-icons/fa";
 import { VscColorMode } from "react-icons/vsc";
@@ -9,11 +9,12 @@ import { AiOutlineUserDelete } from "react-icons/ai";
 import { IoIosArrowForward } from "react-icons/io";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import AccountInfo from '../Components/SettingsComponent/AccountInfo';
-import ChangePass from '../Components/SettingsComponent/changePass';
+import ChangePass from '../Components/SettingsComponent/ChangePass';
 import BlockedAccounts from '../Components/SettingsComponent/BlockedAccounts';
 import Archive from '../Components/SettingsComponent/Archive';
 import EditProfileComponent from '../Components/EditProfileComponent';
 import axios from 'axios';
+import { CustomThemeContext } from '../Contexts/CustomThemeProvider';
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -23,6 +24,8 @@ const SettingsPage = () => {
     const [edit,setEdit] = useState(false) ;
     const [userDetails,setUserDetails] = useState(null);
     const [deleteAccount,setDeleteAccount] = useState(false);
+
+    const {theme,toggleTheme} = useContext(CustomThemeContext)
 
     const handleNavigation = (type)=>{
         navigate(`/settings/${type}`);
@@ -77,15 +80,15 @@ const SettingsPage = () => {
                         {(userDetails) && <p className="text-base text-gray-500">{`@${userDetails.username}`}</p>}
                     </div>
                     <div className='w-full flex flex-col gap-2'>
-                        <div onClick={()=>{handleNavigation('account')}} className='w-full flex justify-between items-center text-lg hover:bg-gray-100 rounded-lg p-2 cursor-pointer '>
+                        <div onClick={()=>{handleNavigation('account')}} className='w-full flex justify-between items-center text-lg p-2 cursor-pointer '>
                             <div className='flex items-center'><FaRegUser className='mr-4 text-xl' /><span>Account information</span></div>
                             <div><IoIosArrowForward /></div>
                         </div>
-                        <div onClick={()=>{handleNavigation('password')}} className='w-full flex justify-between items-center text-lg hover:bg-gray-100 rounded-lg p-2 cursor-pointer '>
+                        <div onClick={()=>{handleNavigation('password')}} className='w-full flex justify-between items-center text-lg p-2 cursor-pointer '>
                             <div className='flex items-center'><RiLockPasswordLine className='mr-4 text-xl' /><span>Change your password</span></div>
                             <div><IoIosArrowForward /></div>
                         </div>
-                        <div onClick={()=>{handleNavigation('blocked')}} className='w-full flex justify-between items-center text-lg hover:bg-gray-100 rounded-lg p-2 cursor-pointer '>
+                        <div onClick={()=>{handleNavigation('blocked')}} className='w-full flex justify-between items-center text-lg p-2 cursor-pointer '>
                             <div className='flex items-center'><MdBlock className='mr-4 text-xl' /><span>Blocked accounts</span></div>
                             <div><IoIosArrowForward /></div>
                         </div>
@@ -93,10 +96,10 @@ const SettingsPage = () => {
                             <div className='flex items-center'><MdOutlineArchive className='mr-4 text-xl' /><span>Archive</span></div>
                             <div><IoIosArrowForward /></div>
                         </div> */}
-                        <div className='w-full flex items-center text-lg hover:bg-gray-100 rounded-lg p-2 cursor-pointer '>
-                            <VscColorMode className='mr-4 text-xl' /><span>Theme</span>
+                        <div onClick={toggleTheme} className='w-full flex items-center text-lg p-2 cursor-pointer '>
+                            <VscColorMode className='mr-4 text-xl' /><span>{`Theme (${theme}) `}</span>
                         </div>
-                        <div onClick={()=>{setDeleteAccount(true)}} className='w-full flex items-center text-lg hover:bg-gray-100 rounded-lg p-2 cursor-pointer '>
+                        <div onClick={()=>{setDeleteAccount(true)}} className='w-full flex items-center text-lg p-2 cursor-pointer '>
                             <AiOutlineUserDelete className='mr-4 text-xl' /><span>Delete your account</span>
                         </div>
                     </div>
@@ -105,8 +108,8 @@ const SettingsPage = () => {
           
             <div className={`fixed top-16 lg:top-0 right-0 w-full h-screen 
                 ${(location.pathname==="/settings")?"translate-x-full lg:translate-x-0":"translate-x-0"} 
-                bg-white lg:relative  lg:min-w-[430px] lg:max-w-[530px] lg:border-l-[1px] lg:pl-5 lg:pr-4 `}>
-                <div className='w-full h-full px-4 py-6'>
+                bg-white dark:bg-black lg:relative  lg:min-w-[430px] lg:max-w-[530px] lg:border-l-[1px] dark:border-gray-500 lg:pl-5 lg:pr-4 `}>
+                <div className='w-full h-full px-4 py-6 dark:bg-black'>
                 {(contentType==='account') && <AccountInfo userDetails={userDetails} setEdit={setEdit} />}
                 {(contentType==='password') && <ChangePass />}
                 {(contentType==='blocked') && <BlockedAccounts />}
@@ -170,7 +173,7 @@ const DeletePopup = ({setDeleteAccount})=>{
     return (
     <div className="w-screen h-screen overflow-x-hidden bg-transparent z-20 fixed top-0 left-0 bg-black bg-opacity-15 backdrop-blur-sm ">
         <div ref={divRef} className=" max-w-[95%] md:max-w-lg w-full sm:max-w-md absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
-            <div className="w-full p-5 py-10 bg-white border-2 border-gray-300 rounded-xl">
+            <div className="w-full p-5 py-10 bg-white dark:bg-black border-[1px] border-gray-300 dark:border-gray-500 rounded-xl">
                 <div className="w-full">
                     <div className='w-full'>
                         <h1 className='text-base sm:text-lg font-semibold break-words font-plex'>
@@ -178,10 +181,10 @@ const DeletePopup = ({setDeleteAccount})=>{
                         </h1>
                     </div>
                     <div className='w-full mt-6 mb-2 font-plex'>
-                        <label>Enter account password</label>
+                        <label className='text-gray-500'>Enter account password</label>
                         <div className='w-full'>
                             <input onChange={onPasswordInputChange} value={enteredPassword} type="password" name="password"
-                            className="w-full mt-1 p-1 px-2 text-lg rounded-lg border-2 outline-blue-400" />
+                            className="w-full mt-1 p-1 px-2 text-lg rounded-lg border-[1px] dark:border-gray-500 dark:bg-black outline-none " />
                         </div>
                     </div>
                     {

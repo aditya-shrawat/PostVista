@@ -68,19 +68,19 @@ const FollowerPage = () => {
   return (
     <div className='w-full '>
         <div className='w-full py-4 '>
-            <div className='w-full px-4 mb-6 border-b-[1px] '>
+            <div className='w-full px-4 mb-6 border-b-[1px] dark:border-gray-500 '>
                 <div>
-                    <h1 className='text-black text-xl font-semibold font-plex'>{accountDetails.name}</h1>
+                    <h1 className=' text-xl font-semibold font-plex'>{accountDetails.name}</h1>
                     <h2 className='text-gray-500 text-base font-plex' >{`@${accountDetails.username}`}</h2>
                 </div>
                 <div className='w-full mt-3 flex justify-between text-lg '>
-                    <div onClick={handleFollowersBtn} className='w-[50%] flex justify-center hover:bg-gray-100 cursor-pointer '>
-                        <div className={`block p-2 ${showFollowers?`border-b-4 border-blue-500 text-black font-bold`:`border-none text-gray-500 font-semibold`} `}>
+                    <div onClick={handleFollowersBtn} className='w-[50%] flex justify-center cursor-pointer '>
+                        <div className={`block p-2 ${showFollowers?`border-b-4 border-blue-500 font-bold`:`border-none text-gray-500 font-semibold`} `}>
                             Followers
                         </div>
                     </div>
-                    <div onClick={handleFollowingBtn} className='w-[50%] flex justify-center hover:bg-gray-100 cursor-pointer '>
-                        <div className={`block p-2 ${!showFollowers?`border-b-4 border-blue-500 text-black font-bold`:`border-none text-gray-500 font-semibold`}`}>
+                    <div onClick={handleFollowingBtn} className='w-[50%] flex justify-center cursor-pointer '>
+                        <div className={`block p-2 ${!showFollowers?`border-b-4 border-blue-500 font-bold`:`border-none text-gray-500 font-semibold`}`}>
                             Following
                         </div>
                     </div>
@@ -95,11 +95,11 @@ const FollowerPage = () => {
                 <>
                 {(showFollowers && followersData.length===0)?
                 <div className="w-full px-2 text-center">
-                    <h1 className="text-xl font-semibold text-black font-plex mt-28 ">No followers yet.</h1>
+                    <h1 className="text-xl font-semibold font-plex mt-28 ">No followers yet.</h1>
                 </div>:
                 (!showFollowers && followingData.length===0)?
                 <div className="w-full px-2 text-center  ">
-                    <h1 className="text-xl font-semibold text-black font-plex mt-28 ">No following yet.</h1>
+                    <h1 className="text-xl font-semibold font-plex mt-28 ">No following yet.</h1>
                 </div>:
                 <FollowersList showFollowers={showFollowers} followersData={followersData} followingData={followingData} />
                 }

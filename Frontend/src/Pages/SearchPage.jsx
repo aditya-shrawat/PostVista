@@ -11,7 +11,7 @@ const SearchPage = () => {
     const searchAccounts = async (e)=>{
         e.preventDefault();
         const value = e.target.value.trim();
-        setSearchQueary(value)
+        setSearchQueary(e.target.value)
         if(value==='') return ;
     
         try {
@@ -28,7 +28,7 @@ const SearchPage = () => {
       <Header />
       <div className="w-full">
         <div className="w-full px-6 py-5 overflow-y-auto relative">
-          <div className="flex items-center w-full px-2 py-2 border-[1px] rounded-3xl ">
+          <div className="flex items-center w-full px-2 py-2 border-[1px] dark:border-gray-500 rounded-3xl ">
             <IoSearchSharp className="mr-1 text-2xl" />
             <input type="text" onChange={searchAccounts} value={searchQueary}
               placeholder="Search"
@@ -36,13 +36,21 @@ const SearchPage = () => {
             />
           </div>
 
+          {(searchedAccounts.length===0 && searchQueary.trim()!=='' ) && 
+          <div className="w-full px-2 text-center  ">
+            <h1 className="text-2xl font-semibold dark:text-white font-plex mt-20 mb-20 ">
+            No user found.
+            </h1>
+          </div>
+          }
+
           {searchedAccounts.length !== 0 && (
             <div className="w-full h-full mt-4">
               {searchedAccounts.map((account) => {
                 return (
-                  <div key={account._id} className="w-full px-1 py-2 my-1 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 ">
+                  <div key={account._id} className="w-full px-1 py-2 my-1 flex items-center cursor-pointer ">
                     <Link to={`/${account.username}`}>
-                      <div className=" h-10 w-10 bg-gray-500 rounded-full cursor-pointer border-[1px] overflow-hidden ">
+                      <div className=" h-10 w-10 rounded-full cursor-pointer overflow-hidden ">
                         <img src={account.profilePicURL} className="h-full w-full object-cover" />
                       </div>
                     </Link>

@@ -29,9 +29,9 @@ const ProfilePicCircle = ({userInfo,}) => {
     },[showBar]) ;
 
   return (
-    <div onClick={handlePfpClick} className=' h-9 w-9 relative rounded-full border-[1px] '>
+    <div onClick={handlePfpClick} className=' h-9 w-9 relative rounded-full '>
         <div className='h-full w-full rounded-full cursor-pointer'>
-            <div className="h-full w-full rounded-full flex items-center justify-center border-[1px] overflow-hidden bg-gray-100">
+            <div className="h-full w-full rounded-full flex items-center justify-center overflow-hidden">
                 {(userInfo && userInfo.profilePicURL) && <img src={userInfo.profilePicURL} className="h-full w-full object-cover" />}
             </div>
         </div>

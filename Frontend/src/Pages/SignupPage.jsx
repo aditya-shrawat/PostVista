@@ -91,7 +91,7 @@ const SignupPage = () => {
 
   return (
     <div className='h-screen w-screen'>
-        <div className='md:w-96 w-80 p-4 py-8 rounded-lg bg-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] shadow-[0px_5px_20px_rgba(0,0,0,0.2)]'>
+        <div className='md:w-96 w-80 p-4 py-8 rounded-lg bg-white dark:bg-black absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] shadow-[0px_0px_10px_rgba(0,0,0,0.3)] dark:shadow-[0px_0px_10px_rgba(252,252,252,0.5)]'>
             <div className='w-full text-center font-bold text-3xl text-blue-400 mb-6'>
                 <p>{(!nextSlide)?'Sign up':'Almost there!'}</p>
             </div>
@@ -101,16 +101,16 @@ const SignupPage = () => {
                 <form onSubmit={handleSignupSubmit} className='flex flex-col'>
                     <label className='mb-1 ' >Email</label>
                     <input type="email" name='email' onChange={(e)=>{onSignupInputChange(e)}} value={signupData.email}
-                    className='mb-4 h-10 p-1 px-2 text-lg rounded-lg border-2 outline-blue-400' />
+                    className='mb-4 h-10 p-1 px-2 text-lg rounded-lg border-[1px] dark:border-gray-500 outline-blue-400 dark:bg-black' />
                     <label className='mb-1 ' >Password</label>
                     <div className='mb-4 w-full'>
                         <input type="password" name='password' onChange={(e)=>{onSignupInputChange(e)}}  value={signupData.password}
-                        className='h-10 w-full p-1 px-2 text-lg rounded-lg border-2 outline-blue-400' />
+                        className='h-10 w-full p-1 px-2 text-lg rounded-lg border-[1px] dark:border-gray-500 outline-blue-400 dark:bg-black' />
                         {passwordError!=='' && <div className='text-red-500 px-2' >{passwordError}</div> }
                     </div>
                     <label className='mb-1 ' >Confirm password</label>
                     <input type="password" name='confirmPassword' onChange={(e)=>{onSignupInputChange(e)}} value={signupData.confirmPassword}
-                    className='mb-4 h-10 p-1 px-2 text-lg rounded-lg border-2 outline-blue-400' />
+                    className='mb-4 h-10 p-1 px-2 text-lg rounded-lg border-[1px] dark:border-gray-500 outline-blue-400 dark:bg-black' />
                     {errorMsg!=='' && <div className='text-red-500 px-2' >{errorMsg}</div> }
                     <button type='submit' className='bg-blue-400 my-5 h-12 rounded-3xl cursor-pointer text-xl text-white font-semibold hover:shadow-lg' >Sign up</button>
                     <div className='w-full text-center text-base'>
