@@ -116,10 +116,10 @@ const AccountItem = ({account}) => {
       <div className="w-full ml-4 font-plex">
         <div className="w-full flex items-center">
           <Link to={`/${account.username}`} className="w-full flex flex-col  ">
-            <h1 className=" text-lg font-semibold hover:underline">
+            <h1 className=" text-lg font-semibold hover:underline break-words line-clamp-1">
               {account.name}
             </h1>
-            <h1 className=" text-gray-500 text-base">
+            <h1 className=" text-gray-500 text-base break-words line-clamp-1">
               {`@${account.username}`}
             </h1>
           </Link>
@@ -131,7 +131,7 @@ const AccountItem = ({account}) => {
                   font-semibold cursor-pointer text-[14px] hover:bg-red-500 `}>
                 Blocked
               </button> :
-              <button onClick={toggleFollowStatus} className={`ml-2 ${followStatus?' border-2 dark:border-gray-500':
+              <button onClick={toggleFollowStatus} className={`ml-2 ${followStatus?' border-[1px] dark:border-gray-500':
                 'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl px-3 py-1 font-semibold cursor-pointer 
                 text-[14px] `}>{(followStatus)?'Following':'Follow'}
               </button>

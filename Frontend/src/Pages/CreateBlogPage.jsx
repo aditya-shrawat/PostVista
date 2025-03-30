@@ -126,7 +126,7 @@ const CreateBlogPage = () => {
 
           <div className=' p-2 pt-5 border-t-[1px] dark:border-gray-500 relative'>
             <textarea className="w-full  border-none resize-none overflow-hidden outline-none text-2xl bg-transparent font-serif2"
-            placeholder="body" name='body' value={postData.body} onChange={handleBodyeInput} />
+            placeholder="body" name='body' value={postData.body} onChange={handleBodyeInput} style={{ whiteSpace: 'pre-wrap' }}  />
 
             {(previewPostImg===null) && 
             <div onClick={handleUpload} className=' absolute -left-12 top-5 hidden md:block '>

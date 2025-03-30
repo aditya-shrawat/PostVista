@@ -229,14 +229,18 @@ const PostDetailPage = () => {
             comments={commentCount} bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
 
           { (postData.coverImage) &&
-          <div className='w-auto h-auto mt-12  '>
-            <div className='w-auto h-auto overflow-hidden bg-gray-100'>
-              <img className=' h-full w-full object-cover' src={postData.coverImage} />
-            </div>
+          <div className="w-full max-h-screen mt-12 relative">
+          <div className="w-full h-full overflow-hidden align-middle">
+            <img
+              className="w-full h-full object-cover align-middle"
+              src={postData.coverImage}
+              alt="Post Cover"
+            />
           </div>
+        </div>
           }
 
-          <p className='text-xl break-words my-12 font-serif2'>{postData.body}</p>
+          <pre className='text-xl break-words my-12 font-serif2' style={{ whiteSpace: 'pre-wrap' }} >{postData.body}</pre>
 
           <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}
            bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
@@ -317,6 +321,20 @@ const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookm
     }
   },[sharing])
 
+  function sharePost() {
+    if (navigator.share) {
+      navigator.share({
+        // title: 'The title of the shared content.',
+        // text: 'A description or additional message.',
+        url: window.location.href,
+      })
+      // .then(() => console.log('Shared successfully'))
+      .catch((error) => console.error('Error sharing:', error));
+    } else {
+      alert('Sharing not supported on this browser.');
+    }
+  }
+
   return (
     <div>
         <div className='w-full px-3 py-2 mt-6 border-y-[1px] dark:border-gray-500 flex justify-between items-center '>
@@ -335,12 +353,12 @@ const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookm
 
                 { (sharing) &&
                   <div ref={optionsRef} className='bg-white dark:bg-black dark:text-white border-[1px] dark:border-gray-500 z-10 h-auto w-56 sm:w-72 p-3 py-3 rounded-xl absolute top-0 -right-2 
-                      text-base font-semibold flex flex-col shadow-[0px_0px_10px_rgba(0,0,0,0.3)] dark:shadow-[0px_0px_10px_rgba(252,252,252,0.5)] overflow-hidden'>
+                      text-base flex flex-col shadow-[0px_0px_10px_rgba(0,0,0,0.3)] dark:shadow-[0px_0px_10px_rgba(252,252,252,0.5)] overflow-hidden'>
                       <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer '>
                         <div className='mr-3'><FaLink /></div>
                         <div>Copy link</div>
                       </div>
-                      <div onClick={()=>{setSharing(false)}} className='flex items-center py-2 px-2 cursor-pointer '>
+                      <div onClick={()=>{sharePost(); setSharing(false)}} className='flex items-center py-2 px-2 cursor-pointer '>
                         <div className='mr-3 '><IoIosShareAlt /></div>
                         <div >Share via</div>
                       </div>

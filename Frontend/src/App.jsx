@@ -35,6 +35,7 @@ const router = createBrowserRouter([
   {path:'new-blog', element: <Suspense fallback={<Loading />}><CreateBlogPage /></Suspense> },
   {path:'user/signin',element: <SigninPage /> },
   {path:'user/signup',element: <SignupPage /> },
+  {path:'/loading',element: <Loading /> },
   {path:'/search',element: <Suspense fallback={<Loading />}><SearchPage /></Suspense> },
   {
     path:'*',

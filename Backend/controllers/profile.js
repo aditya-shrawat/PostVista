@@ -34,7 +34,7 @@ export const getUserProfileDetails = async (req,res)=>{
                 name:user.name,
                 bio:user.bio,
                 profilePicURL:user.profilePicURL,
-                // profilePicPublicId:user.profilePicPublicId
+                profilePicPublicId:user.profilePicPublicId
             },
                 isYou:isYou,
                 blockedYou:blockedYou,

@@ -23,7 +23,7 @@ const PostItem = ({post,pageType}) => {
   const [followStatus,setFollowStatus] = useState(false) ;
   const [isYourAccount,setIsYourAccount] = useState(false) ;
   const optionsRef = useRef(null) ;
-  // const [sharing,setSharing] = useState(false) ;
+  const [deletePostPopup,setDeletePostPopup] = useState(false) ;
 
   const pathLink = `${window.location.origin}/post/${post._id}` ;
 
@@ -118,15 +118,6 @@ const PostItem = ({post,pageType}) => {
     }
   },[showMoreOptions])
 
-  const deletePost = async ()=>{
-    try {
-      const BackendURL = import.meta.env.VITE_backendURL;
-      const response = await axios.delete(`${BackendURL}/post/${post._id}`,{withCredentials:true,});
-      console.log(response.data.message)
-    } catch (error) {
-      console.log("Error in deleting post -",error) ;
-    }
-  }
 
   const copyLinkToClipboard = ()=>{
     navigator.clipboard.writeText(pathLink) ;
@@ -146,6 +137,21 @@ const PostItem = ({post,pageType}) => {
   useEffect(()=>{
     fetchCounts();
   },[likeStatus])
+
+  function sharePost() {
+    if (navigator.share) {
+      navigator.share({
+        // title: 'The title of the shared content.',
+        // text: 'A description or additional message.',
+        url: `${window.location.origin}/post/${post._id}`,
+      })
+      // .then(() => console.log(`Shared successfully - ${window.location.origin}/post/${post._id}`))
+      .catch((error) => console.error('Error sharing:', error));
+    } else {
+      alert('Sharing not supported on this browser.');
+    }
+    setShowMoreOptions(false) ;
+  }
 
   return (
     <div className='my-2 h-auto w-full px-5 py-3 sm:py-5 flex flex-col border-b-[1px] dark:border-gray-500 '>
@@ -179,7 +185,7 @@ const PostItem = ({post,pageType}) => {
                   <div className='mr-3'><FaLink /></div>
                   <div>Copy link</div>
                 </div>
-                <div className='flex items-center py-2 px-2 cursor-pointer dark:text-white'>
+                <div onClick={sharePost} className='flex items-center py-2 px-2 cursor-pointer dark:text-white'>
                   <div className='mr-3'><IoIosShareAlt /></div>
                   <div>Share via</div>
                 </div>
@@ -198,7 +204,7 @@ const PostItem = ({post,pageType}) => {
                 }
                 {
                   (isYourAccount)&&
-                  <div onClick={()=>{deletePost(); setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer text-red-600'>
+                  <div onClick={()=>{setDeletePostPopup(true); setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer text-red-600'>
                     <div className='mr-3'><RiDeleteBin6Line /></div>
                     <div>
                       Delete 
@@ -225,7 +231,7 @@ const PostItem = ({post,pageType}) => {
               </div>
             }
           </Link>
-          <div className='w-full max-w-[75%] min-h-6 flex items-center justify-between font-plex' >
+          <div className={`w-full ${(post && post.coverImage)?`max-w-[75%]`:`w-full`} min-h-6 flex items-center justify-between font-plex`} >
             <div className='flex'>
               <div onClick={toggleLike} className=' flex items-center mr-10 cursor-pointer '>
                 {(likeStatus)?<FcLike className={`mr-2 text-xl`}/>: <VscHeart className={`mr-2 text-xl`}/>}
@@ -243,8 +249,69 @@ const PostItem = ({post,pageType}) => {
           </div>
         </div>
       </div> 
+      {
+        (deletePostPopup)&& <DeletePostPopup setDeletePostPopup={setDeletePostPopup} postId={post._id} />
+      }
     </div>
   )
 }
+
+
+const DeletePostPopup = ({setDeletePostPopup,postId})=>{
+    const divRef = useRef(null)
+
+    useEffect(()=>{
+      const handleOutsideClick = (e)=>{
+        if( divRef.current && !divRef.current.contains(e.target) ){
+          setDeletePostPopup(false);
+        }
+      }
+
+      document.addEventListener('mousedown',handleOutsideClick) ;
+
+      return ()=>{
+        document.removeEventListener('mousedown',handleOutsideClick)
+      }
+    },[setDeletePostPopup]);
+
+    const deletePost = async ()=>{
+      try {
+        const BackendURL = import.meta.env.VITE_backendURL;
+        const response = await axios.delete(`${BackendURL}/post/${postId}`,{withCredentials:true,});
+      } catch (error) {
+        console.log("Error in deleting post -",error) ;
+      }
+      finally{
+        setDeletePostPopup(false)
+      }
+    }
+
+    return (
+      <div className="w-screen h-screen overflow-x-hidden bg-transparent z-20 fixed top-0 left-0 bg-black bg-opacity-15 backdrop-blur-sm ">
+          <div ref={divRef} className=" max-w-[95%] md:max-w-lg w-full sm:max-w-md absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+              <div className="w-full p-5 py-10 bg-white dark:bg-black border-[1px] border-gray-300 dark:border-gray-500 rounded-xl">
+                  <div className="w-full">
+                      <div className='w-full'>
+                        <h1 className='text-base sm:text-lg font-semibold break-words font-plex'>
+                          Deleting this post will remove it permanently, along with all its comments and likes. This action is irreversible.
+                        </h1>
+                      </div>
+                      <div className='w-full flex justify-evenly mt-6'>
+                        <button onClick={()=>{setDeletePostPopup(false)}} className="border-2 border-blue-500 outline-none bg-transparent
+                          hover:text-blue-400 px-6 py-1 text-lg text-blue-500 font-semibold cursor-pointer rounded-3xl">
+                          Cancel
+                        </button>
+                        <button onClick={deletePost} className={`outline-none px-6 py-1 text-lg text-white font-semibold 
+                          rounded-3xl bg-blue-500 hover:bg-blue-400 cursor-pointer `}>
+                          Delete post
+                        </button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    )
+}
+
 
 export default PostItem

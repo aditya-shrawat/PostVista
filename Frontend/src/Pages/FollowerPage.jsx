@@ -69,10 +69,12 @@ const FollowerPage = () => {
     <div className='w-full '>
         <div className='w-full py-4 '>
             <div className='w-full px-4 mb-6 border-b-[1px] dark:border-gray-500 '>
+                { (accountDetails && accountDetails.name!==undefined) &&
                 <div>
                     <h1 className=' text-xl font-semibold font-plex'>{accountDetails.name}</h1>
                     <h2 className='text-gray-500 text-base font-plex' >{`@${accountDetails.username}`}</h2>
                 </div>
+                }
                 <div className='w-full mt-3 flex justify-between text-lg '>
                     <div onClick={handleFollowersBtn} className='w-[50%] flex justify-center cursor-pointer '>
                         <div className={`block p-2 ${showFollowers?`border-b-4 border-blue-500 font-bold`:`border-none text-gray-500 font-semibold`} `}>

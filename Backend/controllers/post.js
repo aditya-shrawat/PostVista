@@ -121,10 +121,13 @@ export const deletePost = async (req,res)=>{
     try {
         const postId = req.params.id ;
 
-        if(!postId){
-            return res.status(400).json({err:"Post id is not provided."})
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ err: "Post not found." });
         }
 
+        await Like.deleteMany({postId});
+        await Comment.deleteMany({postId});
         await SavedPosts.deleteMany({post:postId}) ;
         await Post.deleteOne({_id:postId});
         

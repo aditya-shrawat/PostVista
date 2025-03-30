@@ -29,21 +29,21 @@ const ProfileBar = ({barRef,username}) => {
                 <div className='w-full'>
                     <div className='w-full flex flex-col font-plex dark:text-white'>
                         <div>
-                            <Link to={`/${username}`} className='w-full flex items-center px-3 py-2 text-lg cursor-pointer'>
-                            <FaRegUser className='mr-5 text-xl' /><span>Profile</span>
+                            <Link to={`/${username}`} className='w-full flex items-center px-3 py-2 text-base cursor-pointer'>
+                            <FaRegUser className='mr-5 text-lg ' /><span>Profile</span>
                             </Link>
                         </div>
                         <div>
-                            <Link to={'/my/bookmarks'} className='w-full flex items-center px-3 py-2 text-lg cursor-pointer'>
-                            <FaRegBookmark className='mr-5 text-xl' /><span>Bookmarks</span>
+                            <Link to={'/my/bookmarks'} className='w-full flex items-center px-3 py-2 text-base cursor-pointer'>
+                            <FaRegBookmark className='mr-5 text-lg ' /><span>Bookmarks</span>
                             </Link>
                         </div>
-                        <Link to={'/settings'} className='w-full flex items-center px-3 py-2 text-lg cursor-pointer'>
-                            <MdOutlineSettings className='mr-5 text-2xl' /><span>Settings</span>
+                        <Link to={'/settings'} className='w-full flex items-center px-3 py-2 text-base cursor-pointer'>
+                            <MdOutlineSettings className='mr-5 text-xl ' /><span>Settings</span>
                         </Link>
                         <div className='mt-3 pt-3 border-t-[1px] dark:border-gray-500 '>
-                            <div onClick={handleLogout} className='w-full flex items-center px-3 py-2 text-red-500 text-lg cursor-pointer'>
-                                <RiLogoutBoxRLine className='mr-5 text-2xl' /><span>Logout</span>
+                            <div onClick={handleLogout} className='w-full flex items-center px-3 py-2 text-red-500 text-base cursor-pointer'>
+                                <RiLogoutBoxRLine className='mr-5 text-xl ' /><span>Logout</span>
                             </div>
                         </div>
                     </div>

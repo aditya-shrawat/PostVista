@@ -19,7 +19,7 @@ export const getFollowing = async (req,res)=>{
         const accountId = req.params.id ;
     
         const following = await Follower.find({followedBy:accountId,}).populate('account',"username name bio profilePicURL") ;
-        const accountData = await User.findById(accountId).select("username name") ;
+        const accountData = await User.find().select("username name") ;
         return res.status(200).json({following,accountData,message:"Following fetched successfully."}) ;
     } catch (error) {
         return res.status(500).json({message:"Internal server error."}) ;

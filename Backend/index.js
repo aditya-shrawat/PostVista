@@ -18,9 +18,16 @@ import multer from 'multer';
 import { getUserProfileDetails, updateUserInfo, updateUserProfilePic } from './controllers/profile.js';
 import homeRouter from './routes/home.js';
 import settingsRouter from './routes/settings.js';
+import Follower from './model/follower.js';
 
-mongoose.connect(process.env.mongodbURL)
-.then(console.log("MongoDb is connected successfully"))
+// mongoose.connect(process.env.mongodbURL)
+// .then(console.log("MongoDb is connected successfully"))
+
+const mongoClusterURL = process.env.mongodb_Cluster;
+
+mongoose.connect(mongoClusterURL)
+.then(() => console.log("MongoDB Connected Successfully"))
+.catch((err) => console.log("MongoDB Connection Error:", err));
 
 const app = express() ;
 const PORT = 3000 ;
@@ -71,10 +78,27 @@ app.get('/my/bookmarks',checkTokenAuthentication,getSavedPosts) ;
 app.get('/recent/bookmarks',checkTokenAuthentication,getRecentBookmarks);
 app.get('/recommend/accounts',checkTokenAuthentication,async (req,res)=>{
     try {
-        const recommendAccounts = await User.find({}).limit(3).sort({createdAt:-1}).select('username name profilePicURL');
+        const userId = new mongoose.Types.ObjectId(req.user.id);
+
+        const following = await Follower.find({ followedBy: req.user.id }).select('account');
+        const followingIds = following.map(f => f.account);
+
+        const excludeIds = [userId, ...followingIds];
+        const recommendAccounts = await User.aggregate([
+            {
+                $match:{ _id:{$nin:excludeIds}}
+            },
+            {
+                $sample: {size:3}
+            },
+            {
+                $project:{username:1,name:1,profilePicURL:1} 
+            }
+        ]);
         
         return res.status(200).json({message:'Recommended accounts fetched.',recommendAccounts});
     } catch (err) {
+        console.log("Error ",err)
         return res.status(500).json({ error: "Internal server error" });
     }
 })

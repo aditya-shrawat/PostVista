@@ -77,14 +77,14 @@ const LayoutPage = () => {
   },[setSearchedAccounts]);
 
   return (
-    <div className="w-screen h-screen overflow-auto">
+    <div className="w-screen h-screen overflow-x-hidden overflow-y-auto">
         <Header />
         <div className=" w-full lg:max-w-[1200px] lg:m-auto flex relative">
           <div className="max-w-[730px] w-full min-h-screen m-auto lg:m-0 ">
             <Outlet />
           </div>
 
-          <div className="hidden lg:flex flex-1 w-full min-w-[370px] max-w-[470px] h-screen sticky top-0 border-l-[1px] dark:border-gray-500 ">
+          <div className="hidden lg:flex flex-1 w-full min-w-[380px] max-w-[470px] h-screen sticky top-0 border-l-[1px] dark:border-gray-500 ">
             <div className="w-full">
               <div className="pl-7 pr-5 relative">
                 <div ref={divRef} className="h-14 pb-2 pt-3 relative ">
@@ -131,7 +131,8 @@ const LayoutPage = () => {
                   }
                 </div>
 
-                <div className="w-full border-[1px] dark:border-gray-500 rounded-2xl p-3 px-4 mt-7 ">
+                {/* {(recommendedAccounts.length>0)&& */}
+                  <div className="w-full border-[1px] dark:border-gray-500 rounded-2xl p-3 px-4 mt-4 ">
                   <h2 className="text-lg font-bold mb-2">Who to follow</h2>
                   {loadingRecommendedAccounts &&
                     [...Array(3)].map((_, index) => (
@@ -164,9 +165,10 @@ const LayoutPage = () => {
                     </>
                   )}
                 </div>
+                {/* } */}
 
                 { (recentBookmarks.length>0) && 
-                <div className="w-full border-[1px] dark:border-gray-500 rounded-2xl p-3 px-4 mt-7 ">
+                <div className="w-full border-[1px] dark:border-gray-500 rounded-2xl p-3 px-4 mt-4 ">
                   <h2 className="text-lg font-bold mb-2">Recently saved</h2>
                   {loadingrecentBookmarks &&
                     [...Array(2)].map((_, index) => (

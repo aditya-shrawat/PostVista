@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PostList from '../Components/PostList'
 import CreateBlogBtn from '../Components/CreateBlogBtn'
 import { useNavigate } from 'react-router-dom';
@@ -9,13 +9,18 @@ const HomePage = () => {
   const [Posts,setPosts] = useState([]) ;
   const [showGeneralList,setShowGeneralList] = useState(true);
   const [loadingPosts,setLoadingPosts] = useState(true);
+  const isFetching = useRef(false);  // prevents multiple requests at same time
 
    const fetchPosts = async ()=>{
+    if (isFetching.current) return;
+    isFetching.current = true 
+
     try {
       const BackendURL = import.meta.env.VITE_backendURL;
       if(showGeneralList){
         const response = await axios.get(`${BackendURL}/home`,{withCredentials:true}) ;
-        setPosts(response.data.allPosts) ;
+        
+        setPosts(prev => [...prev, ...response.data.allPosts]);
       }
       else{
         const response = await axios.get(`${BackendURL}/home/following`,{withCredentials:true}) ;
@@ -25,11 +30,13 @@ const HomePage = () => {
       navigate('/user/signin')
     }
     finally{
+      isFetching.current = false 
       setLoadingPosts(false);
     }
    }
 
    useEffect(()=>{
+    setPosts([]);
     fetchPosts();
    },[showGeneralList]);
 

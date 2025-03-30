@@ -176,6 +176,21 @@ const ProfilePage = () => {
     }
   }
 
+  function sharePost() {
+    if (navigator.share) {
+      navigator.share({
+        // title: 'The title of the shared content.',
+        // text: 'A description or additional message.',
+        url: window.location.href,
+      })
+      .then(() => console.log('Shared successfully - ',window.location.href))
+      .catch((error) => console.error('Error sharing:', error));
+    } else {
+      alert('Sharing not supported on this browser.');
+    }
+    setShowMoreOptions(false);
+  }
+
   return (
       <div className='w-full min-h-screen relative'>
         <Header />
@@ -211,26 +226,26 @@ const ProfilePage = () => {
 
                     <div className='w-full'>
                       <div className='w-auto h-auto flex flex-row-reverse justify-start items-center '>
-                        <div className=' ml-3 relative '>
-                          <div onClick={()=>{setShowMoreOptions(true)}} className='dark:text-white cursor-pointer rounded-full p-1 sm:p-2 border-[1px] dark:border-gray-500 flex justify-center items-center text-black '>
+                        <div className=' relative '>
+                          <div onClick={()=>{setShowMoreOptions(true)}} className='dark:text-white ml-3 cursor-pointer rounded-full p-1 sm:p-2 border-[1px] dark:border-gray-500 flex justify-center items-center text-black '>
                             <BsThreeDots className='rounded-full text-lg sm:text-xl ' />
                           </div>
 
                             {(showMoreOptions) &&
-                              <div ref={optionsRef} className='bg-white dark:bg-black z-10 h-auto w-72 p-3 py-5 rounded-xl absolute -top-1 right-0 
+                              <div ref={optionsRef} className='bg-white dark:bg-black z-10 h-auto w-64 sm:w-72 p-3 py-5 rounded-xl absolute -top-1 right-0 
                                 text-base flex flex-col shadow-[0px_0px_10px_rgba(0,0,0,0.3)] dark:shadow-[0px_0px_10px_rgba(252,252,252,0.5)] overflow-hidden font-plex'>
                                   <div onClick={copyLinkToClipboard} className='flex items-center py-2 px-2 cursor-pointer'>
                                     <div className='mr-3'><FaLink /></div>
                                     <div>Copy link to profile</div>
                                   </div>
-                                  <div onClick={()=>{setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer'>
+                                  <div onClick={sharePost} className='flex items-center py-2 px-2 cursor-pointer'>
                                     <div className='mr-3'><IoIosShareAlt /></div>
                                     <div>Share profile via</div>
                                   </div>
                                   {(!isYourAccount)&&
                                   <div onClick={()=>{setBlockPopupOn(true);setShowMoreOptions(false)}} className='flex items-center py-2 px-2 cursor-pointer'>
                                     <div className='mr-3'><MdBlock  /></div>
-                                    <div>{`${blockStatus?`Unblock`:`Block`} ${`@${userDetails.username}`} `}</div>
+                                    <div className='break-words line-clamp-2'>{`${blockStatus?`Unblock`:`Block`} ${`@${userDetails.username}`} `}</div>
                                   </div>
                                   }
                               </div>
