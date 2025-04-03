@@ -24,11 +24,16 @@ const Header = () => {
   },[])
 
   return (
-    <nav className={`w-full h-16 px-6 bg-white dark:bg-black flex flex-row 
+    <nav className={`w-full h-16 px-3 bg-white dark:bg-black flex flex-row 
     justify-between items-center border-b-[1px] dark:border-gray-500 z-30 sticky top-0 left-0 `}>
-      <div className='bg-red-300'>logo image</div>
+      <div className='h-full w-32 sm:w-40  '>
+        <img 
+        src={`https://res.cloudinary.com/dmeaz48sd/image/upload/v1743398717/postVistaLogo_h6rcsz.png`} 
+        className='h-full w-full object-contain'
+        />
+      </div>
       <div className='flex '>
-        <Link to={'new-blog'} className=' hidden sm:block' >
+        <Link to={'/new-blog'} className=' hidden sm:block' >
           <div className='mr-6 flex items-center px-2 py-1 cursor-pointer text-gray-400 hover:text-black dark:hover:text-white hover:scale-105 rounded-xl '>
             <LuSquarePen className='mr-2 text-xl' />Post
           </div>

@@ -17,12 +17,20 @@ const CreateBlogPage = () => {
   const fileInputRef = useRef() ;
   const [previewPostImg,setPreviewPostImage] = useState(null);
   const [postImage,setPostImage] = useState(null) ;
+  const [posting,setPosting] = useState(false);
 
   const handleSubmit = async (e)=>{
     e.preventDefault() ;
 
+    if(posting){
+      console.log("Post is posting , please wait ");
+      return ;
+    }
+    setTimeout(() => setPosting(true), 100);
+
     if(postData.title.trim()==='' || postData.body.trim()===''){
       alert("All felds are required") ;
+      setTimeout(() => setPosting(false), 100);
       return ;
     }
     
@@ -32,21 +40,23 @@ const CreateBlogPage = () => {
       formData.append('body',postData.body) ;
 
       const BackendURL = import.meta.env.VITE_backendURL;
-      axios.post(`${BackendURL}/new-blog`,formData,{ withCredentials: true })
-      .then(response=>{
-        if(response.status === 201){
+      try {
+        const response = await axios.post(`${BackendURL}/new-blog`, formData, { withCredentials: true });
+        if (response.status === 201) {
           navigate('/');
         }
-      })
-      .catch(error=>{
+      }
+      catch(error){
         if(error.response && error.response.data.message){
           console.log("error :",error.response.data.message)
         }
         else{
           console.log("error :",error) ;
         }
-      })
-    
+      }
+      finally {
+        setTimeout(() => setPosting(false), 100);
+      }
   }
 
   const handleTitleInput = (e) => {
@@ -86,10 +96,19 @@ const CreateBlogPage = () => {
     <div className=' w-full min-h-screen '>
       <nav className='w-full h-16 px-4 bg-white dark:bg-black bg-opacity-55 backdrop-blur-sm flex flex-row justify-between items-center 
             border-b-[1px] dark:border-gray-500  sticky top-0 left-0 z-20'>
-          <div className='bg-red-300'>logo image</div>
+          <div className='h-16 w-32 sm:w-40  '>
+            <img 
+            src={`https://res.cloudinary.com/dmeaz48sd/image/upload/v1743398717/postVistaLogo_h6rcsz.png`} 
+            className='h-full w-full object-contain'
+            />
+          </div>
           <div className='flex items-center '>
-            <div onClick={handleSubmit} className=' flex items-center h-8 px-6 cursor-pointer bg-blue-500 hover:bg-blue-400 rounded-3xl text-white 
-                font-semibold shadow-md scale-105 '>Post</div>
+            <div onClick={!posting ? handleSubmit : null} className=' flex items-center h-8 px-6 cursor-pointer bg-[#6356E5] hover:bg-[#7166e5] rounded-3xl text-white 
+                font-semibold shadow-md scale-105 '>
+                  {(posting)?
+                  <span className="loading loading-spinner text-primary bg-white h-5 w-5"></span>:
+                  `Post`}
+            </div>
           </div>
         </nav>
       <div className='m-auto w-full max-w-screen-lg px-2'>
@@ -101,7 +120,7 @@ const CreateBlogPage = () => {
             placeholder="Title" name='title' value={postData.title} onChange={handleTitleInput} />
           </div>
 
-          <div className='w-full flex md:hidden px-2 mb-2 '>
+          <div className='w-full flex px-2 mb-2 '>
             { (previewPostImg===null) && 
             <div>
               <input type="file" accept="image/*" ref={fileInputRef} onChange={handlefileChange} className="hidden " />
@@ -128,11 +147,11 @@ const CreateBlogPage = () => {
             <textarea className="w-full  border-none resize-none overflow-hidden outline-none text-2xl bg-transparent font-serif2"
             placeholder="body" name='body' value={postData.body} onChange={handleBodyeInput} style={{ whiteSpace: 'pre-wrap' }}  />
 
-            {(previewPostImg===null) && 
+            {/* {(previewPostImg===null) && 
             <div onClick={handleUpload} className=' absolute -left-12 top-5 hidden md:block '>
               <IoIosAddCircleOutline className='text-4xl text-gray-500' />
             </div>
-            }
+            } */}
           </div>
         </div>
       </div>

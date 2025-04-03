@@ -47,7 +47,7 @@ const FollowerItem = ({showFollowers,follower,following}) => {
                 </Link>
                 <div>
                     <button onClick={toggleFollowStatus} className={`ml-4 ${followStatus?' border-[1px] dark:border-gray-500':
-                'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl px-3 py-1 font-semibold cursor-pointer 
+                'bg-[#6356E5] hover:bg-[#7166e5] text-white border-none'} rounded-xl px-3 py-1 font-semibold cursor-pointer 
                 text-[14px] ${isYourAccount?'hidden':'block'} `}>{(followStatus)?'Following':'Follow'}
                     </button>
                 </div>

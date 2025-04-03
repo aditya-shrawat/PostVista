@@ -118,7 +118,7 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                     </div>
                     <div className="w-auto h-full">
                         <div className="h-full w-full flex flex-col justify-center font-plex">
-                            <p className="text-base mb-3">Update profile picture</p>
+                            <p className="text-base mb-3">Change profile picture</p>
                             <div className="flex ">
                                 <div>
                                     <input type="file" accept="image/*" ref={fileInputRef} onChange={handlefileChange} className="hidden " />
@@ -158,12 +158,12 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                     </>
                 }
                 <div className="w-full flex justify-evenly">
-                    <button onClick={()=>{setEdit(false)}} className="border-2 border-blue-500 outline-none bg-transparent
-                    hover:text-blue-400 px-6 py-1 text-lg text-blue-500 font-semibold cursor-pointer rounded-3xl">
+                    <button onClick={()=>{setEdit(false)}} className="border-2 dark:border-gray-500 outline-none bg-transparent
+                    px-6 py-1 text-lg font-semibold cursor-pointer rounded-3xl">
                     Cancel
                     </button>
                     <button onClick={updateUserInfo} className={`outline-none px-6 py-1 text-lg text-white font-semibold 
-                         rounded-3xl ${saveBtnStatus?`bg-blue-500 hover:bg-blue-400 cursor-pointer`:`bg-blue-400 cursor-not-allowed`} `} 
+                         rounded-3xl ${saveBtnStatus?`bg-[#6356E5] hover:bg-[#7166e5] cursor-pointer`:`bg-[#7166e5] cursor-not-allowed`} `} 
                         disabled={!saveBtnStatus}>Save
                     </button>
                 </div>

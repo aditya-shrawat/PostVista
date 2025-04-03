@@ -118,7 +118,7 @@ const ChangePass = () => {
       <div className="w-full">
         <div >
           <button onClick={resetPassword} className={`outline-none px-4 py-1 text-lg mt-5 text-white font-semibold rounded-3xl 
-            ${resetBtnStatus?`bg-blue-500 hover:bg-blue-400 cursor-pointer`:`bg-blue-400 cursor-not-allowed`} `} 
+            ${resetBtnStatus?`bg-[#6356E5] hover:bg-[#7166e5] cursor-pointer`:`bg-[#7166e5] cursor-not-allowed`} `} 
             disabled={!resetBtnStatus}>Reset password</button>
         </div>
       </div>

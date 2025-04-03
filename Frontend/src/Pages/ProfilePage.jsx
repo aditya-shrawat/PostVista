@@ -252,16 +252,16 @@ const ProfilePage = () => {
                             }
                         </div>
 
-                        <div className='ml-3 dark:text-white cursor-pointer rounded-full p-1 sm:p-2 border-[1px] dark:border-gray-500 flex justify-center items-center text-black '>
+                        {/* <div className='ml-3 dark:text-white cursor-pointer rounded-full p-1 sm:p-2 border-[1px] dark:border-gray-500 flex justify-center items-center text-black '>
                           <MdOutlineEmail className='rounded-full text-lg sm:text-xl ' />
-                        </div>
+                        </div> */}
                         
                         {
                           (isYourAccount && canUedit)?
                           <>
                           <div>
                             <button onClick={()=>{setEdit(true)}} className={`ml-3 dark:text-white border-[1px] dark:border-gray-500
-                              rounded-3xl px-5 py-1 sm:py-2 font-semibold cursor-pointer text-[14px] `}>
+                              rounded-3xl px-3 py-1 sm:py-2 font-semibold cursor-pointer text-[14px] `}>
                               Edit Profile
                             </button>
                           </div>
@@ -272,7 +272,7 @@ const ProfilePage = () => {
                             <div>
                               <button onClick={toggleFollowStatus} className={`ml-3 
                                 ${followStatus?' dark:text-white border-[1px] dark:border-gray-500':
-                                'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-3xl px-5 py-1 sm:py-2 font-semibold cursor-pointer 
+                                'bg-[#6356E5] hover:bg-[#7166e5] text-white border-none'} rounded-3xl px-4 py-1 sm:py-2 font-semibold cursor-pointer 
                                 text-[14px] `}>
                                 {followStatus?'Following':'Follow'}
                               </button>

@@ -262,7 +262,7 @@ const RecomendedAccountComponent = ({ account }) => {
             <div>
               <button onClick={toggleFollowStatus}
                 className={`ml-4 ${followStatus?' border-[1px] dark:border-gray-500':
-                'bg-green-500 hover:bg-green-600 text-white border-none'} rounded-xl 
+                'bg-[#6356E5] hover:bg-[#7166e5] text-white border-none'} rounded-xl 
                 px-3 py-1 font-semibold cursor-pointer text-[14px] block `}>
                 {(followStatus)?'Following':'Follow'}
               </button>
@@ -295,7 +295,7 @@ const RecomendedRecentPostComponent = ({ post }) => {
             </div>
           </div>
           <div className="w-full ">
-            <h1 className="text-lg font-bold line-clamp-2 break-words font-plex">
+            <h1 className="text-lg font-semibold line-clamp-2 break-words font-plex">
               {post.body}
             </h1>
           </div>

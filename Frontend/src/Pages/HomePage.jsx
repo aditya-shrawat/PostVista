@@ -49,17 +49,17 @@ const HomePage = () => {
       <div className=' w-full relative '>
         <div className='w-full sticky top-0 left-0 bg-white dark:bg-black z-20 flex justify-between text-lg border-b-[1px] dark:border-gray-500'>
           <div onClick={()=>{setShowGeneralList(true)}} className='w-[50%] flex justify-center cursor-pointer'>
-            <div className={`block py-3 ${showGeneralList?`border-b-4 border-blue-500 dark:text-white font-bold`:`border-none text-gray-400 font-semibold`}`}>
+            <div className={`block py-3 ${showGeneralList?`border-b-4 border-[#6356E5] dark:text-white font-bold`:`border-none text-gray-400 font-semibold`}`}>
               For you
             </div>
           </div>
           <div onClick={()=>{setShowGeneralList(false)}} className='w-[50%] flex justify-center cursor-pointer'>
-            <div className={`block py-3 ${!showGeneralList?`border-b-4 border-blue-500 dark:text-white font-bold`:`border-none text-gray-400 font-semibold`}`}>
+            <div className={`block py-3 ${!showGeneralList?`border-b-4 border-[#6356E5] dark:text-white font-bold`:`border-none text-gray-400 font-semibold`}`}>
               Following
             </div>
           </div>
         </div>
-        {(loadingPosts) &&
+        {(loadingPosts) ?
         <div>
           { [...Array(4)].map((_,index)=>(
             <div key={index} className='px-4 w-full h-40 flex justify-between items-center cursor-pointer ' >
@@ -75,8 +75,7 @@ const HomePage = () => {
           ))
           }
         </div>
-        }
-        { (!loadingPosts) &&
+        :
         <>
           {
             (Posts.length===0) ? 

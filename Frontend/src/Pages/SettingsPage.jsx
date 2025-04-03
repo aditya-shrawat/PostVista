@@ -191,12 +191,12 @@ const DeletePopup = ({setDeleteAccount})=>{
                         (errorMsg!=='')&& <div className='text-red-500 text-lg'>{errorMsg}</div>
                     }
                     <div className='w-full flex justify-evenly mt-6'>
-                        <button onClick={()=>{setDeleteAccount(false)}} className="border-2 border-blue-500 outline-none bg-transparent
-                        hover:text-blue-400 px-6 py-1 text-lg text-blue-500 font-semibold cursor-pointer rounded-3xl">
+                        <button onClick={()=>{setDeleteAccount(false)}} className="border-2 dark:border-gray-500 outline-none bg-transparent
+                        px-6 py-1 text-lg font-semibold cursor-pointer rounded-3xl">
                         Cancel
                         </button>
                         <button onClick={deleteAccount} className={`outline-none px-6 py-1 text-lg text-white font-semibold 
-                        rounded-3xl bg-blue-500 hover:bg-blue-400 cursor-pointer `}>
+                        rounded-3xl bg-[#6356E5] hover:bg-[#7166e5] cursor-pointer `}>
                         Delete
                         </button>
                     </div>

@@ -5,6 +5,7 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
 import axios from 'axios';
 import { MdOutlineSettings } from "react-icons/md";
+import { LuSquarePen } from "react-icons/lu";
 
 const ProfileBar = ({barRef,username}) => {
     const navigate = useNavigate() ;
@@ -29,20 +30,25 @@ const ProfileBar = ({barRef,username}) => {
                 <div className='w-full'>
                     <div className='w-full flex flex-col font-plex dark:text-white'>
                         <div>
-                            <Link to={`/${username}`} className='w-full flex items-center px-3 py-2 text-base cursor-pointer'>
+                            <Link to={`/${username}`} className='w-full flex items-center px-3 py-2 text-base sm:text-lg cursor-pointer'>
                             <FaRegUser className='mr-5 text-lg ' /><span>Profile</span>
                             </Link>
                         </div>
+                        <div className='hidden sm:block'>
+                            <Link to={`/new-blog`} className='w-full flex items-center px-3 py-2 text-base sm:text-lg cursor-pointer'>
+                            <LuSquarePen className='mr-5 text-lg ' /><span>Post</span>
+                            </Link>
+                        </div>
                         <div>
-                            <Link to={'/my/bookmarks'} className='w-full flex items-center px-3 py-2 text-base cursor-pointer'>
+                            <Link to={'/my/bookmarks'} className='w-full flex items-center px-3 py-2 text-base sm:text-lg cursor-pointer'>
                             <FaRegBookmark className='mr-5 text-lg ' /><span>Bookmarks</span>
                             </Link>
                         </div>
-                        <Link to={'/settings'} className='w-full flex items-center px-3 py-2 text-base cursor-pointer'>
+                        <Link to={'/settings'} className='w-full flex items-center px-3 py-2 text-base sm:text-lg cursor-pointer'>
                             <MdOutlineSettings className='mr-5 text-xl ' /><span>Settings</span>
                         </Link>
                         <div className='mt-3 pt-3 border-t-[1px] dark:border-gray-500 '>
-                            <div onClick={handleLogout} className='w-full flex items-center px-3 py-2 text-red-500 text-base cursor-pointer'>
+                            <div onClick={handleLogout} className='w-full flex items-center px-3 py-2 text-red-500 text-base sm:text-lg cursor-pointer'>
                                 <RiLogoutBoxRLine className='mr-5 text-xl ' /><span>Logout</span>
                             </div>
                         </div>

@@ -28,6 +28,8 @@ const PostDetailPage = () => {
   const [loading,setLoading] = useState(true) ;
   const [bookmarkStatus,setBookmarkStatus] = useState(false) ;
 
+  const commentRef = useRef(null);
+
   const pathLink = `${window.location.origin}/post/${postId}` ;
 
   const [postTime,setPostTime] = useState('') ;
@@ -166,6 +168,10 @@ const PostDetailPage = () => {
     }
   }
 
+  const scrollToComments = ()=>{
+    commentRef.current?.scrollIntoView({ behavior: "smooth" });
+  }
+
   return (
     <div className='min-h-screen w-full '>
       <Header />
@@ -215,7 +221,7 @@ const PostDetailPage = () => {
                 </Link> 
                 {
                   (!isYourAccount)&&
-                  <span onClick={toggleFollowStatus} className={`block ${followStatus?'text-gray-500 hover:text-gray-600':'text-green-600 hover:text-green-800'}
+                  <span onClick={toggleFollowStatus} className={`block ${followStatus?'text-gray-500 hover:text-gray-600':'text-[#6356E5] hover:text-[#7166e5]'}
                      font-semibold ml-8 cursor-pointer`}>
                     {followStatus?'Following':'Follow'}
                   </span> 
@@ -226,10 +232,10 @@ const PostDetailPage = () => {
           </div>
 
           <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} 
-            comments={commentCount} bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
+            comments={commentCount} bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink} scrollToComments={scrollToComments} />
 
           { (postData.coverImage) &&
-          <div className="w-full max-h-screen mt-12 relative">
+          <div className="w-full max-h-screen overflow-hidden mt-12 relative">
           <div className="w-full h-full overflow-hidden align-middle">
             <img
               className="w-full h-full object-cover align-middle"
@@ -243,7 +249,7 @@ const PostDetailPage = () => {
           <pre className='text-xl break-words my-12 font-serif2' style={{ whiteSpace: 'pre-wrap' }} >{postData.body}</pre>
 
           <LikeCommentBar toggleLike={toggleLike} likeStatus={likeStatus} likes={likesCount} comments={commentCount}
-           bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink}  />
+           bookmarkPost={bookmarkPost} bookmarkStatus={bookmarkStatus} pathLink={pathLink} scrollToComments={scrollToComments} />
 
           <div className='flex my-10 md:my-14 '>
             <Link to={`/${writerData.username}`} className=' mr-4'>
@@ -263,13 +269,13 @@ const PostDetailPage = () => {
                   (!isYourAccount) &&
                   <div>
                     <button onClick={toggleFollowStatus} className={` ${followStatus?' text-base border-[1px] dark:border-gray-500':
-                      'bg-green-500 hover:bg-green-600 text-white border-none'} py-1 px-3 rounded-2xl font-semibold cursor-pointer `}>
+                      'bg-[#6356E5] hover:bg-[#7166e5] text-white border-none'} py-1 px-3 rounded-2xl font-semibold cursor-pointer `}>
                       {followStatus?"Following":"Follow"}
                     </button>
                   </div>
                 }
               </div>
-              <Link Link to={`/${writerData.username}`} className='w-full' >
+              <Link to={`/${writerData.username}`} className='w-full' >
                 <span className='text-[14px] my-1 flex items-center text-gray-500'>{`${followerCount} Followers | ${followingCount} following`}</span>
                 <span className='text-base font-semibold flex items-center break-words font-plex '>{writerData.bio}</span>
               </Link>
@@ -281,7 +287,7 @@ const PostDetailPage = () => {
       <hr />
       {(!loading)&&
       <div className='w-full max-w-screen-lg h-auto p-2 py-2 m-auto'>
-        <div className='w-full '>
+        <div ref={commentRef} className='w-full '>
           <CommentList postId={postId} />
         </div>
       </div>
@@ -291,7 +297,7 @@ const PostDetailPage = () => {
 }
 
 
-const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookmarkStatus,pathLink}) => {
+const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookmarkStatus,pathLink,scrollToComments}) => {
 
   const [sharing,setSharing] = useState(false) ;
   const optionsRef = useRef(null) ;
@@ -343,7 +349,7 @@ const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookm
                 {(likeStatus)?<FcLike className={`mr-2 text-xl`}/>: <VscHeart className={`mr-2 text-xl`}/>}
                 {likes}
               </div>
-              <div className=' flex items-center cursor-pointer font-plex'><VscComment className='mr-2 text-xl' />{comments}</div>
+              <div onClick={scrollToComments} className=' flex items-center cursor-pointer font-plex'><VscComment className='mr-2 text-xl' />{comments}</div>
             </div>
             <div className="flex items-baseline">
               <div className="mr-5 relative ">
