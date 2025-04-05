@@ -32,9 +32,10 @@ mongoose.connect(mongoClusterURL)
 const app = express() ;
 const PORT = process.env.PORT || 3000;
 
+const frontend = process.env.FrontendURL;
 app.use(cookieParser()) ;
 app.use(cors({
-    origin: 'http://localhost:5173', // frontend URL
+    origin: frontend, // frontend URL
     credentials: true
 }));
 
