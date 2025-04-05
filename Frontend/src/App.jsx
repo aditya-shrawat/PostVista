@@ -1,7 +1,7 @@
 import React,{lazy,Suspense} from 'react'
 
 import Layout from './Components/Layout'
-import Errorpage from './Pages/Errorpage'
+import ErrorPage from './Pages/ErrorPage'
 const HomePage = lazy(()=>import('./Pages/HomePage')) ;
 const PostDetailPage = lazy(()=>import('./Pages/PostDetailPage'));
 const ProfilePage = lazy(()=>import('./Pages/ProfilePage'))
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
   {path:'/search',element: <Suspense fallback={<Loading />}><SearchPage /></Suspense> },
   {
     path:'*',
-    element:<Errorpage />
+    element:<ErrorPage />
   }
 ])
 
