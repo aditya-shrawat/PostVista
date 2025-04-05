@@ -39,29 +39,32 @@ app.use(cors({
     credentials: true
 }));
 
-const profilePicsStorage = multer.diskStorage({
-    destination :function(req,file,cb){
-        cb(null,'./uploads/profilePics');
-    },
-    filename:function(req,file,cb){
-        const uniqueSuffix = Date.now() ;
-        const fileExtension = file.originalname.split('.').pop(); // Extract file extension
-        cb(null, uniqueSuffix + '-' + file.fieldname + '.' + fileExtension);
-    }
-})
-const uploadProfilePics = multer({storage:profilePicsStorage}) ;
+// const profilePicsStorage = multer.diskStorage({
+//     destination :function(req,file,cb){
+//         cb(null,'./uploads/profilePics');
+//     },
+//     filename:function(req,file,cb){
+//         const uniqueSuffix = Date.now() ;
+//         const fileExtension = file.originalname.split('.').pop(); // Extract file extension
+//         cb(null, uniqueSuffix + '-' + file.fieldname + '.' + fileExtension);
+//     }
+// })
+// const uploadProfilePics = multer({storage:profilePicsStorage}) ;
 
-const blogPostImageStorage = multer.diskStorage({
-    destination :function(req,file,cb){
-        cb(null,'./uploads/blogImages');
-    },
-    filename:function(req,file,cb){
-        const uniqueSuffix = Date.now() ;
-        const fileExtension = file.originalname.split('.').pop(); 
-        cb(null, uniqueSuffix + '-' + file.fieldname + '.' + fileExtension);
-    }
-})
-const uploadBlogPostImage = multer({storage:blogPostImageStorage}) ;
+// const blogPostImageStorage = multer.diskStorage({
+//     destination :function(req,file,cb){
+//         cb(null,'./uploads/blogImages');
+//     },
+//     filename:function(req,file,cb){
+//         const uniqueSuffix = Date.now() ;
+//         const fileExtension = file.originalname.split('.').pop(); 
+//         cb(null, uniqueSuffix + '-' + file.fieldname + '.' + fileExtension);
+//     }
+// })
+// const uploadBlogPostImage = multer({storage:blogPostImageStorage}) ;
+
+const uploadProfilePics = multer({ storage: multer.memoryStorage() });
+const uploadBlogPostImage = multer({ storage: multer.memoryStorage() });
 
 app.use(express.json()) 
 

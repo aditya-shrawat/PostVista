@@ -3,7 +3,8 @@ import Comment from '../model/comment.js';
 import Post from '../model/post.js';
 import SavedPosts from '../model/savePosts.js';
 import {v2 as cloudinary} from 'cloudinary';
-import fs from 'fs';
+// import fs from 'fs';
+import streamifier from 'streamifier';
 
 cloudinary.config({ 
     cloud_name: process.env.Cloudinary_CloudName , 
@@ -15,34 +16,50 @@ cloudinary.config({
 export const creatingNewPost = async (req,res)=>{
     try {
         const {title,body} = req.body ; 
-        const filePath = req.file ? req.file.path : null ;
+        // const filePath = req.file ? req.file.path : null ;
 
         let imageURL = '' ;
         if(req.file){
-            try {
-                const response = await cloudinary.uploader.upload(filePath,{
-                    folder:'coverImages',
-                    // type:'upload',
-                    // access_mode: 'authenticated',
-                    transformation: [
-                        { quality: "auto:low" }
-                    ]
-                })
+            // try {
+                // const response = await cloudinary.uploader.upload(filePath,{
+                //     folder:'coverImages',
+                //     // type:'upload',
+                //     // access_mode: 'authenticated',
+                //     transformation: [
+                //         { quality: "auto:low" }
+                //     ]
+                // })
+
+                const streamUpload = (buffer)=>{
+                    return new Promise((resolve,reject)=>{
+                        const stream = cloudinary.uploader.upload_stream(
+                            {folder:'coverImages',transformation:[{ quality: "auto:low" }]},
+                            (error,result)=>{
+                                if (result) resolve(result);
+                                else reject(error);
+                            }
+                        );
+
+                        streamifier.createReadStream(buffer).pipe(stream);
+                    })
+                }
+
+                const response = await streamUpload(req.file.buffer);
     
                 imageURL = response.secure_url ;
-            } catch (error) {
-                console.error("Error in cover image uploading:", error);
-                return res.status(500).json({ message: "Failed to upload cover image of Post" });
-            }
-            finally{
-                if(filePath){
-                    try {
-                        fs.unlinkSync(filePath) ;
-                    } catch (error) {
-                        console.log("Failed to delete cover image localy. ",error)
-                    }
-                }
-            }
+            // } catch (error) {
+            //     console.error("Error in cover image uploading:", error);
+            //     return res.status(500).json({ message: "Failed to upload cover image of Post" });
+            // }
+            // finally{
+            //     if(filePath){
+            //         try {
+            //             fs.unlinkSync(filePath) ;
+            //         } catch (error) {
+            //             console.log("Failed to delete cover image localy. ",error)
+            //         }
+            //     }
+            // }
         }
 
         await Post.create({

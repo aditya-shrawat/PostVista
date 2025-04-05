@@ -1,7 +1,8 @@
 
-import fs from 'fs' ;
+// import fs from 'fs' ;
 import User from '../model/user.js';
 import { v2 as cloudinary } from 'cloudinary';
+import streamifier from 'streamifier';
 
 cloudinary.config({ 
     cloud_name: process.env.Cloudinary_CloudName , 
@@ -52,7 +53,7 @@ export const updateUserProfilePic = async (req,res)=>{
     try {
         const {removeProfilePic} = req.body;
         const username = req.params.username ;
-        const filePath = req.file ? req.file.path : null ;
+        // const filePath = req.file ? req.file.path : null ;
 
         if(username !== req.user.username){
             return res.status(400).json({message:"Unauthorized to update this profile pic."});
@@ -73,36 +74,50 @@ export const updateUserProfilePic = async (req,res)=>{
             await user.save();
         }
         else if(req.file) {
-            try {
+            // try {
                 if (user.profilePicPublicId) {
                     await cloudinary.uploader.destroy(user.profilePicPublicId);
                 }
     
-                const response = await cloudinary.uploader.upload(filePath,{
-                    folder:'profilePics',
-                    // type:'upload',
-                    // access_mode: 'authenticated',
-                    transformation: [
-                        { quality: "auto:low" }
-                    ]
-                });
+                // const response = await cloudinary.uploader.upload(filePath,{
+                //     folder:'profilePics',
+                //     transformation: [
+                //         { quality: "auto:low" }
+                //     ]
+                // });
+
+                const streamUpload = (buffer)=>{
+                    return new Promise((resolve,reject)=>{
+                        const stream = cloudinary.uploader.upload_stream(
+                            { folder:'profilePics', transformation:[{ quality: "auto:low" }] },
+                            (error, result) => {
+                                if (result) resolve(result);
+                                else reject(error);
+                            }
+                        );
+
+                        streamifier.createReadStream(buffer).pipe(stream);
+                    });
+                }
+                
+                const response = await streamUpload(req.file.buffer);
     
                 user.profilePicURL = response.secure_url;
                 user.profilePicPublicId = response.public_id;
                 await user.save();
-            } catch (err) {
-                console.error("Error in file uploading:", err);
-                return res.status(500).json({ message: "Failed to upload profile picture" });
-            }
-            finally{
-                if (filePath) {
-                    try {
-                        fs.unlinkSync(filePath) ;
-                    } catch (error) {
-                        console.log("Failed to delete local ProfilePic file:", error) ;
-                    }
-                }
-            }
+            // } catch (err) {
+            //     console.error("Error in file uploading:", err);
+            //     return res.status(500).json({ message: "Failed to upload profile picture" });
+            // }
+            // finally{
+            //     if (filePath) {
+            //         try {
+            //             fs.unlinkSync(filePath) ;
+            //         } catch (error) {
+            //             console.log("Failed to delete local ProfilePic file:", error) ;
+            //         }
+            //     }
+            // }
         }
 
         return res.status(200).json({message:"Profile picture updated successfully."});
