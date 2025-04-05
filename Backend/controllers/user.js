@@ -64,7 +64,8 @@ export const createAccount =async (req,res)=>{
 
         const token = createToken(newUser) ;
     
-        return res.status(201).cookie('token',token).json({message:"signup successfully."}) ;
+        return res.status(201).cookie('token',token,{httpOnly: true,secure: true,sameSite: "None",})
+        .json({message:"signup successfully."}) ;
     } catch (error) {
         return res.status(500).json({error:`something went wrong,try again later.`})
     }
@@ -90,7 +91,7 @@ export const handleSignin = async (req,res)=>{
         if(passwordMatched){
             const token = createToken(user) ;
 
-            return res.status(200).cookie('token',token).json({message:"signin successfully"}) ;
+            return res.status(200).cookie('token',token,{httpOnly: true,secure: true,sameSite: "None",}).json({message:"signin successfully"}) ;
         }
         else{
             return res.status(400).json({message:"Incorrect password"})

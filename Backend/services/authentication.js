@@ -10,13 +10,16 @@ export const createToken = (user)=>{
         profilePicURL:user.profilePicURL,
     }
 
-    const token = jwt.sign(payLoad,secretKey);
+    const token = jwt.sign(payLoad,secretKey,{expiresIn: "7d"});
     return token ;
 }
 
 export const verifyToken = (token)=>{
-    const payload = jwt.verify(token,secretKey) ;
-    return payload ;
+    try {
+        return jwt.verify(token, secretKey);
+    } catch (error) {
+        return null;
+    }
 }
 
 

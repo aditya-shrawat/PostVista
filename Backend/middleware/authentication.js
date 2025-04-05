@@ -14,7 +14,7 @@ export const checkTokenAuthentication = (req,res,next)=>{
         req.user = payload ;
         next();
     } catch (error) {
-        return res.status(500).json({error:`unauthorized, something wrong`})
+        return res.status(500).json({error: "Unauthorized: invalid token" })
     }
 }
 
