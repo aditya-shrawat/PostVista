@@ -22,8 +22,8 @@ export const creatingNewPost = async (req,res)=>{
             try {
                 const response = await cloudinary.uploader.upload(filePath,{
                     folder:'coverImages',
-                    type:'upload',
-                    access_mode: 'authenticated',
+                    // type:'upload',
+                    // access_mode: 'authenticated',
                     transformation: [
                         { quality: "auto:low" }
                     ]

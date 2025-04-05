@@ -80,8 +80,8 @@ export const updateUserProfilePic = async (req,res)=>{
     
                 const response = await cloudinary.uploader.upload(filePath,{
                     folder:'profilePics',
-                    type:'upload',
-                    access_mode: 'authenticated',
+                    // type:'upload',
+                    // access_mode: 'authenticated',
                     transformation: [
                         { quality: "auto:low" }
                     ]
@@ -99,7 +99,7 @@ export const updateUserProfilePic = async (req,res)=>{
                     try {
                         fs.unlinkSync(filePath) ;
                     } catch (error) {
-                        console.log("Failed to delete local ProfilePic file:", err) ;
+                        console.log("Failed to delete local ProfilePic file:", error) ;
                     }
                 }
             }
