@@ -35,13 +35,15 @@ const CreateBlogPage = () => {
     }
     
       const formData = new FormData() ;
-      formData.append('coverImage',postImage) ;
+      if(postImage){
+        formData.append('coverImage',postImage) ;
+      }
       formData.append('title',postData.title) ;
       formData.append('body',postData.body) ;
 
       const BackendURL = import.meta.env.VITE_backendURL;
       try {
-        const response = await axios.post(`${BackendURL}/new-blog`, formData, { withCredentials: true });
+        const response = await axios.post(`${BackendURL}/new-blog`, formData, { withCredentials: true, headers:{'Content-Type':'multipart/form-data'} });
         if (response.status === 201) {
           navigate('/');
         }

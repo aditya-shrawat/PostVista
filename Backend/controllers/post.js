@@ -31,7 +31,7 @@ export const creatingNewPost = async (req,res)=>{
     
                 imageURL = response.secure_url ;
             } catch (error) {
-                console.error("Error in cover image uploading:", err);
+                console.error("Error in cover image uploading:", error);
                 return res.status(500).json({ message: "Failed to upload cover image of Post" });
             }
             finally{

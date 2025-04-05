@@ -334,7 +334,7 @@ const ProfilePage = () => {
                     <h2 className="card-title">Add a bio</h2>
                     <p>Tell others a little about yourself on PostHub.</p>
                     <div className="card-actions">
-                      <button onClick={()=>{setEdit(true)}} className="bg-blue-500 hover:bg-blue-400 cursor-pointer px-3 py-1 
+                      <button onClick={()=>{setEdit(true)}} className="bg-[#6356E5] hover:bg-[#7166e5] cursor-pointer px-3 py-1 
                       font-semibold text-lg text-white rounded-lg mt-2 outline-none border-none font-plex">Add Bio</button>
                     </div>
                   </div>
@@ -354,7 +354,7 @@ const ProfilePage = () => {
                     <h2 className="card-title">Add a profile photo</h2>
                     <p>Choose a photo to represent yourself on PostHub.</p>
                     <div className="card-actions">
-                      <button onClick={()=>{setEdit(true)}} className="bg-blue-500 hover:bg-blue-400 cursor-pointer px-3 py-1 
+                      <button onClick={()=>{setEdit(true)}} className="bg-[#6356E5] hover:bg-[#7166e5] cursor-pointer px-3 py-1 
                       font-semibold text-lg text-white rounded-lg mt-2 outline-none border-none font-plex ">Add Photo</button>
                     </div>
                   </div>

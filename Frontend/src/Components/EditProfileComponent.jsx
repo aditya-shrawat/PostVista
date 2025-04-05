@@ -72,7 +72,7 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
                 }
                 formData.append('removeProfilePic',removeProfilePic);
 
-                await axios.put(`${BackendURL}/${userDetails.username}/profile-picture`,formData,{withCredentials:true,});
+                await axios.put(`${BackendURL}/${userDetails.username}/profile-picture`,formData,{withCredentials:true, headers:{'Content-Type':'multipart/form-data'}});
             }
 
             if(isProfileInfoChanged){ // only update the user information , not profile picture 
