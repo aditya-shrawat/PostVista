@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import PostList from '../Components/PostList';
@@ -12,6 +12,8 @@ import Header from '../Components/Header';
 import { BsThreeDots } from "react-icons/bs";
 import { MdOutlineEmail } from "react-icons/md";
 import CreateBlogBtn from '../Components/CreateBlogBtn';
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 const ProfilePage = () => {
   const {username} = useParams();
@@ -20,19 +22,21 @@ const ProfilePage = () => {
   const [posts,setPosts] = useState([]) ;
   const [followerCount,setFollowerCount] = useState(0) ;
   const [followingCount,setFollowingCount] = useState(0) ;
-  const [followStatus,setFollowStatus] = useState(false) ;
-  const [isYourAccount,setIsYourAccount] = useState(false) ;
-  const [edit,setEdit] = useState(false) ;
+  const [followStatus,setFollowStatus] = useState() ;
+  const [isYourAccount,setIsYourAccount] = useState() ;
+  const [edit,setEdit] = useState() ;
   const [isProfileUpdated,setIsProfileUpdated] = useState(false) ;
-  const [canUedit,setCanUedit] = useState(false) ;
+  const [canUedit,setCanUedit] = useState() ;
   const [userLoading,setUserLoading] = useState(true) ;
   const [postsLoading,setPostsLoading] = useState(true) ;
   const [showMoreOptions,setShowMoreOptions] = useState(false) ;
   const optionsRef = useRef(null) ;
   const [pathLink,setPathLink] = useState(null);
-  const [blockStatus,setBlockStatus] = useState(false) ;
+  const [blockStatus,setBlockStatus] = useState() ;
   const [blockPopupOn,setBlockPopupOn] = useState(false);
   const [blockedYou,setBlockedYou] = useState(false) ;
+
+  const {theme} = useContext(CustomThemeContext)
 
   const fetchPosts =async ()=>{
     try {
@@ -42,7 +46,8 @@ const ProfilePage = () => {
       });
       setPosts(response.data.allPosts) ;
     } catch (error) {
-      console.log("Error in fetching posts - ",error) ;
+      // console.log("Error in fetching posts - ",error) ;
+      console.log("Something went wrong.")
     }
     finally{
       setPostsLoading(false);
@@ -70,7 +75,8 @@ const ProfilePage = () => {
       setCanUedit(response.data.isYou) ;
       setBlockedYou(response.data.blockedYou);
     } catch (error) {
-      console.log("Error :",error) ;
+      // console.log("Error :",error) ;
+      console.log("Something went wrong")
       if(error.response && error.response.status === 400){
         navigate('*');
       }
@@ -94,7 +100,8 @@ const ProfilePage = () => {
       setFollowStatus(response.data.isFollowed) ;
       setIsYourAccount(response.data.isYou) ;
     } catch (error) {
-      console.log("Error in checking Followe status -",error) ;
+      // console.log("Error in checking Followe status -",error) ;
+      console.log("Something went wrong")
     }
   }
 
@@ -106,7 +113,8 @@ const ProfilePage = () => {
       setFollowingCount(response.data.followingCount)
       checkFollowStatus();
     } catch (error) {
-      console.log("Error in counting Followers -",error) ;
+      // console.log("Error in counting Followers -",error) ;
+      console.log("Something went wrong")
     }
   };
 
@@ -117,7 +125,8 @@ const ProfilePage = () => {
       setFollowStatus(response.data.isFollowed) ;
       countFollowers()
     } catch (error) {
-      console.log("Error in toggling FollowStatus -",error) ;
+      // console.log("Error in toggling FollowStatus -",error) ;
+      console.log("Something went wrong")
     }
   }
 
@@ -148,6 +157,9 @@ const ProfilePage = () => {
   const copyLinkToClipboard = ()=>{
     navigator.clipboard.writeText(pathLink) ;
     setShowMoreOptions(false) ;
+    toast.success("Link copied!",{
+      theme: (theme==='dark')?"dark":"light",
+    })
   }
 
   const blockStatusOfAccount = async ()=>{
@@ -158,7 +170,8 @@ const ProfilePage = () => {
         setBlockStatus(response.data.blockStatus);
       }
     } catch (error) {
-      console.log("Error in block-Unblock - ",error);
+      // console.log("Error in block-Unblock - ",error);
+      console.log("something went wrong")
     }
   }
 
@@ -172,7 +185,8 @@ const ProfilePage = () => {
         setShowMoreOptions(false);
       }
     } catch (error) {
-      console.log("Error in block-Unblock - ",error);
+      // console.log("Error in block-Unblock - ",error);
+      console.log("Something went wrong")
     }
   }
 
@@ -183,10 +197,13 @@ const ProfilePage = () => {
         // text: 'A description or additional message.',
         url: window.location.href,
       })
-      .then(() => console.log('Shared successfully - ',window.location.href))
-      .catch((error) => console.error('Error sharing:', error));
+      // .then(() => console.log('Shared successfully - ',window.location.href))
+      .catch((error) => console.error('Error sharing'));
     } else {
-      alert('Sharing not supported on this browser.');
+      // alert('Sharing not supported on this browser.');
+      toast.error("Sharing not supported!",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
     setShowMoreOptions(false);
   }
@@ -257,37 +274,43 @@ const ProfilePage = () => {
                         </div> */}
                         
                         {
-                          (isYourAccount && canUedit)?
+                        (typeof isYourAccount === 'boolean' && typeof canUedit === 'boolean' && typeof blockStatus === 'boolean' && typeof blockedYou === 'boolean')?
+                        <>
+                          {(isYourAccount && canUedit)?
                           <>
-                          <div>
-                            <button onClick={()=>{setEdit(true)}} className={`ml-3 dark:text-white border-[1px] dark:border-gray-500
-                              rounded-3xl px-3 py-1 sm:py-2 font-semibold cursor-pointer text-[14px] `}>
-                              Edit Profile
-                            </button>
-                          </div>
+                            <div>
+                              <button onClick={()=>{setEdit(true)}} className={`ml-3 dark:text-white border-[1px] dark:border-gray-500
+                                rounded-3xl px-3 py-1 sm:py-2 font-semibold cursor-pointer text-[14px] `}>
+                                Edit Profile
+                              </button>
+                            </div>
                           </> :
                           <>
-                          { (!blockStatus)?
-                            <>{ (!isYourAccount && !blockedYou) &&
+                            { (!blockStatus)?
+                              <>{ (!isYourAccount && !blockedYou) &&
+                                <div>
+                                  <button onClick={toggleFollowStatus} className={`ml-3 
+                                    ${followStatus?' dark:text-white border-[1px] dark:border-gray-500':
+                                    'bg-[#6356E5] hover:bg-[#7166e5] text-white border-none'} rounded-3xl px-4 py-1 sm:py-2 font-semibold cursor-pointer 
+                                    text-[14px] `}>
+                                    {followStatus?'Following':'Follow'}
+                                  </button>
+                                </div>}
+                              </>
+                            :
                             <div>
-                              <button onClick={toggleFollowStatus} className={`ml-3 
-                                ${followStatus?' dark:text-white border-[1px] dark:border-gray-500':
-                                'bg-[#6356E5] hover:bg-[#7166e5] text-white border-none'} rounded-3xl px-4 py-1 sm:py-2 font-semibold cursor-pointer 
-                                text-[14px] `}>
-                                {followStatus?'Following':'Follow'}
+                              <button onClick={()=>{setBlockPopupOn(true)}} className={`ml-3
+                                bg-red-600 text-white border-none rounded-3xl px-4 py-1 sm:py-2 font-semibold cursor-pointer 
+                                text-[14px] sm:text-base `}>
+                                Blocked
                               </button>
-                            </div>}
-                            </>
-                          :
-                          <div>
-                            <button onClick={()=>{setBlockPopupOn(true)}} className={`ml-3
-                              bg-red-600 text-white border-none rounded-3xl px-4 py-1 sm:py-2 font-semibold cursor-pointer 
-                              text-[14px] sm:text-base `}>
-                              Blocked
-                            </button>
-                          </div>
-                          }
-                          </>
+                            </div>
+                            }
+                          </>}
+                        </>:
+                        <>
+                        <div className="skeleton h-8 w-24"></div>
+                        </>
                         }
                       </div>
                     </div>
@@ -369,7 +392,7 @@ const ProfilePage = () => {
               (postsLoading)?
               <>
                 <div className='w-full mt-5 '>
-                  { [...Array(4)].map((_,index)=>(
+                  { [...Array(6)].map((_,index)=>(
                     <div key={index} className='px-4 w-full h-40 flex justify-between items-center cursor-pointer ' >
                       <div className=' w-[55%] sm:w-[65%] '>
                         <div className='w-full h-auto flex flex-col gap-2'>
@@ -409,7 +432,7 @@ const ProfilePage = () => {
                       <h1 className="text-2xl font-semibold dark:text-white font-plex mt-20 mb-20 ">No posts yet.</h1>
                     }
                   </div>:
-                  <PostList posts={posts} pageType={'ProfilePage'} />
+                  <PostList posts={posts}/>
                   }
                   </>
                 }

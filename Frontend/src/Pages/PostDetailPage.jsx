@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import CommentList from '../Components/CommentList';
 import { Link, useParams } from 'react-router-dom';
@@ -13,6 +13,8 @@ import { FaLink } from "react-icons/fa6";
 import { FcLike } from "react-icons/fc";
 import { VscHeart } from "react-icons/vsc";
 import { VscComment } from "react-icons/vsc";
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 const PostDetailPage = () => {
   const postId = useParams().id ;
@@ -27,6 +29,7 @@ const PostDetailPage = () => {
   const [followingCount,setFollowingCount] = useState(0) ;
   const [loading,setLoading] = useState(true) ;
   const [bookmarkStatus,setBookmarkStatus] = useState(false) ;
+  const {theme} = useContext(CustomThemeContext)
 
   const commentRef = useRef(null);
 
@@ -337,7 +340,10 @@ const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookm
       // .then(() => console.log('Shared successfully'))
       .catch((error) => console.error('Error sharing:', error));
     } else {
-      alert('Sharing not supported on this browser.');
+      // alert('Sharing not supported on this browser.');
+      toast.error("Sharing not supported!",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
   }
 

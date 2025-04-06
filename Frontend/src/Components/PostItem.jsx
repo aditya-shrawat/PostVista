@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaRegBookmark   } from "react-icons/fa6";
 import { FaBookmark } from "react-icons/fa6";
@@ -13,8 +13,10 @@ import axios from 'axios';
 import { FcLike } from "react-icons/fc";
 import { VscHeart } from "react-icons/vsc";
 import { VscComment } from "react-icons/vsc";
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
-const PostItem = ({post,pageType}) => {
+const PostItem = ({post}) => {
   const [likes,setLikes] = useState(0) ;
   const [comments,setComments] = useState(0) ;
   const [likeStatus,setLikeStatus] = useState(false) ;
@@ -24,6 +26,8 @@ const PostItem = ({post,pageType}) => {
   const [isYourAccount,setIsYourAccount] = useState(false) ;
   const optionsRef = useRef(null) ;
   const [deletePostPopup,setDeletePostPopup] = useState(false) ;
+
+  const {theme} = useContext(CustomThemeContext)
 
   const pathLink = `${window.location.origin}/post/${post._id}` ;
 
@@ -121,6 +125,9 @@ const PostItem = ({post,pageType}) => {
 
   const copyLinkToClipboard = ()=>{
     navigator.clipboard.writeText(pathLink) ;
+    toast.success("Link copied!",{
+      theme: (theme==='dark')?"dark":"light",
+    })
     setShowMoreOptions(false) ;
   }
 
@@ -148,7 +155,10 @@ const PostItem = ({post,pageType}) => {
       // .then(() => console.log(`Shared successfully - ${window.location.origin}/post/${post._id}`))
       .catch((error) => console.error('Error sharing:', error));
     } else {
-      alert('Sharing not supported on this browser.');
+      // alert('Sharing not supported on this browser.');
+      toast.error("Sharing not supported!",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
     setShowMoreOptions(false) ;
   }
@@ -259,6 +269,7 @@ const PostItem = ({post,pageType}) => {
 
 const DeletePostPopup = ({setDeletePostPopup,postId})=>{
     const divRef = useRef(null)
+    const {theme} = useContext(CustomThemeContext)
 
     useEffect(()=>{
       const handleOutsideClick = (e)=>{
@@ -283,6 +294,9 @@ const DeletePostPopup = ({setDeletePostPopup,postId})=>{
       }
       finally{
         setDeletePostPopup(false)
+        toast.error('Post deleted!',{
+          theme: (theme==='dark')?"dark" : "light",
+        })
       }
     }
 

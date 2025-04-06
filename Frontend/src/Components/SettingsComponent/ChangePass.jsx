@@ -1,6 +1,7 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../../Contexts/CustomThemeProvider'
 
 const initialPasswordData = {
   currentPassword:'',
@@ -12,6 +13,7 @@ const ChangePass = () => {
     const [errorMsg,setErrorMsg] = useState('') ;
     const [passwordData,setPasswordData] = useState(initialPasswordData)
     const [resetBtnStatus,setResetBtnStatus] = useState(false);
+    const {theme} = useContext(CustomThemeContext)
 
     const onPasswordInputChange = (e)=>{
       setPasswordData({...passwordData,[e.target.name]:e.target.value}) ;
@@ -45,7 +47,7 @@ const ChangePass = () => {
         return false;
       }
       if(passwordData.newPassword !== passwordData.confirmPassword){
-       setErrorMsg("Password is not same.");
+       setErrorMsg("Password is not same!");
        return false;
       }
       setErrorMsg('');
@@ -63,7 +65,10 @@ const ChangePass = () => {
         const BackendURL = import.meta.env.VITE_backendURL;
         const response = await axios.put(`${BackendURL}/settings/change-password`,passwordData,{withCredentials:true,});
         setPasswordData(initialPasswordData);
-        alert("Password reset successfully.")
+        // alert("Password reset successfully.")
+        toast.success("Password reset successfully!",{
+          theme: (theme==='dark')?"dark" : "light",
+        })
       } catch (error) {
         if(error.response && error.response.data.error){
           setErrorMsg(error.response.data.error) ;

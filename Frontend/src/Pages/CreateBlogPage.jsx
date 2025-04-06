@@ -1,10 +1,11 @@
 import axios from 'axios';
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { BiSolidImageAdd } from "react-icons/bi";
 import { RxCrossCircled } from "react-icons/rx";
-
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 const initialPostData = {
   title:"",
@@ -19,18 +20,23 @@ const CreateBlogPage = () => {
   const [postImage,setPostImage] = useState(null) ;
   const [posting,setPosting] = useState(false);
 
+  const {theme} = useContext(CustomThemeContext)
+
   const handleSubmit = async (e)=>{
     e.preventDefault() ;
 
     if(posting){
-      console.log("Post is posting , please wait ");
+      // console.log("Post is posting , please wait ");
       return ;
     }
-    setTimeout(() => setPosting(true), 100);
+    setTimeout(() => setPosting(true), 50);
 
     if(postData.title.trim()==='' || postData.body.trim()===''){
-      alert("All felds are required") ;
-      setTimeout(() => setPosting(false), 100);
+      // alert("All fields are required") ;
+      toast.error("All fields are required!",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
+      setTimeout(() => setPosting(false), 50);
       return ;
     }
     
@@ -55,9 +61,15 @@ const CreateBlogPage = () => {
         else{
           console.log("error :",error) ;
         }
+        toast.error("Something went worng!",{
+          theme: (theme==='dark')?"dark" : "light",
+        })
       }
       finally {
-        setTimeout(() => setPosting(false), 100);
+        setTimeout(() => setPosting(false), 50);
+        toast.success("Post published!",{
+          theme: (theme==='dark')?"dark" : "light",
+        })
       }
   }
 

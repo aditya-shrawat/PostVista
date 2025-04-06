@@ -15,6 +15,8 @@ import SignupPage from './Pages/SignupPage'
 import SigninPage from './Pages/SigninPage' 
 import SettingsPage from './Pages/SettingsPage';
 import SearchPage from './Pages/SearchPage';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 
 const router = createBrowserRouter([
@@ -44,7 +46,15 @@ const router = createBrowserRouter([
 
 
 const App = () => {
-  return <RouterProvider router={router} />
+  return (
+    <>
+    <RouterProvider router={router} />
+    
+    {/* to add toast notification */}
+    <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} newestOnTop={false}
+    closeOnClick pauseOnFocusLoss={false} draggable pauseOnHover={false} theme="light" />
+    </>
+  )
 }
 
 export default App

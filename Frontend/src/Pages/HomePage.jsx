@@ -36,8 +36,11 @@ const HomePage = () => {
    }
 
    useEffect(()=>{
+    const timeout = setTimeout(()=>{setLoadingPosts(true)},10);
     setPosts([]);
     fetchPosts();
+
+    return () => clearTimeout(timeout);
    },[showGeneralList]);
 
    useEffect(()=>{
@@ -61,7 +64,7 @@ const HomePage = () => {
         </div>
         {(loadingPosts) ?
         <div>
-          { [...Array(4)].map((_,index)=>(
+          { [...Array(6)].map((_,index)=>(
             <div key={index} className='px-4 w-full h-40 flex justify-between items-center cursor-pointer ' >
               <div className=' w-[55%] sm:w-[65%] '>
                 <div className='w-full h-auto flex flex-col gap-2'>
@@ -82,7 +85,7 @@ const HomePage = () => {
             <div className="w-full px-2 text-center  ">
               <h1 className="text-xl font-semibold dark:text-white mt-20 mb-20 font-plex">You're not following anyone yet!</h1>
             </div>:
-            <PostList posts={Posts} pageType={'HomePage'} />
+            <PostList posts={Posts} />
           }
         </>
         }

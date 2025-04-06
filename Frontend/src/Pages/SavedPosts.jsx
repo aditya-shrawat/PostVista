@@ -33,7 +33,7 @@ const SavedPosts = () => {
           (loading)?
           <>
           <div className='w-full'>
-          { [...Array(4)].map((_,index)=>(
+          { [...Array(6)].map((_,index)=>(
             <div key={index} className='px-4 w-full h-40 flex justify-between items-center cursor-pointer ' >
               <div className=' w-[55%] sm:w-[65%] '>
                 <div className='w-full h-auto flex flex-col gap-2'>
