@@ -66,7 +66,7 @@ export const createAccount =async (req,res)=>{
     
         return res.status(201).cookie('token',token,{
             httpOnly: true,
-            // secure: true,sameSite: "None",
+            secure: true,sameSite: "None",
         })
         .json({message:"signup successfully."}) ;
     } catch (error) {
@@ -96,7 +96,7 @@ export const handleSignin = async (req,res)=>{
 
             return res.status(200).cookie('token',token,{
                 httpOnly: true,
-                // secure: true,sameSite: "None",
+                secure: true,sameSite: "None",
             }).json({message:"signin successfully"}) ;
         }
         else{
