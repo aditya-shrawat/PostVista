@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 
 const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
@@ -81,7 +83,9 @@ const EditProfileComponent = ({setEdit,userDetails,setIsProfileUpdated}) => {
 
             setIsProfileUpdated(true) ;
         } catch (error) {
-            console.log("Error in updating user info -",error) ;
+            toast.error("Unable to update profile. Please try again.",{
+                theme: (theme==='dark')?"dark" : "light",
+            })
         }
     }
 

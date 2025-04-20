@@ -27,7 +27,6 @@ export const getGeneralPosts = async (req,res)=>{
 
         return res.status(200).json({allPosts:populatedPosts});
     } catch (error) {
-        console.log("Error - ",error)
         return res.status(500).json({message:"Internal server error."})
     }
 }
@@ -40,7 +39,6 @@ const findingFollowingFeed = async (authors)=>{
             .limit(authors.length)
             .populate('createdBy', 'username name bio profilePicURL');
     } catch (error) {
-        console.log("error in finding author psots ",error);
         return [];
     }
 }

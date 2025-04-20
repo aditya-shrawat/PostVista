@@ -16,7 +16,7 @@ const Header = () => {
         });
         setUserInfo(response.data) ;
       } catch (error) {
-        console.log("Error : ",error);
+        console.log("Error while fetching user profile.");
       }
     }
 

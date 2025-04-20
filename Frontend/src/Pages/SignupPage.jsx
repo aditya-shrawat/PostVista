@@ -16,6 +16,7 @@ const SignupPage = () => {
     const [signupData,setSignupData] = useState(initialSignUpData)
     const [passwordError,setpasswordError] = useState('');
     const [nextSlide,setNextSlide] = useState(false);
+    const [loading,setLoading] = useState(false);
 
     const onSignupInputChange = (e)=>{
         setSignupData({...signupData,[e.target.name]:e.target.value}) ;
@@ -46,9 +47,17 @@ const SignupPage = () => {
 
     const handleSignupSubmit = (e)=>{
         e.preventDefault();
+
+        if(!signupData.email || !signupData.password){
+            setErrorMsg("All fields are required.")
+            return 
+        }
+
         if(!isPassAndConfirmpassSame()){
             return ;
         }
+
+        setTimeout(() => setLoading(true), 50);
 
         const BackendURL = import.meta.env.VITE_backendURL 
         axios.post(`${BackendURL}/user/check-email`,{email:signupData.email,password:signupData.confirmPassword}, 
@@ -66,10 +75,19 @@ const SignupPage = () => {
                 setErrorMsg("Something went wrong, please try again")
             }
         })
+        .finally(
+            setTimeout(() => setLoading(false), 50)
+        )
     }
 
     const createAccount = async (e)=>{
         e.preventDefault();
+
+        if(!signupData.name){
+            setErrorMsg("All fields are required.")
+            return 
+        }
+        setTimeout(() => setLoading(true), 50)
 
         const BackendURL = import.meta.env.VITE_backendURL
         axios.post(`${BackendURL}/user/create-account`,{email:signupData.email,password:signupData.confirmPassword,name:signupData.name}, 
@@ -87,6 +105,9 @@ const SignupPage = () => {
                 setErrorMsg("Something went wrong, please try again")
             }
         })
+        .finally(
+            setTimeout(() => setLoading(false), 50)
+        )
     }
 
   return (
@@ -121,7 +142,11 @@ const SignupPage = () => {
                     <input type="password" name='confirmPassword' onChange={(e)=>{onSignupInputChange(e)}} value={signupData.confirmPassword}
                     className='mb-4 h-10 p-1 px-2 text-lg rounded-lg border-[1px] dark:border-gray-500 outline-[#6356E5] dark:bg-black' />
                     {errorMsg!=='' && <div className='text-red-500 px-2' >{errorMsg}</div> }
-                    <button type='submit' className='bg-[#6356E5] my-4 h-12 rounded-3xl cursor-pointer text-xl text-white font-semibold hover:shadow-lg' >Sign up</button>
+                    <button type='submit' className='bg-[#6356E5] hover:bg-[#7166e5] my-4 h-12 rounded-3xl cursor-pointer text-xl text-white font-semibold hover:shadow-lg' >
+                        {(loading)?
+                        <span className="loading loading-spinner text-primary bg-white h-6 w-6"></span>:
+                        `Sign up`}
+                    </button>
                     <div className='w-full text-center text-base'>
                         <p className='mb-3'>OR</p>
                         <p>Already have an account?
@@ -144,8 +169,12 @@ const SignupPage = () => {
                             <p className='font-semibold'>Email:</p>
                             <p className='ml-1'>{signupData.email}</p>
                         </div>
-                        <button type='submit' className='bg-[#6356E5] my-5 h-12 rounded-3xl cursor-pointer text-xl
-                        text-white font-semibold hover:shadow-lg' >Create account</button>
+                        <button type='submit' className='bg-[#6356E5] hover:bg-[#7166e5] my-5 h-12 rounded-3xl cursor-pointer text-xl
+                        text-white font-semibold hover:shadow-lg' >
+                            {(loading)?
+                            <span className="loading loading-spinner text-primary bg-white h-6 w-6"></span>:
+                            `Create account`}
+                        </button>
                     </form>
                 </div>
                 </>

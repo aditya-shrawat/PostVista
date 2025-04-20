@@ -71,7 +71,7 @@ export const creatingNewPost = async (req,res)=>{
         
         return res.status(201).json({message:"Post created successfully."}) ;
     } catch (error) {
-        res.status(500).json({message:"Intenal server error.",error})
+        res.status(500).json({message:"Intenal server error."})
     }
 };
 

@@ -6,6 +6,8 @@ import { FaRegUser } from "react-icons/fa";
 import axios from 'axios';
 import { MdOutlineSettings } from "react-icons/md";
 import { LuSquarePen } from "react-icons/lu";
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 const ProfileBar = ({barRef,username}) => {
     const navigate = useNavigate() ;
@@ -15,11 +17,12 @@ const ProfileBar = ({barRef,username}) => {
             const BackendURL = import.meta.env.VITE_backendURL;
             const response =await axios.get(`${BackendURL}/user/logout`,{ withCredentials: true });
             if(response.status ===200){
-                console.log("Logout successfully")
                 navigate('/user/signin');
             }
         } catch (error) {
-            console.log("Error in logout -",error);
+            toast.error("Unable to logout. Please try again.",{
+                theme: (theme==='dark')?"dark" : "light",
+            })
         }
     }
 

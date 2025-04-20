@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../../Contexts/CustomThemeProvider'
 
 const BlockedAccounts = () => {
   const [blockedAccounts,setBlockedAccounts] = useState([])
@@ -12,7 +14,7 @@ const BlockedAccounts = () => {
       const response = await axios.get(`${BackendURL}/settings/blocked-accounts`,{withCredentials:true,});
       setBlockedAccounts(response.data.blockedAccounts);
     } catch (error) {
-      console.log("Error in fetching Blocked accounts -",error);
+      console.log("Error while fetching Blocked accounts.");
     }
     {
       setLoadingAccounts(false);
@@ -75,7 +77,9 @@ const AccountItem = ({account}) => {
         const response = await axios.post(`${BackendURL}/user/${account._id}/block`,{},{withCredentials:true,});
         setBlockStatus(response.data.blockStatus);
     } catch (error) {
-      console.log("Error in block-Unblock - ",error);
+      toast.error("Unable to Block-Unblock user. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
   }
 
@@ -85,7 +89,7 @@ const AccountItem = ({account}) => {
           const response = await axios.get(`${BackendURL}/user/${account._id}/follow/status`,{withCredentials:true,});
           setFollowStatus(response.data.isFollowed) ;
       } catch (error) {
-          console.log("Error in checking Followe status -",error) ;
+        console.log("Error while fetching Follow status.") ;
       }
   }
 
@@ -101,7 +105,9 @@ const AccountItem = ({account}) => {
         const response = await axios.post(`${BackendURL}/user/${account._id}/follower`,{},{withCredentials:true,});
         checkFollowStatus();
     } catch (error) {
-        console.log("Error in toggling FollowStatus -",error) ;
+        toast.error("Unable to Follow-Unfollow user. Please try again.",{
+          theme: (theme==='dark')?"dark" : "light",
+        })
     }
   }
 

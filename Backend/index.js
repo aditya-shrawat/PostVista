@@ -17,6 +17,7 @@ import { getRecentBookmarks, getSavedPosts } from './controllers/savePosts.js';
 import multer from 'multer';
 import { getUserProfileDetails, updateUserInfo, updateUserProfilePic } from './controllers/profile.js';
 import homeRouter from './routes/home.js';
+import authRouter from './routes/auth.js';
 import settingsRouter from './routes/settings.js';
 import Follower from './model/follower.js';
 
@@ -68,6 +69,9 @@ const uploadBlogPostImage = multer({ storage: multer.memoryStorage() });
 
 app.use(express.json()) 
 
+
+app.use('/api/auth', authRouter);
+
 app.get("/profile",checkTokenAuthentication,async (req,res)=>{
     try {
         const user = req.user;
@@ -102,7 +106,6 @@ app.get('/recommend/accounts',checkTokenAuthentication,async (req,res)=>{
         
         return res.status(200).json({message:'Recommended accounts fetched.',recommendAccounts});
     } catch (err) {
-        console.log("Error ",err)
         return res.status(500).json({ error: "Internal server error" });
     }
 })

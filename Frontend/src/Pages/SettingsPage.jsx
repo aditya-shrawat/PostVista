@@ -11,7 +11,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import AccountInfo from '../Components/SettingsComponent/AccountInfo';
 import ChangePass from '../Components/SettingsComponent/ChangePass';
 import BlockedAccounts from '../Components/SettingsComponent/BlockedAccounts';
-import Archive from '../Components/SettingsComponent/Archive';
 import EditProfileComponent from '../Components/EditProfileComponent';
 import axios from 'axios';
 import { CustomThemeContext } from '../Contexts/CustomThemeProvider';
@@ -30,6 +29,8 @@ const SettingsPage = () => {
     const handleNavigation = (type)=>{
         navigate(`/settings/${type}`);
     }
+
+    const isActive = (type) => contentType === type;
 
     const isLargeScreen = () => window.matchMedia("(min-width: 1024px)").matches;
 
@@ -54,7 +55,6 @@ const SettingsPage = () => {
             });
             setUserDetails(response.data.userDetails) ;
         } catch (error) {
-            console.log("Error :",error) ;
             if(error.response && error.response.status === 400){
                 navigate('*');
             }
@@ -80,22 +80,24 @@ const SettingsPage = () => {
                         {(userDetails) && <p className="text-base text-gray-500">{`@${userDetails.username}`}</p>}
                     </div>
                     <div className='w-full flex flex-col gap-2'>
-                        <div onClick={()=>{handleNavigation('account')}} className='w-full flex justify-between items-center text-lg p-2 cursor-pointer '>
+                        <div onClick={()=>{handleNavigation('account')}} 
+                        className={`w-full flex justify-between items-center text-lg p-2 cursor-pointer
+                        ${isActive("account")?"text-[#6356E5] font-semibold":""} `}>
                             <div className='flex items-center'><FaRegUser className='mr-4 text-xl' /><span>Account information</span></div>
                             <div><IoIosArrowForward /></div>
                         </div>
-                        <div onClick={()=>{handleNavigation('password')}} className='w-full flex justify-between items-center text-lg p-2 cursor-pointer '>
+                        <div onClick={()=>{handleNavigation('password')}} 
+                        className={`w-full flex justify-between items-center text-lg p-2 cursor-pointer
+                            ${isActive("password")?"text-[#6356E5] font-semibold":""} `}>
                             <div className='flex items-center'><RiLockPasswordLine className='mr-4 text-xl' /><span>Change your password</span></div>
                             <div><IoIosArrowForward /></div>
                         </div>
-                        <div onClick={()=>{handleNavigation('blocked')}} className='w-full flex justify-between items-center text-lg p-2 cursor-pointer '>
+                        <div onClick={()=>{handleNavigation('blocked')}} 
+                        className={`w-full flex justify-between items-center text-lg p-2 cursor-pointer
+                            ${isActive("blocked")?"text-[#6356E5] font-semibold":""} `}>
                             <div className='flex items-center'><MdBlock className='mr-4 text-xl' /><span>Blocked accounts</span></div>
                             <div><IoIosArrowForward /></div>
                         </div>
-                        {/* <div onClick={()=>{handleNavigation('archive')}} className='w-full flex items-center justify-between text-lg hover:bg-gray-100 rounded-lg p-2 cursor-pointer '>
-                            <div className='flex items-center'><MdOutlineArchive className='mr-4 text-xl' /><span>Archive</span></div>
-                            <div><IoIosArrowForward /></div>
-                        </div> */}
                         <div onClick={toggleTheme} className='w-full flex items-center text-lg p-2 cursor-pointer '>
                             <VscColorMode className='mr-4 text-xl' /><span>{`Theme (${theme}) `}</span>
                         </div>
@@ -156,7 +158,6 @@ const DeletePopup = ({setDeleteAccount})=>{
         try {
             const BackendURL = import.meta.env.VITE_backendURL;
             await axios.post(`${BackendURL}/settings/delete-account`,{enteredPassword},{withCredentials:true,});
-            console.log("account deleted");
             setDeleteAccount(false);
 
             window.location.href = "/user/signin";

@@ -26,13 +26,11 @@ const CreateBlogPage = () => {
     e.preventDefault() ;
 
     if(posting){
-      // console.log("Post is posting , please wait ");
       return ;
     }
     setTimeout(() => setPosting(true), 50);
 
     if(postData.title.trim()==='' || postData.body.trim()===''){
-      // alert("All fields are required") ;
       toast.error("All fields are required!",{
         theme: (theme==='dark')?"dark" : "light",
       })
@@ -55,12 +53,6 @@ const CreateBlogPage = () => {
         }
       }
       catch(error){
-        if(error.response && error.response.data.message){
-          console.log("error :",error.response.data.message)
-        }
-        else{
-          console.log("error :",error) ;
-        }
         toast.error("Something went worng!",{
           theme: (theme==='dark')?"dark" : "light",
         })

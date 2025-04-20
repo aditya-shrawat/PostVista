@@ -46,8 +46,9 @@ const ProfilePage = () => {
       });
       setPosts(response.data.allPosts) ;
     } catch (error) {
-      // console.log("Error in fetching posts - ",error) ;
-      console.log("Something went wrong.")
+      toast.error("Unable to fetch posts. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
     finally{
       setPostsLoading(false);
@@ -75,8 +76,6 @@ const ProfilePage = () => {
       setCanUedit(response.data.isYou) ;
       setBlockedYou(response.data.blockedYou);
     } catch (error) {
-      // console.log("Error :",error) ;
-      console.log("Something went wrong")
       if(error.response && error.response.status === 400){
         navigate('*');
       }
@@ -100,8 +99,7 @@ const ProfilePage = () => {
       setFollowStatus(response.data.isFollowed) ;
       setIsYourAccount(response.data.isYou) ;
     } catch (error) {
-      // console.log("Error in checking Followe status -",error) ;
-      console.log("Something went wrong")
+      console.log("Error while fetching Follow status.") ;
     }
   }
 
@@ -113,8 +111,7 @@ const ProfilePage = () => {
       setFollowingCount(response.data.followingCount)
       checkFollowStatus();
     } catch (error) {
-      // console.log("Error in counting Followers -",error) ;
-      console.log("Something went wrong")
+      console.log("Error in counting Followrs.") ;
     }
   };
 
@@ -125,8 +122,9 @@ const ProfilePage = () => {
       setFollowStatus(response.data.isFollowed) ;
       countFollowers()
     } catch (error) {
-      // console.log("Error in toggling FollowStatus -",error) ;
-      console.log("Something went wrong")
+      toast.error("Unable to Follow-Unfollow user. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
   }
 
@@ -170,8 +168,7 @@ const ProfilePage = () => {
         setBlockStatus(response.data.blockStatus);
       }
     } catch (error) {
-      // console.log("Error in block-Unblock - ",error);
-      console.log("something went wrong")
+      console.log("Error while fetching block-Unblock status.");
     }
   }
 
@@ -185,8 +182,9 @@ const ProfilePage = () => {
         setShowMoreOptions(false);
       }
     } catch (error) {
-      // console.log("Error in block-Unblock - ",error);
-      console.log("Something went wrong")
+      toast.error("Unable to Block-Unblock user. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
   }
 
@@ -219,12 +217,9 @@ const ProfilePage = () => {
                   <div className='skeleton  mr-6 sm:mr-8 sm:h-32 sm:w-32 h-24 w-24 rounded-full '></div>
               </div>
               <div className=' mt-1 w-full'>
-                <div className='w-full my-2 flex justify-between items-center '>
-                  <div className=''>
-                    <div className='skeleton w-36 h-4 '></div>
-                    <div className='skeleton w-36 h-4 mt-4'></div>
-                  </div>
-                  <div className="skeleton h-8 w-24"></div>
+                <div >
+                  <div className='skeleton w-36 h-4 '></div>
+                  <div className='skeleton w-36 h-4 mt-4'></div>
                 </div>
                 <div className='skeleton h-4 w-64 mt-5'></div>
               </div>

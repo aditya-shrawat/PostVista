@@ -60,7 +60,7 @@ const PostDetailPage = () => {
       setLikesCount(response.data.likeCount) ;
       setCommentCount(response.data.commentCount) ;
     } catch (error) {
-      console.log("Error in calculating Counts - ",error);
+      console.log("Error in calculating Counts.");
     }
   }
 
@@ -72,7 +72,9 @@ const PostDetailPage = () => {
       setWriterData(response.data.post.createdBy)
       setPostTime(response.data.post.createdAt) ;
     } catch (error) {
-      console.log("Error in fetching PostData - ",error) ;
+      toast.error("Unable to load post. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
     finally{
       setLoading(false)
@@ -85,7 +87,7 @@ const PostDetailPage = () => {
       const response = await axios.get(`${BackendURL}/post/${postId}/like`,{withCredentials:true}) ;
       setLikeStatus(response.data.isLiked) ;
     } catch (error) {
-      console.log("Error in fetching like -",error) ;
+      console.log("Error while fetching like.") ;
     }
   }
   
@@ -95,7 +97,7 @@ const PostDetailPage = () => {
       const response = await axios.post(`${BackendURL}/post/${postId}/like`,{},{withCredentials:true}) ;
       setLikeStatus(response.data.isLiked) ;
     } catch (error) {
-      console.log("Error in toggling like -",error) ;
+      console.log("Error in toggling like.") ;
     }
   }
 
@@ -118,7 +120,7 @@ const PostDetailPage = () => {
           setFollowStatus(response.data.isFollowed) ;
           setIsYourAccount(response.data.isYou) ;
       } catch (error) {
-          console.log("Error in checking Followe status -",error) ;
+          console.log("Error while fetching Followe status.") ;
       }
   }
 
@@ -135,7 +137,9 @@ const PostDetailPage = () => {
           const response = await axios.post(`${BackendURL}/user/${writerData._id}/follower`,{},{withCredentials:true,});
           checkFollowStatus();
       } catch (error) {
-          console.log("Error in toggling FollowStatus -",error) ;
+        toast.error("Unable to Follow-Unfollow user. Please try again.",{
+          theme: (theme==='dark')?"dark" : "light",
+        })
       }
   };
 
@@ -147,7 +151,7 @@ const PostDetailPage = () => {
       setFollowingCount(response.data.followingCount)
       checkFollowStatus();
     } catch (error) {
-      console.log("Error in counting Followers -",error) ;
+      console.log("Error while counting Followers.") ;
     }
   };
 
@@ -157,7 +161,9 @@ const PostDetailPage = () => {
       const response = await axios.post(`${BackendURL}/post/${postId}/bookmark-post`,{},{withCredentials:true,});
       setBookmarkStatus(response.data.isSaved) ;
     } catch (error) {
-      console.log("error in bookmarking post -",error);
+      toast.error("Unable to bookmark post. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
   }
 
@@ -167,7 +173,7 @@ const PostDetailPage = () => {
       const response = await axios.get(`${BackendURL}/post/${postId}/check-bookmark`,{withCredentials:true,});
       setBookmarkStatus(response.data.bookmarked) ;
     } catch (error) {
-      console.log("error in bookmark status -",error);
+      console.log("error while fetching bookmark status.");
     }
   }
 
@@ -338,7 +344,7 @@ const LikeCommentBar = ({toggleLike,likeStatus,likes,comments,bookmarkPost,bookm
         url: window.location.href,
       })
       // .then(() => console.log('Shared successfully'))
-      .catch((error) => console.error('Error sharing:', error));
+      .catch((error) => console.error('Error sharing.'));
     } else {
       // alert('Sharing not supported on this browser.');
       toast.error("Sharing not supported!",{

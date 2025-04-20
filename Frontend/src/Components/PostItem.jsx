@@ -38,7 +38,7 @@ const PostItem = ({post}) => {
       setLikes(response.data.likeCount) ;
       setComments(response.data.commentCount) ;
     } catch (error) {
-      console.log("Error in calculating Counts - ",error);
+      console.log("Error in calculating Counts.");
     }
   }
 
@@ -48,7 +48,7 @@ const PostItem = ({post}) => {
       const response = await axios.get(`${BackendURL}/post/${post._id}/like`,{withCredentials:true}) ;
       setLikeStatus(response.data.isLiked) ;
     } catch (error) {
-      console.log("Error in fetching like -",error) ;
+      console.log("Error while fetching likes.") ;
     }
   }
 
@@ -65,7 +65,7 @@ const PostItem = ({post}) => {
       const response = await axios.get(`${BackendURL}/post/${post._id}/check-bookmark`,{withCredentials:true,});
       setBookmarkStatus(response.data.bookmarked) ;
     } catch (error) {
-      console.log("error in bookmark status -",error);
+      console.log("error in fetching bookmark status.");
     }
   }
 
@@ -75,7 +75,9 @@ const PostItem = ({post}) => {
       const response = await axios.post(`${BackendURL}/post/${post._id}/bookmark-post`,{},{withCredentials:true,});
       setBookmarkStatus(response.data.isSaved) ;
     } catch (error) {
-      console.log("error in bookmarking post -",error);
+      toast.error("Unable to Bookmark post. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
   }
 
@@ -86,7 +88,9 @@ const PostItem = ({post}) => {
       {},{withCredentials:true,});
       setFollowStatus(response.data.isFollowed) ;
     } catch (error) {
-      console.log("error in following author -",error);
+      toast.error("Unable to Follow-Unfollow author. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
   }
 
@@ -98,7 +102,7 @@ const PostItem = ({post}) => {
         setFollowStatus(response.data.isFollowed) ;
         setIsYourAccount(response.data.isYou) ;
     } catch (error) {
-        console.log("Error in checking Followe status -",error) ;
+        console.log("Error while fetching Follow status.") ;
     }
   }
 
@@ -137,7 +141,9 @@ const PostItem = ({post}) => {
       const response = await axios.post(`${BackendURL}/post/${post._id}/like`,{},{withCredentials:true}) ;
       setLikeStatus(response.data.isLiked) ;
     } catch (error) {
-      console.log("Error in toggling like -",error) ;
+      toast.error("Unable to Like-Unlike the post. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
   }
 
@@ -153,7 +159,7 @@ const PostItem = ({post}) => {
         url: `${window.location.origin}/post/${post._id}`,
       })
       // .then(() => console.log(`Shared successfully - ${window.location.origin}/post/${post._id}`))
-      .catch((error) => console.error('Error sharing:', error));
+      .catch((error) => console.error('Error while sharing.'));
     } else {
       // alert('Sharing not supported on this browser.');
       toast.error("Sharing not supported!",{
@@ -290,7 +296,9 @@ const DeletePostPopup = ({setDeletePostPopup,postId})=>{
         const BackendURL = import.meta.env.VITE_backendURL;
         const response = await axios.delete(`${BackendURL}/post/${postId}`,{withCredentials:true,});
       } catch (error) {
-        console.log("Error in deleting post -",error) ;
+        toast.error("Unable to delete post. Please try again.",{
+          theme: (theme==='dark')?"dark" : "light",
+        })
       }
       finally{
         setDeletePostPopup(false)

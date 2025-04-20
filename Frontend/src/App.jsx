@@ -17,12 +17,17 @@ import SettingsPage from './Pages/SettingsPage';
 import SearchPage from './Pages/SearchPage';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import RequireAuth from './Components/RequireAuth';
 
 
 const router = createBrowserRouter([
   {
     path:"/",
-    element:<Layout />,
+    element: (
+      <RequireAuth>
+        <Layout />
+      </RequireAuth>
+    ),
     children:[
       {path:'/', element: <Suspense fallback={<Loading />}><HomePage /></Suspense> },
       {path:'user/:id/follower',element: <Suspense fallback={<Loading />}><FollowerPage /></Suspense> },
@@ -30,14 +35,14 @@ const router = createBrowserRouter([
       {path:'/my/bookmarks', element: <Suspense fallback={<Loading />}><SavedPosts /></Suspense>},
     ]
   },
-  {path:'/:username',element: <Suspense fallback={<Loading />}><ProfilePage /></Suspense> },
-  {path:'/post/:id',element: <Suspense fallback={<Loading />}><PostDetailPage /></Suspense> },
-  { path: '/settings', element: <Suspense fallback={<Loading />}><SettingsPage /></Suspense> },
-  {path:'/settings/:contentType', element: <Suspense fallback={<Loading />}><SettingsPage /></Suspense> },
-  {path:'new-blog', element: <Suspense fallback={<Loading />}><CreateBlogPage /></Suspense> },
+  {path:'/:username',element:(<RequireAuth> <Suspense fallback={<Loading />}><ProfilePage /></Suspense> </RequireAuth> )},
+  {path:'/post/:id',element:(<RequireAuth> <Suspense fallback={<Loading />}><PostDetailPage /></Suspense> </RequireAuth>)},
+  { path: '/settings', element:(<RequireAuth> <Suspense fallback={<Loading />}><SettingsPage /></Suspense> </RequireAuth>)},
+  {path:'/settings/:contentType', element:(<RequireAuth> <Suspense fallback={<Loading />}><SettingsPage /></Suspense> </RequireAuth>)},
+  {path:'new-blog', element:(<RequireAuth> <Suspense fallback={<Loading />}><CreateBlogPage /></Suspense> </RequireAuth>)},
   {path:'user/signin',element: <SigninPage /> },
   {path:'user/signup',element: <SignupPage /> },
-  {path:'/search',element: <Suspense fallback={<Loading />}><SearchPage /></Suspense> },
+  {path:'/search',element:(<RequireAuth> <Suspense fallback={<Loading />}><SearchPage /></Suspense> </RequireAuth>)},
   {
     path:'*',
     element:<ErrorPage />

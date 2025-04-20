@@ -3,6 +3,8 @@ import Header from "./Header.jsx";
 import { Link, Outlet } from "react-router-dom";
 import { IoSearchSharp } from "react-icons/io5";
 import axios from "axios";
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 const LayoutPage = () => {
   const [recentBookmarks, setRecentBookmarks] = useState([]);
@@ -21,7 +23,7 @@ const LayoutPage = () => {
       });
       setRecentBookmarks(response.data.recentBookmarks);
     } catch (error) {
-      console.log("Error in fetching recent bookmarks - ", error);
+      console.log("Error while fetching recent bookmarks.");
     } finally {
       setLoadingrecentBookmarks(false);
     }
@@ -35,7 +37,7 @@ const LayoutPage = () => {
       });
       setRecommendedAccounts(response.data.recommendAccounts);
     } catch (error) {
-      console.log("Error in fetching recommended accounts - ", error);
+      console.log("Error while fetching recommended accounts.");
     } finally {
       setLoadingRecommendedAccounts(false);
     }
@@ -57,7 +59,9 @@ const LayoutPage = () => {
       const response = await axios.get(`${BackendURL}/search?query=${value}`,{withCredentials:true})
       setSearchedAccounts(response.data.accounts)
     } catch (error) {
-      console.log("Error while searching users: ",error)
+      toast.error("Unable to search users. Please try again later.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
   }
 
@@ -223,7 +227,7 @@ const RecomendedAccountComponent = ({ account }) => {
       setFollowStatus(response.data.isFollowed);
       setIsYourAccount(response.data.isYou);
     } catch (error) {
-      console.log("Error in checking Followe status -", error);
+      console.log("Unable to fetch Follow status.");
     }
   };
 
@@ -239,7 +243,9 @@ const RecomendedAccountComponent = ({ account }) => {
       );
       checkFollowStatus();
     } catch (error) {
-      console.log("Error in toggling FollowStatus -", error);
+      toast.error("Unable to Follow-Unfollow user. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
   };
 

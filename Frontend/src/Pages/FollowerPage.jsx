@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import FollowersList from '../Components/FollowersList';
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 const FollowerPage = () => {
     const navigate = useNavigate() ;
@@ -22,7 +24,7 @@ const FollowerPage = () => {
                 setShowFollowers(false) ;
             }
         } catch (error) {
-            console.log("Error",error) ;
+            console.log("Error") ;
         }
     } 
 
@@ -40,7 +42,9 @@ const FollowerPage = () => {
                 setAccountDetails(response.data.accountData) ;
             }
         } catch (error) {
-            console.log("Error is fetching Followers/following -",error) ;
+            toast.error(`Unable to fetch ${showFollowers?`followers`:`following`}. Please try again.`,{
+                theme: (theme==='dark')?"dark" : "light",
+            })
         }
         finally{
             setLoading(false);

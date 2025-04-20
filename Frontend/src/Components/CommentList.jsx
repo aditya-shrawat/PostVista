@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import CommentItem from './CommentItem';
 import { FaLocationArrow } from "react-icons/fa";
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 const commentList = ({postId}) => {
     const [Comments,setComments] = useState([]) ;
@@ -15,7 +17,7 @@ const commentList = ({postId}) => {
             setComments(response.data.allComments) ;
             setCommentCount(response.data.commentCount) ;
         } catch (error) {
-            console.log("Error in fetching Comments -",error);
+            console.log("Error in fetching Comments.");
         }
     }
 
@@ -27,7 +29,9 @@ const commentList = ({postId}) => {
             setCommentContent('')
             fetchComments()
         } catch (error) {
-            console.log("Error in posting Comments -",error);
+            toast.error("Unable to post comment. Please try again.",{
+                theme: (theme==='dark')?"dark" : "light",
+            })
         }
     }
 

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import PostList from '../Components/PostList'
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 const SavedPosts = () => {
   const [savedPosts,setSavedPosts] = useState([]) ;
@@ -12,7 +14,9 @@ const SavedPosts = () => {
       const response = await axios.get(`${BackendURL}/my/bookmarks`,{withCredentials:true,});
       setSavedPosts(response.data.savedPosts);
     } catch (error) {
-      console.log("Error is fetching saved posts - ",error);
+      toast.error("Unable to fetch bookmarked posts. Please try again.",{
+        theme: (theme==='dark')?"dark" : "light",
+      })
     }
     finally{
       setLoading(false) ;

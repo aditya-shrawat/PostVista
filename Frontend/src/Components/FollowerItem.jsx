@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 const FollowerItem = ({showFollowers,follower,following}) => {
     const accountId = (showFollowers)?follower.followedBy._id : following.account._id ;
@@ -14,7 +16,7 @@ const FollowerItem = ({showFollowers,follower,following}) => {
             setFollowStatus(response.data.isFollowed) ;
             setIsYourAccount(response.data.isYou) ;
         } catch (error) {
-            console.log("Error in checking Followe status -",error) ;
+            console.log("Error while fetching Follow status.") ;
         }
     }
 
@@ -28,7 +30,9 @@ const FollowerItem = ({showFollowers,follower,following}) => {
             const response = await axios.post(`${BackendURL}/user/${accountId}/follower`,{},{withCredentials:true,});
             checkFollowStatus();
         } catch (error) {
-            console.log("Error in toggling FollowStatus -",error) ;
+            toast.error("Unable to Follow-Unfollow user. Please try again.",{
+                theme: (theme==='dark')?"dark" : "light",
+            })
         }
     }
 

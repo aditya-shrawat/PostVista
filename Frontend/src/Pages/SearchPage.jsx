@@ -3,6 +3,8 @@ import Header from "../Components/Header";
 import { IoSearchSharp } from "react-icons/io5";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
+import { CustomThemeContext} from '../Contexts/CustomThemeProvider'
 
 const SearchPage = () => {
     const [searchQueary,setSearchQueary] = useState('');
@@ -19,7 +21,9 @@ const SearchPage = () => {
           const response = await axios.get(`${BackendURL}/search?query=${value}`,{withCredentials:true})
           setSearchedAccounts(response.data.accounts)
         } catch (error) {
-          console.log("Error while searching users: ",error)
+          toast.error("Unable to search users. Please try again.",{
+            theme: (theme==='dark')?"dark" : "light",
+          })
         }
     }
 

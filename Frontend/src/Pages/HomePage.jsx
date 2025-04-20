@@ -27,7 +27,7 @@ const HomePage = () => {
         setPosts(response.data.allPosts) ;
       }
     } catch (error) {
-      navigate('/user/signin')
+      navigate('/*')
     }
     finally{
       isFetching.current = false 

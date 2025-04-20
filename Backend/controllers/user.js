@@ -64,7 +64,10 @@ export const createAccount =async (req,res)=>{
 
         const token = createToken(newUser) ;
     
-        return res.status(201).cookie('token',token,{httpOnly: true,secure: true,sameSite: "None",})
+        return res.status(201).cookie('token',token,{
+            httpOnly: true,
+            // secure: true,sameSite: "None",
+        })
         .json({message:"signup successfully."}) ;
     } catch (error) {
         return res.status(500).json({error:`something went wrong,try again later.`})
@@ -91,7 +94,10 @@ export const handleSignin = async (req,res)=>{
         if(passwordMatched){
             const token = createToken(user) ;
 
-            return res.status(200).cookie('token',token,{httpOnly: true,secure: true,sameSite: "None",}).json({message:"signin successfully"}) ;
+            return res.status(200).cookie('token',token,{
+                httpOnly: true,
+                // secure: true,sameSite: "None",
+            }).json({message:"signin successfully"}) ;
         }
         else{
             return res.status(400).json({message:"Incorrect password"})
@@ -111,7 +117,6 @@ export const getBlockStatus = async (req,res)=>{
         }
         return res.status(200).json({message:"Block status Fetched.",blockStatus:true})
     } catch (error) {
-        console.log("Error in getting block status -",error);
         return res.status(500).json({message:"Internal server error."});
     }
 }
@@ -132,7 +137,6 @@ export const blockUnblockAccount = async (req,res)=>{
             return res.status(200).json({message:"User is unblocked.",blockStatus:false});
         }
     } catch (error) {
-        console.log("Error in blocking-unblocking -",error);
         return res.status(500).json({message:"Internal server error."});
     }
 }

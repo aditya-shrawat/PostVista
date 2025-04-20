@@ -13,6 +13,7 @@ const SigninPage = () => {
 
     const [errorMsg,setErrorMsg] = useState('') ;
     const [signInData,setSignInData] = useState(initialsignInData)
+    const [loading,setLoading] = useState(false);
 
     const onSigninInputChange = (e)=>{
         setSignInData({...signInData,[e.target.name]:e.target.value}) ; 
@@ -20,6 +21,13 @@ const SigninPage = () => {
 
     const handleSignInSubmit = (e)=>{
         e.preventDefault();
+
+        if(!signInData.email || !signInData.password){
+            setErrorMsg("All fields are required.")
+            return 
+        }
+
+        setTimeout(() => setLoading(true), 50);
 
         const BackendURL = import.meta.env.VITE_backendURL // backend url 
         axios.post(`${BackendURL}/user/signin`,signInData, { withCredentials: true })
@@ -36,6 +44,9 @@ const SigninPage = () => {
                 setErrorMsg("Something went wrong, please try again")
             }
         })
+        .finally(
+            setTimeout(() => setLoading(false), 50)
+        )
     }
 
   return (
@@ -59,7 +70,11 @@ const SigninPage = () => {
                 <input type="password" name='password' onChange={(e)=>{onSigninInputChange(e)}} value={signInData.password}
                 className='mb-4 h-10 p-1 px-2 text-lg rounded-lg border-[1px] dark:border-gray-500 outline-[#6356E5] dark:bg-black' />
                 {errorMsg!=='' && <div className='text-red-500 px-2' >{errorMsg}</div> }
-                <button type='submit' className='bg-[#6356E5] my-5 h-12 rounded-3xl cursor-pointer text-xl text-white font-semibold hover:shadow-lg' >Sign in</button>
+                <button type='submit' className='bg-[#6356E5] hover:bg-[#7166e5] my-5 h-12 rounded-3xl cursor-pointer text-xl text-white font-semibold hover:shadow-lg' >
+                    {(loading)?
+                    <span className="loading loading-spinner text-primary bg-white h-6 w-6"></span>:
+                    `Sign in`}
+                </button>
                 <div className='w-full text-center text-base'>
                     <p className='mb-5'>OR</p>
                     <p>No account?
